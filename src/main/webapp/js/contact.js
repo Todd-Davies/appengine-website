@@ -1,20 +1,33 @@
 var answer = "";
 
-$(document).ready(function() {
+var initPage = function() {
   $.getJSON('/api/contact', function(data) {
-    $('#question').html = "";
-    var span = $('<span>').appendTo('#question');
+    $('#contact-question').html("");
+    var span = $('<span>').appendTo('#contact-question');
     span.text(data['question']);
     answer = data['answer'];
-    $('<br>').appendTo('#question')
-    $('<input>').attr('onkeyup', 'submitAnswer();').appendTo('#question')
-    var span = $('<p>').appendTo('#question');
+    $('<br>').appendTo('#contact-question');
+    $('<input>')
+        .attr('onkeyup', 'submitAnswer();')
+        .appendTo('#contact-question');
+    $('<input>')
+        .attr('label', 'refreshQuestion')
+        .attr('type', 'button')
+        .attr('onclick', 'refreshQuestion();')
+        .attr('value', "I'm dumb, give me another question!")
+        .appendTo('#contact-question');
+    var span = $('<p>').appendTo('#contact-question');
   });
-});
+}
+
+var refreshQuestion = function() {
+  $(".refreshQuestion").disabled = true;
+  initPage();
+}
 
 var submitAnswer = function() {
-  var text = $('#question input').val();
-  $('#question p').text(xor(false, text, answer));
+  var text = $('#contact-question input').val();
+  $('#contact-question p').text(xor(false, text, answer));
 }
 
 /**

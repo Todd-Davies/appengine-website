@@ -1,5 +1,7 @@
 package uk.co.todddavies.website.notes;
 
+import uk.co.todddavies.website.cache.MemcacheModule;
+
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.KeyFactory;
@@ -15,6 +17,7 @@ public final class NotesServletModule extends ServletModule {
       @Override
       protected void configure() {
         install(new NotesServletModule());
+        install(new MemcacheModule());
         
         Datastore datastore = DatastoreOptions.defaultInstance().service();
         bind(Datastore.class).toInstance(datastore);

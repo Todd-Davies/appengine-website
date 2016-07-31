@@ -1,7 +1,6 @@
 package uk.co.todddavies.website.contact;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +10,7 @@ import uk.co.todddavies.website.contact.Annotations.EmailAddress;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestion;
 
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -37,9 +37,10 @@ final class ContactApiServlet extends HttpServlet {
       throws IOException {
     resp.setContentType("text/plain");
     CaptchaQuestion randomQuestion = questionProvider.get();
-    LinkedHashMap<String, String> response = new LinkedHashMap<>();
-    response.put("question", randomQuestion.getQuestion());
-    response.put("answer", randomQuestion.encryptSecret(email));
-    resp.getWriter().print(jsonObjectWriter.writeValueAsString(response));
+    resp.getWriter().print(
+        jsonObjectWriter.writeValueAsString(
+            ImmutableMap.of(
+                "question", randomQuestion.getQuestion(),
+                "answer", randomQuestion.encryptSecret(email))));
   }
 }
