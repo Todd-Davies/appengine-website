@@ -14,10 +14,12 @@ import uk.co.todddavies.website.cache.MemcacheModule;
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.KeyFactory;
+import com.google.common.base.Optional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
@@ -56,9 +58,16 @@ public final class NotesServletModule extends ServletModule {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
         FilterChain chain) throws IOException, ServletException {
-      Long key = Long.valueOf(request.getParameter("key"));
+      String keyParameter = request.getParameter("key");
+      Optional<Long> key = keyParameter == null 
+          ? Optional.<Long>absent()
+          : Optional.of(Long.valueOf(keyParameter));
       request.setAttribute(
-          Key.get(Long.class, Names.named("key")).toString(), key);  
+          Key.get(
+              new TypeLiteral<Optional<Long>>() {},
+              Names.named("key"))
+            .toString(),
+          key);  
       chain.doFilter(request, response);
     }
 
@@ -68,7 +77,7 @@ public final class NotesServletModule extends ServletModule {
   
   @Provides
   @Named("key")
-  @RequestScoped Long provideKey() {
+  @RequestScoped Optional<Long> provideKey() {
     throw new IllegalStateException("Notes key is derived from the request.");
   }
 }
