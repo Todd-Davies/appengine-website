@@ -1,6 +1,7 @@
 package uk.co.todddavies.website;
 
 import uk.co.todddavies.website.contact.ContactServletModule;
+import uk.co.todddavies.website.notes.NotesServletModule;
 import uk.co.todddavies.website.pages.PagesServletModule;
 
 import com.google.inject.Guice;
@@ -13,6 +14,7 @@ public class ApiServletContextListener  extends GuiceServletContextListener {
     return Guice.createInjector(
         new JsonObjectWriterModule(),
         new PagesServletModule(),
-        ContactServletModule.create());
+        ContactServletModule.create(),
+        NotesServletModule.create());
   }
 }
