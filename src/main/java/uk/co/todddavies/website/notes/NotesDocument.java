@@ -13,13 +13,15 @@ final class NotesDocument {
   final String name, url;
   final ImmutableList<String> tags;
   final int downloads;
+  final long key;
   
   //TODO(td): Use autovalue here
-  NotesDocument(String name, String url, List<String> tags, int downloads) {
+  NotesDocument(String name, String url, List<String> tags, int downloads, long key) {
     this.name = name;
     this.url = url;
     this.tags = ImmutableList.<String>builder().addAll(tags).build();
     this.downloads = downloads;
+    this.key = key;
   }
   
   static NotesDocument createFromEntity(Entity entity) {
@@ -31,6 +33,13 @@ final class NotesDocument {
         entity.getString("name"),
         entity.getString("download_url"),
         tags.build(),
-        (int) entity.getLong("downloads"));
+        (int) entity.getLong("downloads"),
+        entity.key().id());
+  }
+
+  public static Entity incrementDownloads(Entity entity) {
+    return Entity.builder(entity)
+        .set("downloads", entity.getLong("downloads") + 1)
+        .build();
   }
 }

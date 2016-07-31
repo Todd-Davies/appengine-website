@@ -43,6 +43,12 @@
             <artifactId>appengine-api-1.0-sdk</artifactId>
             <version>${appengine.target.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.appengine/appengine-endpoints -->
+				<dependency>
+				    <groupId>com.google.appengine</groupId>
+				    <artifactId>appengine-endpoints</artifactId>
+				    <version>1.7.5</version>
+				</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
