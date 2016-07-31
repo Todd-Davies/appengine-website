@@ -1,9 +1,13 @@
 package uk.co.todddavies.website.contact.captcha;
 
+import com.google.appengine.repackaged.com.google.api.client.util.Preconditions;
+
 
 public final class CaptchaQuestion {
 
   static CaptchaQuestion create(String question, String answer) {
+    Preconditions.checkNotNull(question, "Question cannot be null");
+    Preconditions.checkNotNull(answer, "Answer cannot be null");
     return new CaptchaQuestion(question, answer.toLowerCase());
   }
   
@@ -19,6 +23,7 @@ public final class CaptchaQuestion {
   }
   
   public String encryptSecret(String secret) {
+    if (secret == null) return "";
     StringBuilder output = new StringBuilder();
     for (int i = 0; i < secret.length(); i++) {
       output.append(i == 0 ? "" : "-");
