@@ -1,6 +1,5 @@
 package uk.co.todddavies.website.contact.captcha;
 
-import org.apache.commons.codec.binary.Hex;;
 
 public final class CaptchaQuestion {
 
@@ -20,11 +19,13 @@ public final class CaptchaQuestion {
   }
   
   public String encryptSecret(String secret) {
-    final byte[] key = answer.getBytes();
-    byte[] out = secret.getBytes();
-    for (int i = 0; i < out.length; i++) {
-        out[i] ^= (byte) key[i%key.length];
+    StringBuilder output = new StringBuilder();
+    for (int i = 0; i < secret.length(); i++) {
+      output.append(i == 0 ? "" : "-");
+      int encryptedChar = answer.charAt(i % answer.length()) ^ secret.charAt(i);
+      output.append(encryptedChar);
+      output.append(encryptedChar < 100 ? encryptedChar < 10 ? "XX" : "X" : "");
     }
-    return new String(Hex.encodeHexString(out));
+    return output.toString();
   }
 }
