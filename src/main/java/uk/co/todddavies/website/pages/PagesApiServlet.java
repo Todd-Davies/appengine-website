@@ -15,9 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 final class PagesApiServlet extends HttpServlet {
   
+  // TODO(td): Discover these automatically?
   private static final ImmutableMap<String, String> PAGES = ImmutableMap.of(
-      "/contact", "Contact",
-      "/notes", "Notes");
+      "/contact/", "Contact",
+      "/notes/", "Notes");
   
   private final ObjectWriter jsonObjectWriter;
   
