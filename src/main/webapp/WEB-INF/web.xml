@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE web-app PUBLIC
+ "-//Oracle Corporation//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+
+    <filter>
+	    <filter-name>guiceFilter</filter-name>
+	    <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+	  </filter>
+	
+	  <filter-mapping>
+	    <filter-name>guiceFilter</filter-name>
+	    <url-pattern>/api/*</url-pattern>
+	  </filter-mapping>
+	  
+	  <listener>
+	    <listener-class> uk.co.todddavies.website.ApiServletContextListener</listener-class>
+    </listener>
+
+    <welcome-file-list>
+      <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+</web-app>
