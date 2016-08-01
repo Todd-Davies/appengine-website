@@ -9,5 +9,6 @@ var initPage = function() {
         ul.append(
             $(document.createElement('li')).append(link));
     });
+    centerPage();
   });
 }

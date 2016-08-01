@@ -20,6 +20,7 @@ $(document).ready(function() {
         );
       }
     }
+    centerPage();
   });
 });
 
@@ -34,5 +35,15 @@ var loadPage = function(url) {
     } else {
       console.log("There was an error loading " + url);
     }
+  });
+};
+
+var centerPage = function() {
+  $(function() {
+    $('.center').css({
+      'position' : 'absolute',
+      'left' : '50%',
+      'margin-left' : -$('.center').outerWidth()/2,
+    });
   });
 };

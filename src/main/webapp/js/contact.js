@@ -7,16 +7,18 @@ var initPage = function() {
     span.text(data['question']);
     answer = data['answer'];
     $('<br>').appendTo('#contact-question');
+    var wrapper = $('<div>').attr('id', 'contact-wrapper').appendTo('#contact-question');
     $('<input>')
         .attr('onkeyup', 'submitAnswer();')
-        .appendTo('#contact-question');
+        .appendTo('#contact-wrapper');
     $('<input>')
+        .attr('class', 'refreshButton')
         .attr('label', 'refreshQuestion')
         .attr('type', 'button')
         .attr('onclick', 'refreshQuestion();')
-        .attr('value', "I'm dumb, give me another question!")
-        .appendTo('#contact-question');
+        .appendTo('#contact-wrapper');
     var span = $('<p>').appendTo('#contact-question');
+    centerPage();
   });
 }
 
