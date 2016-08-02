@@ -7,7 +7,7 @@ $(document).ready(function() {
     loadPage(data["home"]);
     // Now render the page list 
     $('#pages').html("");
-    var ul = $('<ul>').appendTo('#pages');
+    var ul = $("#pages");
     var pages = data["pages"];
     for (var key in pages) {
       if (pages.hasOwnProperty(key)) {
