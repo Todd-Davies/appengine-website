@@ -1,0 +1,10 @@
+-language: java		
+ -jdk:	   		
+ -- oraclejdk7			
+ -- oraclejdk8				
+ -script: mvn verify				
+ -after_success:					
+ -- bash <(curl -s https://codecov.io/bash)			
+ -branches:	   
+ -  only:		
+ -  - master
