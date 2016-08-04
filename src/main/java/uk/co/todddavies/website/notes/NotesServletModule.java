@@ -25,10 +25,16 @@ import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 
+/**
+ * Module for serving '{@code /api/notes*}'.
+ */
 public final class NotesServletModule extends ServletModule {
   
   private NotesServletModule() {}
   
+  /**
+   * Static method for installing the requisite dependencies
+   */
   public static AbstractModule create() {
     return new AbstractModule() {
       @Override
@@ -50,6 +56,9 @@ public final class NotesServletModule extends ServletModule {
     serve("/api/notes").with(NotesApiServlet.class);
   }
   
+  /**
+   * Injects {@code @named{"key"} Long key} to requests with a 'key' GET parameter.
+   */
   @Singleton
   private static final class KeyFilter implements Filter {
     @Override

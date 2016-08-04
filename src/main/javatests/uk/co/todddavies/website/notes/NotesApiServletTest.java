@@ -35,13 +35,13 @@ public class NotesApiServletTest {
   private static final ImmutableList<String> TAGS = ImmutableList.of(TAG_1, TAG_2, TAG_3);
   
   private static final NotesDocument NOTES_1 =
-      NotesDocument.createForTest("test1", "http://test1.com", ImmutableList.of(TAG_1), 0, 1);
+      NotesDocument.createForTest("test1", "http://t1.com", ImmutableList.of(TAG_1), 0, 1);
   private static final NotesDocument NOTES_2 =
-      NotesDocument.createForTest("test2", "http://test2.com", ImmutableList.of(TAG_2), 0, 2);
+      NotesDocument.createForTest("test2", "http://t2.com", ImmutableList.of(TAG_2), 0, 2);
   private static final NotesDocument NOTES_3 =
-      NotesDocument.createForTest("test3", "http://test3.com", ImmutableList.of(TAG_1), 0, 3);
+      NotesDocument.createForTest("test3", "http://t3.com", ImmutableList.of(TAG_1, TAG_2), 0, 3);
   private static final NotesDocument NOTES_4 =
-      NotesDocument.createForTest("test4", "http://test4.com", ImmutableList.of(TAG_3), 0, 4);
+      NotesDocument.createForTest("test4", "http://t4.com", ImmutableList.of(TAG_3), 0, 4);
  
   private static final ImmutableList<NotesDocument> TEST_DATA = ImmutableList.of(
       NOTES_1, NOTES_2, NOTES_3, NOTES_4);
@@ -76,6 +76,15 @@ public class NotesApiServletTest {
     assertThat(output.get(TAG_1), contains(NOTES_1, NOTES_3));
     assertThat(output.get(TAG_2), contains(NOTES_2));
     assertThat(output.get(TAG_3), contains(NOTES_4));
+  }
+  
+  @Test
+  public void testListNotesByTagSecondaryTag() {
+    LinkedHashMap<String, LinkedList<NotesDocument>> output =
+        servlet.listNotesByTag(ImmutableList.of(TAG_2));
+    
+    assertThat(output.keySet(), contains(TAG_2));
+    assertThat(output.get(TAG_2), contains(NOTES_2, NOTES_3));
   }
   
   @Test

@@ -17,8 +17,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
-@SuppressWarnings("serial")
 @Singleton
+@SuppressWarnings("serial")
 final class NotesApiDownloadServlet extends HttpServlet { 
   
   private static final String KIND = "NotesDocument";

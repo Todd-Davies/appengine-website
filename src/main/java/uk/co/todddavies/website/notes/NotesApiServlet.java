@@ -91,6 +91,10 @@ final class NotesApiServlet extends HttpServlet {
     return output;
   }
   
+  /**
+   * Returns the first tag in {@code tags} that is present in {@code notes.getTags()}. Returns
+   * {@code Optional.absent()} if none are present.
+   */
   private static Optional<String> getFirstTag(NotesDocument notes, ImmutableList<String> tags) {
     for (String tag : tags) {
       if (notes.getTags().contains(tag)) {
