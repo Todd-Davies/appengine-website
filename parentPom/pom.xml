@@ -35,6 +35,7 @@ limitations under the License.
   </modules>
 
   <build>
+    <testSourceDirectory>src/main/javatests</testSourceDirectory>
     <plugins>
       <plugin>
         <!-- Unit tests -->
