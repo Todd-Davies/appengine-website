@@ -1,10 +1,10 @@
 package uk.co.todddavies.website.contact.captcha;
 
-import java.util.Random;
-
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+
+import java.util.Random;
 
 public class CaptchaQuestionModule extends AbstractModule {
 

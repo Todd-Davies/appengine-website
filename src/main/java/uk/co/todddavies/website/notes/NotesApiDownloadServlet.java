@@ -1,11 +1,5 @@
 package uk.co.todddavies.website.notes;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -14,6 +8,12 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Singleton
 @SuppressWarnings("serial")

@@ -1,7 +1,5 @@
 package uk.co.todddavies.website.notes.data;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.StringValue;
@@ -9,9 +7,12 @@ import com.google.cloud.datastore.Value;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 
+import java.util.List;
+
 @JsonSerialize(using = NotesDocumentSerializer.class)
 public final class NotesDocument {
-  final String name, url;
+  final String name;
+  final String url;
   final ImmutableList<String> tags;
   final int downloads;
   final long key;

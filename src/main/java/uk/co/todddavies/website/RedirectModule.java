@@ -5,14 +5,6 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.BindingAnnotation;
@@ -20,6 +12,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.servlet.ServletModule;
+
+import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 final class RedirectModule  extends ServletModule {
   

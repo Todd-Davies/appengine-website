@@ -1,16 +1,12 @@
 package uk.co.todddavies.website.notes;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import javax.cache.Cache;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
@@ -22,6 +18,15 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
+import javax.cache.Cache;
 
 /**
  * Test for {@code NotesApiServlet}.

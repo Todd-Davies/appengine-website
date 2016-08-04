@@ -1,14 +1,5 @@
 package uk.co.todddavies.website.notes;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-
-import javax.cache.Cache;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -21,6 +12,15 @@ import com.google.gdata.util.common.base.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
+import javax.cache.Cache;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @SuppressWarnings("serial")
 @Singleton
 final class NotesApiServlet extends HttpServlet { 
@@ -32,7 +32,7 @@ final class NotesApiServlet extends HttpServlet {
   private final Optional<Cache> memCache;
   
   // TODO(td): Don't hardcode this list
-  private final ImmutableList<String> TAGS = ImmutableList.of("Third year");
+  private static final ImmutableList<String> TAGS = ImmutableList.of("Third year");
   
   @Inject
   private NotesApiServlet(
@@ -67,8 +67,8 @@ final class NotesApiServlet extends HttpServlet {
   /**
    * List the notes according to the tags they have.
    * @param tags The tags to list by.
-   * @return A linked map of tag->List<NotesDocument> where the order of the tag iterator is the
-   * same as the input tag list. 
+   * @return A linked map of {@code tag->List<NotesDocument>} where the order of the tag iterator is
+   *     the same as the input tag list. 
    */
   @VisibleForTesting
   public Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer>

@@ -1,7 +1,5 @@
 package uk.co.todddavies.website.notes.data;
 
-import java.util.Iterator;
-
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
@@ -10,6 +8,8 @@ import com.google.cloud.datastore.StructuredQuery.OrderBy;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+
+import java.util.Iterator;
 
 /**
  * Implementation of{@code NotesDatastoreInterface}.

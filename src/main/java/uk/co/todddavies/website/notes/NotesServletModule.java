@@ -1,14 +1,5 @@
 package uk.co.todddavies.website.notes;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
 import uk.co.todddavies.website.cache.MemcacheModule;
 import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
 
@@ -23,6 +14,15 @@ import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
 /**
  * Module for serving '{@code /api/notes*}'.
  */
@@ -35,7 +35,7 @@ public final class NotesServletModule extends ServletModule {
   }
   
   /**
-   * Static method for installing the requisite dependencies
+   * Static method for installing the requisite dependencies.
    */
   public static AbstractModule create(final String apiPath) {
     return new AbstractModule() {

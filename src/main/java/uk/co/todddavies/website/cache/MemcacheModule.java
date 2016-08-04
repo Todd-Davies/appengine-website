@@ -1,15 +1,15 @@
 package uk.co.todddavies.website.cache;
 
-import javax.cache.Cache;
-import javax.cache.CacheException;
-import javax.cache.CacheFactory;
-import javax.cache.CacheManager;
-
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
 
 public final class MemcacheModule extends AbstractModule {
 

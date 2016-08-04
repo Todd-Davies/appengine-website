@@ -11,7 +11,8 @@ public final class CaptchaQuestion {
     return new CaptchaQuestion(question, answer.toLowerCase());
   }
   
-  private final String question, answer;
+  private final String question;
+  private final String answer;
   
   private CaptchaQuestion(String question, String answer) {
     this.question = question;
@@ -23,14 +24,17 @@ public final class CaptchaQuestion {
   }
   
   public String encryptSecret(String secret) {
-    if (secret == null) return "";
-    StringBuilder output = new StringBuilder();
-    for (int i = 0; i < secret.length(); i++) {
-      output.append(i == 0 ? "" : "-");
-      int encryptedChar = answer.charAt(i % answer.length()) ^ secret.charAt(i);
-      output.append(encryptedChar);
-      output.append(encryptedChar < 100 ? encryptedChar < 10 ? "XX" : "X" : "");
+    if (secret == null) {
+      return "";
+    } else {
+      StringBuilder output = new StringBuilder();
+      for (int i = 0; i < secret.length(); i++) {
+        output.append(i == 0 ? "" : "-");
+        int encryptedChar = answer.charAt(i % answer.length()) ^ secret.charAt(i);
+        output.append(encryptedChar);
+        output.append(encryptedChar < 100 ? encryptedChar < 10 ? "XX" : "X" : "");
+      }
+      return output.toString();
     }
-    return output.toString();
   }
 }
