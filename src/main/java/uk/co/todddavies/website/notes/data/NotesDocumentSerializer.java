@@ -1,4 +1,4 @@
-package uk.co.todddavies.website.notes;
+package uk.co.todddavies.website.notes.data;
 
 import java.io.IOException;
 

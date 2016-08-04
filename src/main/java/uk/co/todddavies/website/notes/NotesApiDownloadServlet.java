@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import uk.co.todddavies.website.notes.data.NotesDocument;
+
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
@@ -48,8 +50,9 @@ final class NotesApiDownloadServlet extends HttpServlet {
       } else {
         // TODO(td): Do this in a task queue for latency
         datastore.update(NotesDocument.incrementDownloads(entity));
+        // TODO(td): This is at the wrong level of abstraction, should be a storage level op.
         NotesDocument document = NotesDocument.createFromEntity(entity);
-        resp.sendRedirect(document.url);
+        resp.sendRedirect(document.getUrl());
       }
     }
   }
