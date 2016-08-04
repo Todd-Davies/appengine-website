@@ -25,7 +25,7 @@ public final class NotesDocument {
     this.key = key;
   }
   
-  public static NotesDocument createFromEntity(Entity entity) {
+  static NotesDocument createFromEntity(Entity entity) {
     ImmutableList.Builder<String> tags = ImmutableList.<String>builder();
     for (Value<String> s : entity.<StringValue>getList("tags")) {
       tags.add(s.get());

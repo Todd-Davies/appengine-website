@@ -10,10 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import uk.co.todddavies.website.cache.MemcacheModule;
+import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
 
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
-import com.google.cloud.datastore.KeyFactory;
 import com.google.common.base.Optional;
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
@@ -41,10 +39,7 @@ public final class NotesServletModule extends ServletModule {
       protected void configure() {
         install(new NotesServletModule());
         install(new MemcacheModule());
-        
-        Datastore datastore = DatastoreOptions.defaultInstance().service();
-        bind(Datastore.class).toInstance(datastore);
-        bind(KeyFactory.class).toInstance(datastore.newKeyFactory().kind("NotesDocument"));
+        install(new NotesDatastoreModule());
       }
     };
   }
