@@ -3,6 +3,7 @@ package uk.co.todddavies.website.notes;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+
 import javax.cache.Cache;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.gdata.util.common.base.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -28,6 +30,9 @@ final class NotesApiServlet extends HttpServlet {
   private final NotesDatastoreInterface notesStorage;
   private final ObjectWriter jsonObjectWriter;
   private final Optional<Cache> memCache;
+  
+  // TODO(td): Don't hardcode this list
+  private final ImmutableList<String> TAGS = ImmutableList.of("Third year");
   
   @Inject
   private NotesApiServlet(
@@ -48,15 +53,12 @@ final class NotesApiServlet extends HttpServlet {
         ? (String) memCache.get().get(CACHE_KEY)
         : null;
     if (notesList == null) {
-      ImmutableList<NotesDocument> notes = notesStorage.listNotes();
-      int totalDownloads = 0;
-      for (NotesDocument document : notes) {
-        totalDownloads += document.getDownloads();
-      }
+      Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer> notes = listNotesByTag(TAGS);
+      int totalDownloads = notes.getSecond();
       notesList = jsonObjectWriter.writeValueAsString(
           ImmutableMap.of(
               "downloads", totalDownloads,
-              "notes", notes));
+              "notes", notes.getFirst()));
       memCache.get().put(CACHE_KEY, notesList);
     }
     resp.getWriter().print(notesList);
@@ -69,17 +71,21 @@ final class NotesApiServlet extends HttpServlet {
    * same as the input tag list. 
    */
   @VisibleForTesting
-  public LinkedHashMap<String, LinkedList<NotesDocument>> listNotesByTag(ImmutableList<String> tags) {
+  public Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer>
+      listNotesByTag(ImmutableList<String> tags) {
     LinkedHashMap<String, LinkedList<NotesDocument>> output = new LinkedHashMap<>();
     // Add the tag keys in order
     for (String tag : tags) {
       output.put(tag, new LinkedList<NotesDocument>());
     }
+    // Keep track of how many downloads there were
+    int downloads = 0;
     // For each notes document, add it to the map
     for (NotesDocument notes : notesStorage.listNotes()) {
       Optional<String> firstTag = getFirstTag(notes, tags);
       if (firstTag.isPresent()) {
         output.get(firstTag.get()).add(notes);
+        downloads += notes.getDownloads();
       } else { /* Don't show notes that aren't in the tag list */ }
     }
     // Remove tags w/ no notes
@@ -88,7 +94,7 @@ final class NotesApiServlet extends HttpServlet {
         output.remove(tag);
       }
     }
-    return output;
+    return Pair.of(output, downloads);
   }
   
   /**

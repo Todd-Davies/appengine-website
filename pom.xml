@@ -101,8 +101,12 @@
 		      <artifactId>gcloud-java-datastore</artifactId>
 		      <version>0.2.5</version>
 		    </dependency>
-						
-				
+		    <!-- https://mvnrepository.com/artifact/com.google.gdata/core -->
+				<dependency>
+				    <groupId>com.google.gdata</groupId>
+				    <artifactId>core</artifactId>
+				    <version>1.47.1</version>
+				</dependency>
 
         <!-- Test Dependencies -->
         <dependency>

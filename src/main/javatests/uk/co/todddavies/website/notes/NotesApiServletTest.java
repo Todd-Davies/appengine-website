@@ -35,13 +35,13 @@ public class NotesApiServletTest {
   private static final ImmutableList<String> TAGS = ImmutableList.of(TAG_1, TAG_2, TAG_3);
   
   private static final NotesDocument NOTES_1 =
-      NotesDocument.createForTest("test1", "http://t1.com", ImmutableList.of(TAG_1), 0, 1);
+      NotesDocument.createForTest("test1", "http://t1.com", ImmutableList.of(TAG_1), 9, 1);
   private static final NotesDocument NOTES_2 =
-      NotesDocument.createForTest("test2", "http://t2.com", ImmutableList.of(TAG_2), 0, 2);
+      NotesDocument.createForTest("test2", "http://t2.com", ImmutableList.of(TAG_2), 9, 2);
   private static final NotesDocument NOTES_3 =
-      NotesDocument.createForTest("test3", "http://t3.com", ImmutableList.of(TAG_1, TAG_2), 0, 3);
+      NotesDocument.createForTest("test3", "http://t3.com", ImmutableList.of(TAG_1, TAG_2), 9, 3);
   private static final NotesDocument NOTES_4 =
-      NotesDocument.createForTest("test4", "http://t4.com", ImmutableList.of(TAG_3), 0, 4);
+      NotesDocument.createForTest("test4", "http://t4.com", ImmutableList.of(TAG_3), 9, 4);
  
   private static final ImmutableList<NotesDocument> TEST_DATA = ImmutableList.of(
       NOTES_1, NOTES_2, NOTES_3, NOTES_4);
@@ -67,10 +67,19 @@ public class NotesApiServletTest {
     
     when(mockStorage.listNotes()).thenReturn(TEST_DATA);
   }
+ 
+  @Test
+  public void testListNotesByTagDownloads() {
+    int downloads =
+        servlet.listNotesByTag(TAGS).getSecond();
+    
+    assertThat(downloads, is(equalTo(36)));
+  }
   
   @Test
   public void testListNotesByTagOrdering() {
-    LinkedHashMap<String, LinkedList<NotesDocument>> output = servlet.listNotesByTag(TAGS);
+    LinkedHashMap<String, LinkedList<NotesDocument>> output =
+        servlet.listNotesByTag(TAGS).getFirst();
     
     assertThat(output.keySet(), contains(TAG_1, TAG_2, TAG_3));
     assertThat(output.get(TAG_1), contains(NOTES_1, NOTES_3));
@@ -81,7 +90,7 @@ public class NotesApiServletTest {
   @Test
   public void testListNotesByTagSecondaryTag() {
     LinkedHashMap<String, LinkedList<NotesDocument>> output =
-        servlet.listNotesByTag(ImmutableList.of(TAG_2));
+        servlet.listNotesByTag(ImmutableList.of(TAG_2)).getFirst();
     
     assertThat(output.keySet(), contains(TAG_2));
     assertThat(output.get(TAG_2), contains(NOTES_2, NOTES_3));
@@ -90,7 +99,7 @@ public class NotesApiServletTest {
   @Test
   public void testListNotesByTagOmissions() {
     LinkedHashMap<String, LinkedList<NotesDocument>> output =
-        servlet.listNotesByTag(ImmutableList.of(TAG_1));
+        servlet.listNotesByTag(ImmutableList.of(TAG_1)).getFirst();
     
     assertThat(output.keySet(), contains(TAG_1));
     assertThat(output.get(TAG_1), contains(NOTES_1, NOTES_3));
@@ -100,7 +109,8 @@ public class NotesApiServletTest {
   public void testListNotesByTagEmpty() {
     when(mockStorage.listNotes()).thenReturn(ImmutableList.<NotesDocument>of());
     
-    LinkedHashMap<String, LinkedList<NotesDocument>> output = servlet.listNotesByTag(TAGS);
+    LinkedHashMap<String, LinkedList<NotesDocument>> output =
+        servlet.listNotesByTag(TAGS).getFirst();
     
     assertThat(output.entrySet(), is(empty()));
   }
