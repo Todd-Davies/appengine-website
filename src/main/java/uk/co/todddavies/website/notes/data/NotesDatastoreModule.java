@@ -15,6 +15,7 @@ public final class NotesDatastoreModule extends AbstractModule {
     Datastore datastore = DatastoreOptions.defaultInstance().service();
     bind(Datastore.class).toInstance(datastore);
     bind(KeyFactory.class).toInstance(datastore.newKeyFactory().kind("NotesDocument"));
+    
+    bind(NotesDatastoreInterface.class).to(NotesDatastoreImpl.class);
   }
-
 }
