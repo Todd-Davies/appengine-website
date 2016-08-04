@@ -28,16 +28,20 @@ import com.google.inject.servlet.ServletModule;
  */
 public final class NotesServletModule extends ServletModule {
   
-  private NotesServletModule() {}
+  private final String apiPath;
+  
+  private NotesServletModule(String apiPath) {
+    this.apiPath = apiPath; 
+  }
   
   /**
    * Static method for installing the requisite dependencies
    */
-  public static AbstractModule create() {
+  public static AbstractModule create(final String apiPath) {
     return new AbstractModule() {
       @Override
       protected void configure() {
-        install(new NotesServletModule());
+        install(new NotesServletModule(apiPath));
         install(new MemcacheModule());
         install(new NotesDatastoreModule());
       }
@@ -46,9 +50,9 @@ public final class NotesServletModule extends ServletModule {
   
   @Override
   protected void configureServlets() {
-    filter("/api/notes-dl*").through(KeyFilter.class);
-    serve("/api/notes-dl*").with(NotesApiDownloadServlet.class);
-    serve("/api/notes").with(NotesApiServlet.class);
+    filter(apiPath + "notes-dl*").through(KeyFilter.class);
+    serve(apiPath + "notes-dl*").with(NotesApiDownloadServlet.class);
+    serve(apiPath + "notes").with(NotesApiServlet.class);
   }
   
   /**
