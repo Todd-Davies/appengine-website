@@ -1,6 +1,6 @@
 package uk.co.todddavies.website.contact.captcha;
 
-import com.google.appengine.repackaged.com.google.api.client.util.Preconditions;
+import com.google.api.client.util.Preconditions;
 
 
 public final class CaptchaQuestion {
