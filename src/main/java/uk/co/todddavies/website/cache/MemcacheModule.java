@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -22,6 +23,7 @@ public final class MemcacheModule extends AbstractModule {
   protected void configure() { /* Nothing to configure here. */}
   
   @Provides
+  @Singleton
   Optional<Cache> produceCache() {
     try {
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
@@ -31,6 +33,4 @@ public final class MemcacheModule extends AbstractModule {
       return Optional.absent();
     }
   }
-  
-
 }
