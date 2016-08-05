@@ -12,6 +12,5 @@ var initPage = function() {
               $(document.createElement('li')).append(link));
       });
     });
-    centerPage();
   });
 }
