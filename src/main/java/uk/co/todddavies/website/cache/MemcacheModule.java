@@ -19,7 +19,7 @@ public final class MemcacheModule extends AbstractModule {
           GCacheFactory.EXPIRATION_DELTA, 600);
   
   @Override
-  protected void configure() {}
+  protected void configure() { /* Nothing to configure here. */}
   
   @Provides
   Optional<Cache> produceCache() {

@@ -61,7 +61,7 @@ public final class NotesServletModule extends ServletModule {
   @Singleton
   private static final class KeyFilter implements Filter {
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {/* Not required. */}
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
@@ -80,7 +80,7 @@ public final class NotesServletModule extends ServletModule {
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {/* Not required. */}
   }
   
   @Provides

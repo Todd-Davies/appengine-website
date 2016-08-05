@@ -4,15 +4,15 @@ import com.google.api.client.util.Preconditions;
 
 
 public final class CaptchaQuestion {
-
+  
+  private final String question;
+  private final String answer;
+  
   static CaptchaQuestion create(String question, String answer) {
     Preconditions.checkNotNull(question, "Question cannot be null");
     Preconditions.checkNotNull(answer, "Answer cannot be null");
     return new CaptchaQuestion(question, answer.toLowerCase());
   }
-  
-  private final String question;
-  private final String answer;
   
   private CaptchaQuestion(String question, String answer) {
     this.question = question;

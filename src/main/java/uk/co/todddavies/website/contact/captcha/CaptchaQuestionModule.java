@@ -20,7 +20,7 @@ public class CaptchaQuestionModule extends AbstractModule {
   }
   
   @Override
-  protected void configure() {}
+  protected void configure() { /* Nothing to configure here. */ }
 
   @Provides
   CaptchaQuestion provideRandomQuestion() {
