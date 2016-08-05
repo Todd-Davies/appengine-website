@@ -1,6 +1,20 @@
 var currentPage = "";
 var initPage = function() {}
 
+var loadPage = function(url) {
+  if (currentPage === url) return;
+  
+  currentPage = url;
+  
+  $("#content").load(url, function( response, status, xhr ) {
+    if (status !== "error") {
+      initPage();
+    } else {
+      console.log("There was an error loading " + url);
+    }
+  });
+};
+
 $(document).ready(function() {
   $.getJSON("/api/pages", function(data) {
     // Load the home page first
@@ -22,17 +36,3 @@ $(document).ready(function() {
     }
   });
 });
-
-var loadPage = function(url) {
-  if (currentPage == url) return;
-  
-  currentPage = url;
-  
-  $("#content").load(url, function( response, status, xhr ) {
-    if (status !== "error") {
-      initPage();
-    } else {
-      console.log("There was an error loading " + url);
-    }
-  });
-};
