@@ -8,8 +8,11 @@
  * The "input" paramater is the string to be en/decrypted
  * N.b. Yes, I know this isn"t secure, but it's primary purpose is obfuscation rather than encryption
  */
+ /*global xor */
 var xor = function(password, input) {
-  if(password.length === 0 || input.length === 0) return "";
+  if(password.length === 0 || input.length === 0) {
+    return "";
+  }
   password = password.toLowerCase();
   if(password.length < (input.length / 4)) {
     for (i = 0; password.length < input.length / 4; i++) {
@@ -24,4 +27,4 @@ var xor = function(password, input) {
     outputString += String.fromCharCode(password.charCodeAt(i) ^ parseInt(thisChar, 10));
   }
   return outputString;
-}
+};

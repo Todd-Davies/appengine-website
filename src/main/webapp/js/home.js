@@ -1,8 +1,10 @@
 var currentPage = "";
-var initPage = function() {}
+var initPage = function() {};
 
 var loadPage = function(url) {
-  if (currentPage === url) return;
+  if (currentPage === url) {
+    return;
+  }
   
   currentPage = url;
   

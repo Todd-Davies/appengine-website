@@ -19,7 +19,7 @@ var initPage = function() {
         .appendTo("#contact-wrapper");
     $("<p>").appendTo("#contact-question");
   });
-}
+};
 
 var refreshQuestion = function() {
   $(".refreshQuestion").disabled = true;
