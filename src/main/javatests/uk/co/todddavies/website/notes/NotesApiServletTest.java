@@ -40,13 +40,13 @@ public class NotesApiServletTest {
   private static final ImmutableList<String> TAGS = ImmutableList.of(TAG_1, TAG_2, TAG_3);
   
   private static final NotesDocument NOTES_1 =
-      NotesDocument.createForTest("test1", "http://t1.com", ImmutableList.of(TAG_1), 9, 1);
+      NotesDocument.createForTest("test1", "", "http://t1.com", ImmutableList.of(TAG_1), 9, 1);
   private static final NotesDocument NOTES_2 =
-      NotesDocument.createForTest("test2", "http://t2.com", ImmutableList.of(TAG_2), 9, 2);
+      NotesDocument.createForTest("test2", "", "http://t2.com", ImmutableList.of(TAG_2), 9, 2);
   private static final NotesDocument NOTES_3 =
-      NotesDocument.createForTest("test3", "http://t3.com", ImmutableList.of(TAG_1, TAG_2), 9, 3);
+      NotesDocument.createForTest("test3", "","http://t3.com", ImmutableList.of(TAG_1, TAG_2), 9, 3);
   private static final NotesDocument NOTES_4 =
-      NotesDocument.createForTest("test4", "http://t4.com", ImmutableList.of(TAG_3), 9, 4);
+      NotesDocument.createForTest("test4", "", "http://t4.com", ImmutableList.of(TAG_3), 9, 4);
  
   private static final ImmutableList<NotesDocument> TEST_DATA = ImmutableList.of(
       NOTES_1, NOTES_2, NOTES_3, NOTES_4);

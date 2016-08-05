@@ -16,14 +16,17 @@ public final class NotesDocument implements Serializable {
   private static final long serialVersionUID = -844261516437759395L;
   
   final String name;
+  final String courseCode;
   final String url;
   final ImmutableList<String> tags;
   final int downloads;
   final long key;
   
   //TODO(td): Use autovalue here
-  NotesDocument(String name, String url, List<String> tags, int downloads, long key) {
+  NotesDocument(
+      String name, String courseCode, String url, List<String> tags, int downloads, long key) {
     this.name = name;
+    this.courseCode = courseCode;
     this.url = url;
     this.tags = ImmutableList.<String>builder().addAll(tags).build();
     this.downloads = downloads;
@@ -37,6 +40,7 @@ public final class NotesDocument implements Serializable {
     }
     return new NotesDocument(
         entity.getString("name"),
+        entity.getString("courseCode"),
         entity.getString("download_url"),
         tags.build(),
         (int) entity.getLong("downloads"),
@@ -45,8 +49,8 @@ public final class NotesDocument implements Serializable {
   
   @VisibleForTesting
   public static NotesDocument createForTest(
-      String name, String url, List<String> tags, int downloads, long key) {
-    return new NotesDocument(name, url, tags, downloads, key);
+      String name, String courseCode, String url, List<String> tags, int downloads, long key) {
+    return new NotesDocument(name, courseCode, url, tags, downloads, key);
   }
 
   public static Entity incrementDownloads(Entity entity) {
@@ -60,6 +64,7 @@ public final class NotesDocument implements Serializable {
     return new StringBuilder()
         .append("NotesDocument(")
         .append(name).append(",")
+        .append(courseCode).append(",")
         .append(url).append(",")
         .append(tags).append(",")
         .append(downloads).append(",")
