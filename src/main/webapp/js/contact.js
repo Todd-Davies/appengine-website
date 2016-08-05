@@ -24,9 +24,9 @@ var initPage = function() {
 var refreshQuestion = function() {
   $(".refreshQuestion").disabled = true;
   initPage();
-}
+};
 
 var submitAnswer = function() {
   var text = $("#contact-question input").val();
   $("#contact-question p").text(xor(text, answer));
-}
+};
