@@ -7,10 +7,14 @@ import com.google.cloud.datastore.Value;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 
+import java.io.Serializable;
 import java.util.List;
 
 @JsonSerialize(using = NotesDocumentSerializer.class)
-public final class NotesDocument {
+public final class NotesDocument implements Serializable {
+  
+  private static final long serialVersionUID = -844261516437759395L;
+  
   final String name;
   final String url;
   final ImmutableList<String> tags;

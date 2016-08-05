@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.notes;
 
+import uk.co.todddavies.website.cache.MemcacheKeys;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -13,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -24,8 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @Singleton
 final class NotesApiServlet extends HttpServlet { 
-  
-  private static final String CACHE_KEY = "notes-list";
   
   private final NotesDatastoreInterface notesStorage;
   private final ObjectWriter jsonObjectWriter;
@@ -45,23 +45,20 @@ final class NotesApiServlet extends HttpServlet {
   }
   
   @Override
-  @SuppressWarnings("unchecked")
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
     resp.setContentType("text/plain");
-    String notesList = memCache.isPresent() 
-        ? (String) memCache.get().get(CACHE_KEY)
-        : null;
-    if (notesList == null) {
+    // Try and read the cached data.
+    ImmutableMap<String, Serializable> responseData = get(memCache, MemcacheKeys.NOTES_KEY);
+    // If it wasn't read, then read & prepare it.
+    if (responseData == null) {
       Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer> notes = listNotesByTag(TAGS);
       int totalDownloads = notes.getSecond();
-      notesList = jsonObjectWriter.writeValueAsString(
-          ImmutableMap.of(
-              "downloads", totalDownloads,
-              "notes", notes.getFirst()));
-      memCache.get().put(CACHE_KEY, notesList);
+      responseData = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getFirst());
+      put(memCache, MemcacheKeys.NOTES_KEY, responseData);
     }
-    resp.getWriter().print(notesList);
+    // Serialise to JSON and send to the client.
+    resp.getWriter().print(jsonObjectWriter.writeValueAsString(responseData));
   }
   
   /**
@@ -95,6 +92,21 @@ final class NotesApiServlet extends HttpServlet {
       }
     }
     return Pair.of(output, downloads);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private static <T> T get(Optional<Cache> cache, String key) {
+    return cache.isPresent() ? (T) cache.get().get(key) : null;
+  }
+  
+  @SuppressWarnings("unchecked")
+  private static <T extends Serializable> boolean put(Optional<Cache> cache, String key, T value) {
+    if (cache.isPresent()) {
+      cache.get().put(key, value);
+      return true;
+    } else {
+      return false;
+    }
   }
   
   /**

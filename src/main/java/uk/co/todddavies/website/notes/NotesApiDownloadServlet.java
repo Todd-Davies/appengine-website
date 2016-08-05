@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.notes;
 
+import uk.co.todddavies.website.cache.MemcacheKeys;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -11,6 +12,7 @@ import com.google.inject.name.Named;
 
 import java.io.IOException;
 
+import javax.cache.Cache;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,13 +23,16 @@ final class NotesApiDownloadServlet extends HttpServlet {
   
   private final NotesDatastoreInterface storageInterface;
   private final Provider<Optional<Long>> keyProvider;
+  private final Optional<Cache> memCache;
   
   @Inject
   private NotesApiDownloadServlet(
       @Named("key") Provider<Optional<Long>> keyProvider,
-      NotesDatastoreInterface storageInterface) {
+      NotesDatastoreInterface storageInterface,
+      Optional<Cache> memCache) {
     this.storageInterface = storageInterface;
     this.keyProvider = keyProvider;
+    this.memCache = memCache;
   }
   
   @Override
@@ -42,6 +47,12 @@ final class NotesApiDownloadServlet extends HttpServlet {
       Optional<NotesDocument> optionalNotes = storageInterface.get(key.get());
       if (optionalNotes.isPresent()) {
         storageInterface.incrementDownloads(optionalNotes.get());
+        // The data is now stale
+        // TODO(td): Read the data, increment the relevant notes document and then store
+        // it in the cache again.
+        if (memCache.isPresent()) {
+          memCache.get().remove(MemcacheKeys.NOTES_KEY);
+        }
         resp.sendRedirect(optionalNotes.get().getUrl());
       } else {
         resp.sendError(404, String.format("Notes document with ID %d not found.", key.get()));

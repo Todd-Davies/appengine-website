@@ -51,7 +51,7 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
     Entity entity = datastore.get(createKey(notesDocument.getKey()));
     if (entity != null) {
       long newDownloads = entity.getLong("downloads") + 1;
-      Entity.builder(entity).set("downloads", newDownloads);
+      datastore.update(Entity.builder(entity).set("downloads", newDownloads).build());
       return (int) newDownloads;
     } else {
       // TODO(td): Simply log this and return -1.
