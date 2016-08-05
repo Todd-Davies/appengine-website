@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class CaptchaQuestionModule extends AbstractModule {
 
+  // TODO(td): Load these from Datastore or something.
   private static final ImmutableList<CaptchaQuestion> QUESTIONS = ImmutableList.of(
       CaptchaQuestion.create("What is my first name?", "Todd"),
       CaptchaQuestion.create("The planet that we live on is called...?", "Earth"));
@@ -23,10 +24,6 @@ public class CaptchaQuestionModule extends AbstractModule {
 
   @Provides
   CaptchaQuestion provideRandomQuestion() {
-    if (QUESTIONS.isEmpty()) {
-      throw new RuntimeException("No questions found!");
-    } else {
-      return QUESTIONS.get(random.nextInt(QUESTIONS.size()));
-    }
+    return QUESTIONS.get(random.nextInt(QUESTIONS.size()));
   }
 }

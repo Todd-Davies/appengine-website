@@ -54,6 +54,7 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
       Entity.builder(entity).set("downloads", newDownloads);
       return (int) newDownloads;
     } else {
+      // TODO(td): Simply log this and return -1.
       throw new RuntimeException(
           String.format("Document with key %l not found in Datastore.", notesDocument.key));
     }
