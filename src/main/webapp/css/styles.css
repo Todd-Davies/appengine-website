@@ -76,7 +76,7 @@
 #contact-wrapper {
     border:1px solid #000;
     display:inline-block;
-    line-height:0px;
+    line-height: 0;
 }
 
 #contact-wrapper input {
