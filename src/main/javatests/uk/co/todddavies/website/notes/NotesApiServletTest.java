@@ -5,28 +5,37 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
+import uk.co.todddavies.website.cache.MemcacheKeys;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
+import com.google.inject.Provides;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 import javax.cache.Cache;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Test for {@code NotesApiServlet}.
@@ -53,6 +62,10 @@ public class NotesApiServletTest {
   
   @Mock
   private final NotesDatastoreInterface mockStorage = mock(NotesDatastoreInterface.class);
+  @Mock
+  private final Cache mockCache = mock(Cache.class);
+  
+  private Optional<Cache> dummyCache = Optional.absent();
   
   @Inject
   private NotesApiServlet servlet;
@@ -64,7 +77,11 @@ public class NotesApiServletTest {
           @Override
           protected void configure() {
             bind(NotesDatastoreInterface.class).toInstance(mockStorage);
-            bind(new TypeLiteral<Optional<Cache>>() {}).toInstance(Optional.<Cache>absent());
+          }
+          
+          @Provides
+          Optional<Cache> dummyCacheProvider() {
+            return dummyCache;
           }
         },
         new JsonObjectWriterModule()
@@ -73,6 +90,51 @@ public class NotesApiServletTest {
     when(mockStorage.listNotes()).thenReturn(TEST_DATA);
   }
  
+  @Test
+  public void testHappyCase() throws IOException {
+    ImmutableMap<String, LinkedList<NotesDocument>> dummyCachedValue =
+        ImmutableMap.of("Tag", new LinkedList<NotesDocument>());
+    
+    dummyCache = Optional.of(mockCache);
+    when(mockCache.get(any(String.class))).thenReturn(dummyCachedValue);
+    
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+    PrintWriter mockWriter = mock(PrintWriter.class);
+    when(mockResponse.getWriter()).thenReturn(mockWriter);
+    
+    servlet.doGet(mock(HttpServletRequest.class), mockResponse);
+    
+    verify(mockWriter).print("{\n" +
+        "  \"downloads\" : 0,\n" +
+        "  \"notes\" : { }\n" +
+      "}");
+  }
+  
+  @Test
+  public void testNoCache() throws IOException {
+    when(mockStorage.listNotes()).thenReturn(ImmutableList.of(
+        NotesDocument.createForTest(
+            "name", "course code", "url", ImmutableList.of("Third Year"), 0, 0)));
+    
+    HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+    PrintWriter mockWriter = mock(PrintWriter.class);
+    when(mockResponse.getWriter()).thenReturn(mockWriter);
+    
+    servlet.doGet(mock(HttpServletRequest.class), mockResponse);
+    
+    verify(mockWriter).print("{\n" +
+        "  \"downloads\" : 0,\n" +
+        "  \"notes\" : {\n" +
+        "    \"Third Year\" : [ {\n" +
+        "      \"name\" : \"name\",\n" +
+        "      \"download_url\" : \"/api/notes-dl?key=0\",\n" +
+        "      \"downloads\" : 0,\n" +
+        "      \"tags\" : [ \"Third Year\" ]\n" +
+        "    } ]\n" +
+        "  }\n" +
+      "}");
+  }
+  
   @Test
   public void testListNotesByTagDownloads() {
     int downloads =
@@ -118,5 +180,67 @@ public class NotesApiServletTest {
         servlet.listNotesByTag(TAGS).getFirst();
     
     assertThat(output.entrySet(), is(empty()));
+  }
+  
+  @Test
+  public void testUnknownCacheKey() {
+    // TODO(td): Assert that the correct error message is logged.
+    assertThat(NotesApiServlet.get(dummyCache, /* random key */ "asdff84wrfdfhg43"), nullValue());
+  }
+  
+  @Test
+  public void testAbsentCache() {
+    // TODO(td): Assert that the correct error message is logged.
+    assertThat(NotesApiServlet.get(Optional.<Cache>absent(), MemcacheKeys.NOTES_KEY), nullValue());
+  }
+  
+  @Test
+  public void testCacheValueNotFound() {
+    dummyCache = Optional.of(mockCache);
+    when(mockCache.get(any(String.class))).thenReturn(null);
+    
+    assertThat(NotesApiServlet.get(dummyCache, MemcacheKeys.NOTES_KEY), nullValue());
+    
+    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+  }
+  
+  @Test
+  public void testCacheValueIncorrectType() {
+    dummyCache = Optional.of(mockCache);
+    // Return an integer instead of the expected type
+    when(mockCache.get(any(String.class))).thenReturn(123);
+    
+    assertThat(NotesApiServlet.get(dummyCache, MemcacheKeys.NOTES_KEY), nullValue());
+    // TODO(td): Assert that the correct error message is logged.
+    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+  }
+  
+  @Test
+  public void testCacheValueCorrectType() {
+    ImmutableMap<String, LinkedList<NotesDocument>> dummyCachedValue =
+        ImmutableMap.of("", new LinkedList<NotesDocument>());
+    
+    dummyCache = Optional.of(mockCache);
+    when(mockCache.get(any(String.class))).thenReturn(dummyCachedValue);
+    
+    assertThat(NotesApiServlet
+        .<ImmutableMap<String, LinkedList<NotesDocument>>> get(
+            dummyCache,
+            MemcacheKeys.NOTES_KEY),
+        is(equalTo(dummyCachedValue)));
+    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+  }
+  
+  @Test
+  public void testAbsentCachePut() {
+    assertThat(NotesApiServlet.put(dummyCache,MemcacheKeys.NOTES_KEY, ""), is(equalTo(false)));
+  }
+  
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testCachePut() {
+    dummyCache = Optional.of(mockCache);
+    when(mockCache.put(any(String.class), any(String.class))).thenReturn(null);
+    assertThat(NotesApiServlet.put(dummyCache,MemcacheKeys.NOTES_KEY, ""), is(equalTo(true)));
   }
 }

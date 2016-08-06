@@ -94,9 +94,10 @@ final class NotesApiServlet extends HttpServlet {
     }
     return Pair.of(output, downloads);
   }
-  
+
+  @VisibleForTesting
   @SuppressWarnings("unchecked") /* Type checking is done manually */
-  private static <T> T get(Optional<Cache> cache, String key) {
+  static <T> T get(Optional<Cache> cache, String key) {
     /* Check that we know what type to cast to, if not, then don't attempt to cast to avoid a
      * class cast error if the expected key is different from the actual key. */
     if (!MemcacheKeys.EXPECTED_TYPES.containsKey(key)) {
@@ -124,8 +125,9 @@ final class NotesApiServlet extends HttpServlet {
     }
   }
   
+  @VisibleForTesting
   @SuppressWarnings("unchecked")
-  private static <T extends Serializable> boolean put(Optional<Cache> cache, String key, T value) {
+  static <T extends Serializable> boolean put(Optional<Cache> cache, String key, T value) {
     if (cache.isPresent()) {
       cache.get().put(key, value);
       return true;
