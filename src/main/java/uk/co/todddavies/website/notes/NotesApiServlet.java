@@ -97,10 +97,11 @@ final class NotesApiServlet extends HttpServlet {
   
   @SuppressWarnings("unchecked") /* Type checking is done manually */
   private static <T> T get(Optional<Cache> cache, String key) {
-    /* Check that we know what type to cast to, if not, then don't attempt to cast to avoid a class cast error if the
-     * expected key is different from the actual key. */
+    /* Check that we know what type to cast to, if not, then don't attempt to cast to avoid a
+     * class cast error if the expected key is different from the actual key. */
     if (!MemcacheKeys.EXPECTED_TYPES.containsKey(key)) {
-      System.err.printf("Key '%s' not associated with a type. Did you forget to add it to MemcacheKeys.java?\n", key);
+      System.err.printf("Key '%s' not associated with a type. "
+          + "Did you forget to add it to MemcacheKeys.java?\n", key);
       return null;
     }
     // Retrieve the object from the cache
