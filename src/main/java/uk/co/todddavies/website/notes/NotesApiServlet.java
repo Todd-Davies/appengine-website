@@ -96,6 +96,7 @@ final class NotesApiServlet extends HttpServlet {
     return Pair.of(output, downloads);
   }
 
+  // TODO(td): Move this logic into a dedicated class in uk.co.todddavies.website.cache
   @VisibleForTesting
   @SuppressWarnings("unchecked") /* Type checking is done manually */
   static <T> T get(Optional<Cache> cache, MemcacheKey key) {
