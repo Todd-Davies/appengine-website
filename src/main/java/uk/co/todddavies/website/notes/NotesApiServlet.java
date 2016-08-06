@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gdata.util.common.base.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.TypeLiteral;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -94,14 +95,31 @@ final class NotesApiServlet extends HttpServlet {
     return Pair.of(output, downloads);
   }
   
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked") /* Type checking is done manually */
   private static <T> T get(Optional<Cache> cache, String key) {
-    try {
-      return cache.isPresent() ? (T) cache.get().get(key) : null;
-    } catch (ClassCastException e) {
-      // For some reason, the memcache object was a different type than the one we expected.
-      e.printStackTrace();
+    /* Check that we know what type to cast to, if not, then don't attempt to cast to avoid a class cast error if the
+     * expected key is different from the actual key. */
+    if (!MemcacheKeys.EXPECTED_TYPES.containsKey(key)) {
+      System.err.printf("Key '%s' not associated with a type. Did you forget to add it to MemcacheKeys.java?\n", key);
       return null;
+    }
+    // Retrieve the object from the cache
+    T out = cache.isPresent() ? (T) cache.get().get(key) : null;
+    // The cache didn't contain that object
+    if (out == null) {
+      return null;
+    } else {
+      // Check that the retrieved object is of the correct type.
+      TypeLiteral<?> expectedType = MemcacheKeys.EXPECTED_TYPES.get(key);
+      if (expectedType.getRawType().isInstance(out)) {
+        return out;
+      } else {
+        System.err.printf("Memcache key as of an unexpected type for key '%s'\n", key);
+        System.err.printf("Expected type: '%s'\n", expectedType.toString());
+        System.err.printf("Actual type: '%s'\n", out == null ? "null" : out.getClass().toString());
+        System.err.printf("Value: '%s'\n", out == null ? "null" : out.toString());
+        return null;
+      }
     }
   }
   
