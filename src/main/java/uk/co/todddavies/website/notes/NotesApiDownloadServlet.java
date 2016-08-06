@@ -1,6 +1,7 @@
 package uk.co.todddavies.website.notes;
 
 import uk.co.todddavies.website.cache.MemcacheKeys;
+import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -51,7 +52,7 @@ final class NotesApiDownloadServlet extends HttpServlet {
         // TODO(td): Read the data, increment the relevant notes document and then store
         // it in the cache again.
         if (memCache.isPresent()) {
-          memCache.get().remove(MemcacheKeys.NOTES_KEY);
+          memCache.get().remove(MemcacheKey.NOTES_LIST);
         }
         resp.sendRedirect(optionalNotes.get().getUrl());
       } else {
