@@ -96,7 +96,13 @@ final class NotesApiServlet extends HttpServlet {
   
   @SuppressWarnings("unchecked")
   private static <T> T get(Optional<Cache> cache, String key) {
-    return cache.isPresent() ? (T) cache.get().get(key) : null;
+    try {
+      return cache.isPresent() ? (T) cache.get().get(key) : null;
+    } catch (ClassCastException e) {
+      // For some reason, the memcache object was a different type than the one we expected.
+      e.printStackTrace();
+      return null;
+    }
   }
   
   @SuppressWarnings("unchecked")
