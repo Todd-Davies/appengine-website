@@ -1,6 +1,5 @@
 package uk.co.todddavies.website.notes;
 
-import uk.co.todddavies.website.cache.MemcacheKeys;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
