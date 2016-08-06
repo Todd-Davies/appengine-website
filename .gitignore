@@ -2,3 +2,4 @@ target/*
 apikeys
 keys.json
 *.~
+codacyUpload.sh
