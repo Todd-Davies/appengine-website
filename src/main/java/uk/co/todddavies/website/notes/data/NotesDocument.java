@@ -40,7 +40,7 @@ public final class NotesDocument implements Serializable {
     }
     return new NotesDocument(
         entity.getString("name"),
-        entity.getString("courseCode"),
+        entity.getString("course_code"),
         entity.getString("download_url"),
         tags.build(),
         (int) entity.getLong("downloads"),
