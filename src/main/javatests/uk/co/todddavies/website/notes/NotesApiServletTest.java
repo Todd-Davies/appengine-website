@@ -219,7 +219,7 @@ public class NotesApiServletTest {
     when(mockCache.get(any(String.class))).thenReturn(dummyCachedValue);
     
     assertThat(NotesApiServlet
-        .<ImmutableMap<String, LinkedList<NotesDocument>>> get(
+        .<ImmutableMap<String, LinkedList<NotesDocument>>>get(
             dummyCache,
             MemcacheKey.NOTES_LIST),
         is(equalTo(dummyCachedValue)));
