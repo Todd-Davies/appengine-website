@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
 import uk.co.todddavies.website.cache.MemcacheKeys;
+import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -104,10 +105,10 @@ public class NotesApiServletTest {
     
     servlet.doGet(mock(HttpServletRequest.class), mockResponse);
     
-    verify(mockWriter).print("{\n" +
-        "  \"downloads\" : 0,\n" +
-        "  \"notes\" : { }\n" +
-      "}");
+    verify(mockWriter).print("{\n"
+        + "  \"downloads\" : 0,\n"
+        + "  \"notes\" : { }\n"
+        + "}");
   }
   
   @Test
@@ -122,17 +123,17 @@ public class NotesApiServletTest {
     
     servlet.doGet(mock(HttpServletRequest.class), mockResponse);
     
-    verify(mockWriter).print("{\n" +
-        "  \"downloads\" : 0,\n" +
-        "  \"notes\" : {\n" +
-        "    \"Third Year\" : [ {\n" +
-        "      \"name\" : \"name\",\n" +
-        "      \"download_url\" : \"/api/notes-dl?key=0\",\n" +
-        "      \"downloads\" : 0,\n" +
-        "      \"tags\" : [ \"Third Year\" ]\n" +
-        "    } ]\n" +
-        "  }\n" +
-      "}");
+    verify(mockWriter).print("{\n"
+        + "  \"downloads\" : 0,\n"
+        + "  \"notes\" : {\n"
+        + "    \"Third Year\" : [ {\n"
+        + "      \"name\" : \"name\",\n"
+        + "      \"download_url\" : \"/api/notes-dl?key=0\",\n"
+        + "      \"downloads\" : 0,\n"
+        + "      \"tags\" : [ \"Third Year\" ]\n"
+        + "    } ]\n"
+        + "  }\n"
+        + "}");
   }
   
   @Test
@@ -183,15 +184,9 @@ public class NotesApiServletTest {
   }
   
   @Test
-  public void testUnknownCacheKey() {
-    // TODO(td): Assert that the correct error message is logged.
-    assertThat(NotesApiServlet.get(dummyCache, /* random key */ "asdff84wrfdfhg43"), nullValue());
-  }
-  
-  @Test
   public void testAbsentCache() {
     // TODO(td): Assert that the correct error message is logged.
-    assertThat(NotesApiServlet.get(Optional.<Cache>absent(), MemcacheKeys.NOTES_KEY), nullValue());
+    assertThat(NotesApiServlet.get(Optional.<Cache>absent(), MemcacheKey.NOTES_LIST), nullValue());
   }
   
   @Test
@@ -199,9 +194,9 @@ public class NotesApiServletTest {
     dummyCache = Optional.of(mockCache);
     when(mockCache.get(any(String.class))).thenReturn(null);
     
-    assertThat(NotesApiServlet.get(dummyCache, MemcacheKeys.NOTES_KEY), nullValue());
+    assertThat(NotesApiServlet.get(dummyCache, MemcacheKey.NOTES_LIST), nullValue());
     
-    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+    verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
   }
   
   @Test
@@ -210,9 +205,9 @@ public class NotesApiServletTest {
     // Return an integer instead of the expected type
     when(mockCache.get(any(String.class))).thenReturn(123);
     
-    assertThat(NotesApiServlet.get(dummyCache, MemcacheKeys.NOTES_KEY), nullValue());
+    assertThat(NotesApiServlet.get(dummyCache, MemcacheKey.NOTES_LIST), nullValue());
     // TODO(td): Assert that the correct error message is logged.
-    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+    verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
   }
   
   @Test
@@ -226,14 +221,14 @@ public class NotesApiServletTest {
     assertThat(NotesApiServlet
         .<ImmutableMap<String, LinkedList<NotesDocument>>> get(
             dummyCache,
-            MemcacheKeys.NOTES_KEY),
+            MemcacheKey.NOTES_LIST),
         is(equalTo(dummyCachedValue)));
-    verify(mockCache).get(MemcacheKeys.NOTES_KEY);
+    verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
   }
   
   @Test
   public void testAbsentCachePut() {
-    assertThat(NotesApiServlet.put(dummyCache,MemcacheKeys.NOTES_KEY, ""), is(equalTo(false)));
+    assertThat(NotesApiServlet.put(dummyCache, MemcacheKey.NOTES_LIST, ""), is(equalTo(false)));
   }
   
   @Test
@@ -241,6 +236,6 @@ public class NotesApiServletTest {
   public void testCachePut() {
     dummyCache = Optional.of(mockCache);
     when(mockCache.put(any(String.class), any(String.class))).thenReturn(null);
-    assertThat(NotesApiServlet.put(dummyCache,MemcacheKeys.NOTES_KEY, ""), is(equalTo(true)));
+    assertThat(NotesApiServlet.put(dummyCache, MemcacheKey.NOTES_LIST, ""), is(equalTo(true)));
   }
 }

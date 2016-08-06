@@ -1,6 +1,7 @@
 package uk.co.todddavies.website.notes;
 
 import uk.co.todddavies.website.cache.MemcacheKeys;
+import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
@@ -50,13 +51,13 @@ final class NotesApiServlet extends HttpServlet {
       throws IOException {
     resp.setContentType("text/plain");
     // Try and read the cached data.
-    ImmutableMap<String, Serializable> responseData = get(memCache, MemcacheKeys.NOTES_KEY);
+    ImmutableMap<String, Serializable> responseData = get(memCache, MemcacheKey.NOTES_LIST);
     // If it wasn't read, then read & prepare it.
     if (responseData == null) {
       Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer> notes = listNotesByTag(TAGS);
       int totalDownloads = notes.getSecond();
       responseData = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getFirst());
-      put(memCache, MemcacheKeys.NOTES_KEY, responseData);
+      put(memCache, MemcacheKey.NOTES_LIST, responseData);
     }
     // Serialise to JSON and send to the client.
     resp.getWriter().print(jsonObjectWriter.writeValueAsString(responseData));
@@ -97,16 +98,9 @@ final class NotesApiServlet extends HttpServlet {
 
   @VisibleForTesting
   @SuppressWarnings("unchecked") /* Type checking is done manually */
-  static <T> T get(Optional<Cache> cache, String key) {
-    /* Check that we know what type to cast to, if not, then don't attempt to cast to avoid a
-     * class cast error if the expected key is different from the actual key. */
-    if (!MemcacheKeys.EXPECTED_TYPES.containsKey(key)) {
-      System.err.printf("Key '%s' not associated with a type. "
-          + "Did you forget to add it to MemcacheKeys.java?\n", key);
-      return null;
-    }
+  static <T> T get(Optional<Cache> cache, MemcacheKey key) {
     // Retrieve the object from the cache
-    T out = cache.isPresent() ? (T) cache.get().get(key) : null;
+    T out = cache.isPresent() ? (T) cache.get().get(MemcacheKeys.KEY_MAP.get(key)) : null;
     // The cache didn't contain that object
     if (out == null) {
       return null;
@@ -127,9 +121,9 @@ final class NotesApiServlet extends HttpServlet {
   
   @VisibleForTesting
   @SuppressWarnings("unchecked")
-  static <T extends Serializable> boolean put(Optional<Cache> cache, String key, T value) {
+  static <T extends Serializable> boolean put(Optional<Cache> cache, MemcacheKey key, T value) {
     if (cache.isPresent()) {
-      cache.get().put(key, value);
+      cache.get().put(MemcacheKeys.KEY_MAP.get(key), value);
       return true;
     } else {
       return false;
