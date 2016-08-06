@@ -32,7 +32,7 @@ final class NotesApiServlet extends HttpServlet {
   private final Optional<Cache> memCache;
   
   // TODO(td): Don't hardcode this list
-  private static final ImmutableList<String> TAGS = ImmutableList.of("Third year");
+  private static final ImmutableList<String> TAGS = ImmutableList.of("Third Year");
   
   @Inject
   private NotesApiServlet(
