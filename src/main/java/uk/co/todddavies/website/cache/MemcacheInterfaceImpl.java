@@ -8,6 +8,8 @@ import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.cache.Cache;
 
@@ -17,6 +19,8 @@ import javax.cache.Cache;
  * Objects are validated as being the correct type as to avoid casting exceptions at runtime.
  */
 final class MemcacheInterfaceImpl implements MemcacheInterface {
+  
+  private static final Logger log = Logger.getLogger(MemcacheInterfaceImpl.class.getName());
 
   private final Cache memcache;
   
@@ -39,10 +43,14 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
       if (expectedType.getRawType().isInstance(out)) {
         return Optional.of(out);
       } else {
-        System.err.printf("Memcache key is of an unexpected type for key '%s'\n", key);
-        logIncorrectTypeError(key, out);
-        System.err.println("This should not happen; are multiple systems writing to the same "
-            + "memcache instance?");
+        StringBuilder errorMessage = new StringBuilder();
+        errorMessage.append(String.format(
+            "Memcache key is of an unexpected type for key '%s'\n", key));
+        logIncorrectTypeError(errorMessage, key, out);
+        errorMessage.append(
+            "This should not happen; are multiple systems writing to the same memcache"
+            + " instance?\n");
+        log.log(Level.SEVERE, errorMessage.toString());
         return Optional.absent();
       }
     }
@@ -55,9 +63,12 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
         && MemcacheKeys.EXPECTED_TYPES.get(key).getRawType().isAssignableFrom(object.getClass())) {
       memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
     } else {
-      System.err.printf("The value to be put in memcache for key '%s' was of the wrong type.\n",
-          key.toString());
-      logIncorrectTypeError(key, object);
+      StringBuilder errorMessage = new StringBuilder();
+      errorMessage.append(String.format(
+          "The value to be put in memcache for key '%s' was of the wrong type.\n",
+          key.toString()));
+      logIncorrectTypeError(errorMessage, key, object);
+      log.log(Level.SEVERE, errorMessage.toString());
     }
   }
 
@@ -66,11 +77,12 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
     memcache.remove(MemcacheKeys.KEY_MAP.get(key));
   }
   
-  private void logIncorrectTypeError(MemcacheKey key, Object object) {
-    System.err.printf("Expected type: '%s'\n", MemcacheKeys.EXPECTED_TYPES.get(key).toString());
-    System.err.printf("Actual type: '%s'\n",
-        object == null ? "null" : object.getClass().toString());
-    System.err.printf("Value: '%s'\n", object == null ? "null" : object.toString());
+  private void logIncorrectTypeError(StringBuilder sb, MemcacheKey key, Object object) {
+    sb.append(String.format(
+        "Expected type: '%s'\n", MemcacheKeys.EXPECTED_TYPES.get(key).toString()));
+    sb.append(String.format(
+        "Actual type: '%s'\n", object == null ? "null" : object.getClass().toString()));
+    sb.append(String.format("Value: '%s'\n", object == null ? "null" : object.toString()));
   }
 
 }

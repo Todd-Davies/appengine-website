@@ -13,6 +13,8 @@ import static org.mockito.Mockito.when;
 import uk.co.todddavies.website.cache.Annotations.CacheInstance;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDocument;
+import uk.co.todddavies.website.testing.LogVerifier;
+import uk.co.todddavies.website.testing.LogVerifierModule;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
@@ -26,6 +28,8 @@ import org.mockito.Mock;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.logging.Level;
 
 import javax.cache.Cache;
 
@@ -40,11 +44,16 @@ public class MemcacheInterfaceImplTest {
   @Inject
   private MemcacheInterfaceImpl cacheInterface;
   
+  @Inject
+  @SuppressWarnings("rawtypes")
+  Map<Class, LogVerifier> logVerifiers;
+  
   @Before
   public void setUp() {
     mockCache =  mock(Cache.class);
     
     Guice.createInjector(
+        LogVerifierModule.create(MemcacheInterfaceImpl.class),
         new AbstractModule() {
           @Override
           protected void configure() {
@@ -69,11 +78,17 @@ public class MemcacheInterfaceImplTest {
     // Return an integer instead of the expected type
     when(mockCache.get(any(String.class))).thenReturn(123);
     
+    String expectedMessage = "Memcache key is of an unexpected type for key 'NOTES_LIST'\n"
+        + "Expected type: 'com.google.common.collect.ImmutableMap<java.lang.String,"
+        + " java.util.LinkedList<uk.co.todddavies.website.notes.data.NotesDocument>>'\n"
+        + "Actual type: 'class java.lang.Integer'\nValue: '123'\nThis should not happen; are"
+        + " multiple systems writing to the same memcache instance?\n";
+    
     assertThat(cacheInterface.get(MemcacheKey.NOTES_LIST),
         is(equalTo(Optional.<Serializable>absent())));
     
-    // TODO(td): Assert that the correct error message is logged.
     verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
+    logVerifiers.get(MemcacheInterfaceImpl.class).verify(Level.SEVERE, expectedMessage);
   }
   
   @Test
@@ -104,9 +119,16 @@ public class MemcacheInterfaceImplTest {
   @Test
   @SuppressWarnings("unchecked")
   public void testCachePutValueIncorrectType() {
+    String expectedMessage = "The value to be put in memcache for key 'NOTES_LIST' was of the"
+        + " wrong type.\n"
+        + "Expected type: 'com.google.common.collect.ImmutableMap<java.lang.String,"
+        + " java.util.LinkedList<uk.co.todddavies.website.notes.data.NotesDocument>>'\n"
+        + "Actual type: 'class java.lang.Integer'\nValue: '123'\n";
+    
     cacheInterface.put(MemcacheKey.NOTES_LIST, 123);
     
     verify(mockCache, never()).put(any(String.class), any());
+    logVerifiers.get(MemcacheInterfaceImpl.class).verify(Level.SEVERE, expectedMessage);
   }
   
   @Test
