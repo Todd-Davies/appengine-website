@@ -39,10 +39,10 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
       if (expectedType.getRawType().isInstance(out)) {
         return Optional.of(out);
       } else {
-        System.err.printf("Memcache key as of an unexpected type for key '%s'\n", key);
-        System.err.printf("Expected type: '%s'\n", expectedType.toString());
-        System.err.printf("Actual type: '%s'\n", out == null ? "null" : out.getClass().toString());
-        System.err.printf("Value: '%s'\n", out == null ? "null" : out.toString());
+        System.err.printf("Memcache key is of an unexpected type for key '%s'\n", key);
+        logIncorrectTypeError(key, out);
+        System.err.println("This should not happen; are multiple systems writing to the same "
+            + "memcache instance?");
         return Optional.absent();
       }
     }
@@ -51,13 +51,26 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Serializable> void put(MemcacheKey key, T object) {
-    // TODO(td): Ensure that object is the correct type
-    memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
+    if (object != null
+        && MemcacheKeys.EXPECTED_TYPES.get(key).getRawType().isAssignableFrom(object.getClass())) {
+      memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
+    } else {
+      System.err.printf("The value to be put in memcache for key '%s' was of the wrong type.\n",
+          key.toString());
+      logIncorrectTypeError(key, object);
+    }
   }
 
   @Override
   public void remove(MemcacheKey key) {
     memcache.remove(MemcacheKeys.KEY_MAP.get(key));
+  }
+  
+  private void logIncorrectTypeError(MemcacheKey key, Object object) {
+    System.err.printf("Expected type: '%s'\n", MemcacheKeys.EXPECTED_TYPES.get(key).toString());
+    System.err.printf("Actual type: '%s'\n",
+        object == null ? "null" : object.getClass().toString());
+    System.err.printf("Value: '%s'\n", object == null ? "null" : object.toString());
   }
 
 }

@@ -4,7 +4,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,13 +35,15 @@ import javax.cache.Cache;
 public class MemcacheInterfaceImplTest {
   
   @Mock
-  private final Cache mockCache = mock(Cache.class);
+  private Cache mockCache;
   
   @Inject
   private MemcacheInterfaceImpl cacheInterface;
   
   @Before
   public void setUp() {
+    mockCache =  mock(Cache.class);
+    
     Guice.createInjector(
         new AbstractModule() {
           @Override
@@ -73,7 +77,7 @@ public class MemcacheInterfaceImplTest {
   }
   
   @Test
-  public void testCacheValueCorrectType() {
+  public void testCacheGetValueCorrectType() {
     ImmutableMap<String, LinkedList<NotesDocument>> dummyCachedValue =
         ImmutableMap.of("", new LinkedList<NotesDocument>());
     
@@ -84,5 +88,39 @@ public class MemcacheInterfaceImplTest {
         is(equalTo(Optional.of(dummyCachedValue))));
     
     verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
+  }
+  
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testCachePutValueCorrectType() {
+    ImmutableMap<String, LinkedList<NotesDocument>> dummyCachedValue =
+        ImmutableMap.of("", new LinkedList<NotesDocument>());
+    
+    cacheInterface.put(MemcacheKey.NOTES_LIST, dummyCachedValue);
+    
+    verify(mockCache).put(any(String.class), eq(dummyCachedValue));
+  }
+  
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testCachePutValueIncorrectType() {
+    cacheInterface.put(MemcacheKey.NOTES_LIST, 123);
+    
+    verify(mockCache, never()).put(any(String.class), any());
+  }
+  
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testCachePutValueNull() {
+    cacheInterface.put(MemcacheKey.NOTES_LIST, null);
+    
+    verify(mockCache, never()).put(any(String.class), any());
+  }
+  
+  @Test
+  public void testRemoveValue() {
+    cacheInterface.remove(MemcacheKey.NOTES_LIST);
+    
+    verify(mockCache).remove(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
   }
 }
