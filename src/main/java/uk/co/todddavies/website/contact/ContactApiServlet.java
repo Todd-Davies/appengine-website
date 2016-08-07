@@ -32,6 +32,8 @@ final class ContactApiServlet extends HttpServlet {
     this.jsonObjectWriter = jsonObjectWriter;
   }
   
+  // TODO(td): After n reloads of the captcha, add an easter egg to tell the person to stop
+  // reloading
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
