@@ -3,13 +3,19 @@ var initPage = function() {
     $("#notes-downloads").text("Total downloads: " + data["downloads"]);
     $.each(data["notes"], function(tag, list) {
       $("<h3>").appendTo("#notes-list").text(tag);
-      var ul = $("<ul>").appendTo("#notes-list");
+      var table = $("<table>").appendTo("#notes-list");
+      table.append(
+          $(document.createElement("tr"))
+              .append($(document.createElement("th")).text("Name"))
+              .append($(document.createElement("th")).text("Downloads")));
       $.each(list, function(j, item) {
+        var tr = $(document.createElement("tr"));
         var link = $(document.createElement("a"))
               .attr("href", item["download_url"])
-              .text(item["name"] + " - " + item["downloads"]);
-          ul.append(
-              $(document.createElement("li")).append(link));
+              .text(item["name"]);
+        tr.append($(document.createElement("td")).append(link));
+        tr.append($(document.createElement("td")).text(item["downloads"]));
+        table.append(tr);
       });
     });
   });

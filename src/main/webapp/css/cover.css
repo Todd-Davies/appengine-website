@@ -57,6 +57,7 @@ body {
 /* Padding for spacing */
 .inner {
   padding: 30px;
+  margin-bottom: 30px;
 }
 
 
@@ -161,4 +162,18 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+#notes-list ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.footer {
+  color: #999;
+  color: rgba(255,255,255,.5);
+}
+
+table {
+  margin: auto;
 }
