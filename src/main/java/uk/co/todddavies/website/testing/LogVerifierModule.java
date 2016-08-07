@@ -3,6 +3,9 @@ package uk.co.todddavies.website.testing;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 
+/**
+ * Module for providing {@code LogVerifier}s.
+ */
 public class LogVerifierModule extends AbstractModule {
 
   private final Class<?>[] targetClasses;
