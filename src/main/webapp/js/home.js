@@ -19,8 +19,6 @@ var loadPage = function(url) {
 
 $(document).ready(function() {
   $.getJSON("/api/pages", function(data) {
-    // Load the home page first
-    loadPage(data["home"]);
     // Now render the page list 
     $("#pages").html("");
     var ul = $("#pages");
@@ -28,13 +26,21 @@ $(document).ready(function() {
     for (var key in pages) {
       if (pages.hasOwnProperty(key)) {
         var link = $(document.createElement("a"))
-            .attr("href", "#")
+            .attr("href", "#" + pages[key])
             .attr("onclick", "loadPage(\"" + key + "\");")
             .text(pages[key]);
         ul.append(
             $(document.createElement("li")).append(link)
         );
+        var currentHeader = window.location.hash.substr(1);
+        if (pages[key].toLowerCase() === currentHeader.toLowerCase()) {
+          loadPage(key);
+        }
       }
+    }
+    var currentHeader = window.location.hash.substr(1);
+    if (currentHeader === "") {
+      loadPage(data["home"]);
     }
   });
 });
