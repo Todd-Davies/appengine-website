@@ -4,9 +4,13 @@
 
 /* Links */
 a,
-a:focus,
+a:focus {
+  color: #b3e6ff;
+}
+
 a:hover {
-  color: #fff;
+  color: #b3e6ff;
+  text-decoration: underline;
 }
 
 /* Custom default button */
@@ -67,6 +71,11 @@ body {
 .masthead-brand {
   margin-top: 10px;
   margin-bottom: 10px;
+  color: #fff;
+}
+
+.masthead-brand a {
+  color: #fff;
 }
 
 .masthead-nav > li {
@@ -112,7 +121,7 @@ body {
  */
 
 .cover {
-  padding: 0 20px;
+  padding: 30px 20px 0 20px;
 }
 .cover .btn-lg {
   padding: 10px 20px;
