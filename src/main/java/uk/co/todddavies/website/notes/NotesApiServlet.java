@@ -1,6 +1,6 @@
 package uk.co.todddavies.website.notes;
 
-import uk.co.todddavies.website.cache.MemcacheKeys;
+import uk.co.todddavies.website.cache.MemcacheInterface;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
@@ -13,14 +13,12 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gdata.util.common.base.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-import javax.cache.Cache;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +29,7 @@ final class NotesApiServlet extends HttpServlet {
   
   private final NotesDatastoreInterface notesStorage;
   private final ObjectWriter jsonObjectWriter;
-  private final Optional<Cache> memCache;
+  private final MemcacheInterface memCache;
   
   // TODO(td): Don't hardcode this list
   private static final ImmutableList<String> TAGS = ImmutableList.of("Third Year");
@@ -40,7 +38,7 @@ final class NotesApiServlet extends HttpServlet {
   private NotesApiServlet(
       NotesDatastoreInterface notesStorage,
       ObjectWriter jsonObjectWriter,
-      Optional<Cache> memCache) {
+      MemcacheInterface memCache) {
     this.notesStorage = notesStorage;
     this.jsonObjectWriter = jsonObjectWriter;
     this.memCache = memCache;
@@ -50,17 +48,20 @@ final class NotesApiServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
     resp.setContentType("text/plain");
+    ImmutableMap<String, Serializable> response;
     // Try and read the cached data.
-    ImmutableMap<String, Serializable> responseData = get(memCache, MemcacheKey.NOTES_LIST);
+    Optional<ImmutableMap<String, Serializable>> cachedValue = memCache.get(MemcacheKey.NOTES_LIST);
     // If it wasn't read, then read & prepare it.
-    if (responseData == null) {
+    if (!cachedValue.isPresent()) {
       Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer> notes = listNotesByTag(TAGS);
       int totalDownloads = notes.getSecond();
-      responseData = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getFirst());
-      put(memCache, MemcacheKey.NOTES_LIST, responseData);
+      response = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getFirst());
+      memCache.put(MemcacheKey.NOTES_LIST, response);
+    } else {
+      response = cachedValue.get();
     }
     // Serialise to JSON and send to the client.
-    resp.getWriter().print(jsonObjectWriter.writeValueAsString(responseData));
+    resp.getWriter().print(jsonObjectWriter.writeValueAsString(response));
   }
   
   /**
@@ -94,41 +95,6 @@ final class NotesApiServlet extends HttpServlet {
       }
     }
     return Pair.of(output, downloads);
-  }
-
-  // TODO(td): Move this logic into a dedicated class in uk.co.todddavies.website.cache
-  @VisibleForTesting
-  @SuppressWarnings("unchecked") /* Type checking is done manually */
-  static <T> T get(Optional<Cache> cache, MemcacheKey key) {
-    // Retrieve the object from the cache
-    T out = cache.isPresent() ? (T) cache.get().get(MemcacheKeys.KEY_MAP.get(key)) : null;
-    // The cache didn't contain that object
-    if (out == null) {
-      return null;
-    } else {
-      // Check that the retrieved object is of the correct type.
-      TypeLiteral<?> expectedType = MemcacheKeys.EXPECTED_TYPES.get(key);
-      if (expectedType.getRawType().isInstance(out)) {
-        return out;
-      } else {
-        System.err.printf("Memcache key as of an unexpected type for key '%s'\n", key);
-        System.err.printf("Expected type: '%s'\n", expectedType.toString());
-        System.err.printf("Actual type: '%s'\n", out == null ? "null" : out.getClass().toString());
-        System.err.printf("Value: '%s'\n", out == null ? "null" : out.toString());
-        return null;
-      }
-    }
-  }
-  
-  @VisibleForTesting
-  @SuppressWarnings("unchecked")
-  static <T extends Serializable> boolean put(Optional<Cache> cache, MemcacheKey key, T value) {
-    if (cache.isPresent()) {
-      cache.get().put(MemcacheKeys.KEY_MAP.get(key), value);
-      return true;
-    } else {
-      return false;
-    }
   }
   
   /**

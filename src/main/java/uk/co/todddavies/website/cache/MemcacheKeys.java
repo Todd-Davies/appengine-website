@@ -13,12 +13,12 @@ public final class MemcacheKeys {
     NOTES_LIST
   }
   
-  public static ImmutableMap<MemcacheKey, TypeLiteral<?>> EXPECTED_TYPES =
+  static ImmutableMap<MemcacheKey, TypeLiteral<?>> EXPECTED_TYPES =
       ImmutableMap.<MemcacheKey, TypeLiteral<?>>of(
           MemcacheKey.NOTES_LIST,
           new TypeLiteral<ImmutableMap<String, LinkedList<NotesDocument>>>() {});
   
-  public static final ImmutableMap<MemcacheKey, String>  KEY_MAP = 
+  static final ImmutableMap<MemcacheKey, String>  KEY_MAP = 
       ImmutableMap.of(MemcacheKey.NOTES_LIST, "notes-list");
   
   private MemcacheKeys() {/* Private constructor */}

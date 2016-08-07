@@ -5,25 +5,22 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
-import uk.co.todddavies.website.cache.MemcacheKeys;
-import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
+import uk.co.todddavies.website.cache.FakeMemcacheInterfaceImpl;
+import uk.co.todddavies.website.cache.MemcacheInterface;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Provides;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -66,8 +63,6 @@ public class NotesApiServletTest {
   @Mock
   private final Cache mockCache = mock(Cache.class);
   
-  private Optional<Cache> dummyCache = Optional.absent();
-  
   @Inject
   private NotesApiServlet servlet;
   
@@ -78,11 +73,7 @@ public class NotesApiServletTest {
           @Override
           protected void configure() {
             bind(NotesDatastoreInterface.class).toInstance(mockStorage);
-          }
-          
-          @Provides
-          Optional<Cache> dummyCacheProvider() {
-            return dummyCache;
+            bind(MemcacheInterface.class).to(FakeMemcacheInterfaceImpl.class);
           }
         },
         new JsonObjectWriterModule()
@@ -96,7 +87,6 @@ public class NotesApiServletTest {
     ImmutableMap<String, LinkedList<NotesDocument>> dummyCachedValue =
         ImmutableMap.of("Tag", new LinkedList<NotesDocument>());
     
-    dummyCache = Optional.of(mockCache);
     when(mockCache.get(any(String.class))).thenReturn(dummyCachedValue);
     
     HttpServletResponse mockResponse = mock(HttpServletResponse.class);
@@ -183,7 +173,7 @@ public class NotesApiServletTest {
     assertThat(output.entrySet(), is(empty()));
   }
   
-  @Test
+  /*@Test
   public void testAbsentCache() {
     // TODO(td): Assert that the correct error message is logged.
     assertThat(NotesApiServlet.get(Optional.<Cache>absent(), MemcacheKey.NOTES_LIST), nullValue());
@@ -237,5 +227,5 @@ public class NotesApiServletTest {
     dummyCache = Optional.of(mockCache);
     when(mockCache.put(any(String.class), any(String.class))).thenReturn(null);
     assertThat(NotesApiServlet.put(dummyCache, MemcacheKey.NOTES_LIST, ""), is(equalTo(true)));
-  }
+  }*/
 }
