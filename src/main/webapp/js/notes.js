@@ -1,16 +1,21 @@
 var initPage = function() {
   $.getJSON("/api/notes", function(data) {
     $("#notes-downloads").text("Total downloads: " + data["downloads"]);
+    var table = $("<table>").appendTo("#notes-list");
     $.each(data["notes"], function(tag, list) {
-      $("<h3>").appendTo("#notes-list").text(tag);
-      var table = $("<table>").appendTo("#notes-list");
       table.append(
           $(document.createElement("tr"))
+              .append($(document.createElement("th"))
+                  .text(tag)
+                  .attr("class", "notes-header-cell")
+                  .attr("colspan", "3")));
+      table.append(
+          $(document.createElement("tr")).attr("class", "notes-header2-cell")
               .append($(document.createElement("th")).text("Name"))
               .append($(document.createElement("th")).text("Course code"))
               .append($(document.createElement("th")).text("Downloads")));
       $.each(list, function(j, item) {
-        var tr = $(document.createElement("tr"));
+        var tr = $(document.createElement("tr")).attr("class", "notes-body-cell");
         var link = $(document.createElement("a"))
               .attr("href", item["download_url"])
               .text(item["name"]);

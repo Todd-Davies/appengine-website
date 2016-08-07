@@ -164,10 +164,32 @@ body {
   }
 }
 
-#notes-list ul {
+.notes-list ul {
   list-style-type: none;
   padding-left: 0;
 }
+
+.notes-header-cell {
+  text-align: center;
+  font-size: 25px;
+  padding-top: 15px;
+}
+
+.notes-header2-cell {
+  text-align: left;
+}
+
+.notes-body-cell {
+  text-align: left;
+  padding: 15px;
+}
+
+.notes-body-cell td {
+  padding-right: 15px;
+}
+
+.notes-body-cell:nth-child(even) {background: #555}
+.notes-body-cell:nth-child(odd) {}
 
 .footer {
   color: #999;
