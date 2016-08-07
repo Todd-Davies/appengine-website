@@ -78,7 +78,6 @@
 				    <artifactId>guava</artifactId>
 				    <version>19.0</version>
 				</dependency>
-				
 				<!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
 				<dependency>
 				    <groupId>com.google.inject</groupId>
@@ -90,6 +89,12 @@
 				  <artifactId>guice-servlet</artifactId>
 				  <version>4.1.0</version>
 				</dependency>
+				<!-- https://mvnrepository.com/artifact/com.google.inject.extensions/guice-multibindings -->
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-multibindings</artifactId>
+            <version>4.1.0</version>
+        </dependency>
 				<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
 				<dependency>
 				    <groupId>commons-codec</groupId>
