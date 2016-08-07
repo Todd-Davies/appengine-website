@@ -10,12 +10,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation of{@code NotesDatastoreInterface}.
  */
 final class NotesDatastoreImpl implements NotesDatastoreInterface {
-
+  
+  private static final Logger log = Logger.getLogger(NotesDatastoreImpl.class.getName());
   private static String KIND = "NotesDocument";
   
   private final Datastore datastore;
@@ -54,9 +57,9 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
       datastore.update(Entity.builder(entity).set("downloads", newDownloads).build());
       return (int) newDownloads;
     } else {
-      // TODO(td): Simply log this and return -1.
-      throw new RuntimeException(
-          String.format("Document with key %l not found in Datastore.", notesDocument.key));
+      log.log(Level.WARNING, 
+          String.format("NotesDocument '%s' not found in Datastore.", notesDocument));
+      return -1;
     }
   }
   
