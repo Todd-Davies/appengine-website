@@ -7,6 +7,7 @@ var initPage = function() {
       table.append(
           $(document.createElement("tr"))
               .append($(document.createElement("th")).text("Name"))
+              .append($(document.createElement("th")).text("Course code"))
               .append($(document.createElement("th")).text("Downloads")));
       $.each(list, function(j, item) {
         var tr = $(document.createElement("tr"));
@@ -14,6 +15,7 @@ var initPage = function() {
               .attr("href", item["download_url"])
               .text(item["name"]);
         tr.append($(document.createElement("td")).append(link));
+        tr.append($(document.createElement("td")).text(item["course_code"]));
         tr.append($(document.createElement("td")).text(item["downloads"]));
         table.append(tr);
       });

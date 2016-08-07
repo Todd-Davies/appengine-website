@@ -15,6 +15,7 @@ final class NotesDocumentSerializer extends JsonSerializer<NotesDocument> {
       JsonProcessingException {
     gen.writeStartObject();
     gen.writeStringField("name", value.name);
+    gen.writeStringField("course_code", value.courseCode);
     gen.writeStringField("download_url", "/api/notes-dl?key=" + value.key);
     gen.writeNumberField("downloads", value.downloads);
     gen.writeArrayFieldStart("tags");

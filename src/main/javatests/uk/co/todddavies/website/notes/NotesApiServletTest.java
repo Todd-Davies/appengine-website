@@ -118,6 +118,7 @@ public class NotesApiServletTest {
         + "  \"notes\" : {\n"
         + "    \"Third Year\" : [ {\n"
         + "      \"name\" : \"name\",\n"
+        + "      \"course_code\" : \"course code\",\n"
         + "      \"download_url\" : \"/api/notes-dl?key=0\",\n"
         + "      \"downloads\" : 0,\n"
         + "      \"tags\" : [ \"Third Year\" ]\n"
