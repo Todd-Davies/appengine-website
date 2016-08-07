@@ -11,7 +11,11 @@ public class CaptchaQuestionModule extends AbstractModule {
   // TODO(td): Load these from Datastore or something.
   private static final ImmutableList<CaptchaQuestion> QUESTIONS = ImmutableList.of(
       CaptchaQuestion.create("What is my first name?", "Todd"),
-      CaptchaQuestion.create("The planet that we live on is called...?", "Earth"));
+      CaptchaQuestion.create("The planet that we live on is called...?", "Earth"),
+      CaptchaQuestion.create("How many toes do humans have?", "Five"),
+      CaptchaQuestion.create("Books have many...", "Pages"),
+      CaptchaQuestion.create("Humans sleep in a...", "Bed"),
+      CaptchaQuestion.create("A group of birds is called a...", "Flock"));
 
   private final Random random;
   
