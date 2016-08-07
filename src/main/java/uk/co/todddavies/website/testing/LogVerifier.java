@@ -1,13 +1,13 @@
 package uk.co.todddavies.website.testing;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.gdata.util.common.base.Pair;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -22,18 +22,17 @@ public final class LogVerifier {
     Logger.getLogger(targetClass.getName()).addHandler(logHandler);
   }
   
-  public void verify(Class<?> targetClass, Level level, String message) {
-    LogRecord record = logHandler.popLogRecord();
-    assertThat(record.getLevel(), is(equalTo(level)));
-    assertThat(record.getMessage(), is(equalTo(message)));
+  @SuppressWarnings("unchecked")
+  public void verify(Level level, String message) {
+    assertThat(logHandler.logs, contains(Pair.of(level, message)));
   }
   
-  public ImmutableList<LogRecord> getLog() {
-    return ImmutableList.<LogRecord>builder().addAll(logHandler.log).build();
+  public ImmutableSet<Pair<Level, String>> getLog() {
+    return ImmutableSet.<Pair<Level, String>>builder().addAll(logHandler.logs).build();
   }
   
   private static class LogHandler extends Handler {
-    private final Queue<LogRecord> log = new LinkedList<LogRecord>();
+    private final Set<Pair<Level, String>> logs = new HashSet<>();
     
     @Override
     public void close() throws SecurityException {/* Not required */}
@@ -43,11 +42,7 @@ public final class LogVerifier {
 
     @Override
     public void publish(LogRecord record) {
-      log.add(record);
-    }
-    
-    public LogRecord popLogRecord() {
-      return log.remove();
+      logs.add(Pair.of(record.getLevel(), record.getMessage()));
     }
   }
 }
