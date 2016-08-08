@@ -61,7 +61,13 @@ body {
 /* Padding for spacing */
 .inner {
   padding: 30px;
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;*/
+}
+
+@media (min-width: 768px) {
+  .inner {
+    margin-bottom: 0px;
+  }
 }
 
 
@@ -121,8 +127,17 @@ body {
  */
 
 .cover {
-  padding: 30px 20px 0 20px;
+  padding: 0 20px;
+  margin-bottom: 0px;
 }
+
+@media (min-width: 768px) {
+  .cover {
+    padding: 30px 20px 0 20px;
+    margin-bottom: 30px;
+  }
+}
+
 .cover .btn-lg {
   padding: 10px 20px;
   font-weight: bold;
