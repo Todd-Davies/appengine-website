@@ -2,6 +2,8 @@ package uk.co.todddavies.website.testing;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gdata.util.common.base.Pair;
@@ -41,6 +43,13 @@ public final class LogVerifier {
   @SuppressWarnings("unchecked")
   public void verify(Level level, String message) {
     assertThat(logHandler.logs, contains(Pair.of(level, message)));
+  }
+  
+  /**
+   * Verify that no logs were created.
+   */
+  public void verifyNoLogs() {
+    assertThat(logHandler.logs, is(empty()));
   }
   
   public ImmutableSet<Pair<Level, String>> getLog() {

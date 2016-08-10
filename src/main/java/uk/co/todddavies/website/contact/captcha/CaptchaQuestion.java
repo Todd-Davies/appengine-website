@@ -1,6 +1,7 @@
 package uk.co.todddavies.website.contact.captcha;
 
 import com.google.api.client.util.Preconditions;
+import com.google.common.annotations.VisibleForTesting;
 
 
 public final class CaptchaQuestion {
@@ -8,7 +9,8 @@ public final class CaptchaQuestion {
   private final String question;
   private final String answer;
   
-  static CaptchaQuestion create(String question, String answer) {
+  @VisibleForTesting
+  public static CaptchaQuestion create(String question, String answer) {
     Preconditions.checkNotNull(question, "Question cannot be null");
     Preconditions.checkNotNull(answer, "Answer cannot be null");
     return new CaptchaQuestion(question, answer.toLowerCase());
