@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -33,6 +32,10 @@ final class RedirectModule  extends ServletModule {
       "/home", "/#home",
       "/notes", "/#notes",
       "/contact", "/#contact");
+  
+  private static final String UNKNOWN_PATH_WARNING = "Request to path '%s' was handled by the "
+      + "redirect module, but was not registered with a redirect target. Registered targets "
+      + "are:\n%s"; 
   
   private static final ImmutableMap<String, String> GENERATED_MAP =
       ImmutableMap.<String, String>builder()
@@ -78,8 +81,7 @@ final class RedirectModule  extends ServletModule {
       if (redirectMap.containsKey(path)) {
         resp.sendRedirect(redirectMap.get(path));
       } else {
-        log.log(Level.WARNING, String.format("Request to path '%s' was handled by the redirect "
-            + "module, but was not registered with a redirect target. Registered targets are:\n%s",
+        log.warning(String.format(UNKNOWN_PATH_WARNING,
             path, REDIRECT_MAP.toString()));
         resp.sendError(404);
       }

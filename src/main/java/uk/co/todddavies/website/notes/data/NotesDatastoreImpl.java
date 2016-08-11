@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -57,8 +56,7 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
       datastore.update(Entity.builder(entity).set("downloads", newDownloads).build());
       return (int) newDownloads;
     } else {
-      log.log(Level.WARNING, 
-          String.format("NotesDocument '%s' not found in Datastore.", notesDocument));
+      log.warning(String.format("NotesDocument '%s' not found in Datastore.", notesDocument));
       return -1;
     }
   }

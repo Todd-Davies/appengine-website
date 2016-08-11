@@ -11,7 +11,6 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -64,7 +63,7 @@ final class ContactApiServlet extends HttpServlet {
           numPresses == null ? 1 : (int) numPresses + 1);
       return questionProvider.get();
     } else {
-      log.log(Level.INFO, "User pressed the contact button 5 times.");
+      log.info("User pressed the contact button 5 times.");
       session.setAttribute(SESSION_CONTACT_PRESSES, 0);
       return questionProvider.get();
     }

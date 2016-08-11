@@ -50,7 +50,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
         errorMessage.append(
             "This should not happen; are multiple systems writing to the same memcache"
             + " instance?\n");
-        log.log(Level.SEVERE, errorMessage.toString());
+        log.severe(errorMessage.toString());
         return Optional.absent();
       }
     }
@@ -68,7 +68,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface {
           "The value to be put in memcache for key '%s' was of the wrong type.\n",
           key.toString()));
       logIncorrectTypeError(errorMessage, key, object);
-      log.log(Level.SEVERE, errorMessage.toString());
+      log.severe(errorMessage.toString());
     }
   }
 
