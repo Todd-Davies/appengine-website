@@ -16,6 +16,9 @@ import com.google.inject.servlet.ServletModule;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,11 +26,19 @@ import javax.servlet.http.HttpServletResponse;
 
 final class RedirectModule  extends ServletModule {
   
+  private static final Logger log = Logger.getLogger(RedirectModule.class.getName());
+  
   // TODO: Read from config
   private static final ImmutableMap<String, String> REDIRECT_MAP = ImmutableMap.of(
-      "/home/", "/#home",
-      "/notes/", "/#notes",
-      "/contact/", "/#contact");
+      "/home", "/#home",
+      "/notes", "/#notes",
+      "/contact", "/#contact");
+  
+  private static final ImmutableMap<String, String> GENERATED_MAP =
+      ImmutableMap.<String, String>builder()
+          .putAll(REDIRECT_MAP)
+          .putAll(addSlashesToPaths(REDIRECT_MAP))
+          .build();
   
   private RedirectModule() {}
   
@@ -37,14 +48,14 @@ final class RedirectModule  extends ServletModule {
       protected void configure() {
         install(new RedirectModule());
         bind(new TypeLiteral<ImmutableMap<String, String>>() {}).annotatedWith(RedirectMap.class)
-            .toInstance(REDIRECT_MAP);
+            .toInstance(GENERATED_MAP);
       }
     };
   }
   
   @Override
   protected void configureServlets() {
-    for (String key : REDIRECT_MAP.keySet()) {
+    for (String key : GENERATED_MAP.keySet()) {
       serve(key).with(RedirectServlet.class);
     }
   }
@@ -67,9 +78,26 @@ final class RedirectModule  extends ServletModule {
       if (redirectMap.containsKey(path)) {
         resp.sendRedirect(redirectMap.get(path));
       } else {
+        log.log(Level.WARNING, String.format("Request to path '%s' was handled by the redirect "
+            + "module, but was not registered with a redirect target. Registered targets are:\n%s",
+            path, REDIRECT_MAP.toString()));
         resp.sendError(404);
       }
     }
+  }
+  
+  /**
+   * Adds slashes to the paths (keys) of a redirect mapping.
+   * 
+   * E.g. (/contact, /#contact) will go to (/contact/, #contact);
+   */
+  private static final ImmutableMap<String, String> addSlashesToPaths(
+      ImmutableMap<String, String> input) {
+    ImmutableMap.Builder<String, String> output = ImmutableMap.builder();
+    for (Entry<String, String> mapping : input.entrySet()) {
+      output.put(mapping.getKey() + '/', mapping.getValue());
+    }
+    return output.build();
   }
   
   @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
