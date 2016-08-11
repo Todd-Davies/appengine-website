@@ -8,7 +8,6 @@ import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 
 import java.io.Serializable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.cache.Cache;
