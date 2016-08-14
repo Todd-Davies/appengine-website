@@ -18,7 +18,8 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         RedirectModule.create(),
         new JsonObjectWriterModule(),
         new PagesServletModule(API_PATH),
-        new SslVerificationServletModule(),
+        // Used when verifying ownership of the domain for https renewal
+        new SslVerificationServletModule(false),
         ContactServletModule.create(API_PATH),
         NotesServletModule.create(API_PATH));
   }

@@ -7,7 +7,5 @@
        <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     </system-properties>
     <sessions-enabled>true</sessions-enabled>
-    <static-files>
-      <include path="/.well-known/acme-challenge/J0w3Dh5wav3etnz_lEo6SSVdxCGFpHpcEdkagw9KtFM" />
-    </static-files>
+    <async-session-persistence enabled="true" />
 </appengine-web-app>
