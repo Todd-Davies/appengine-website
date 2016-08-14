@@ -3,6 +3,7 @@ package uk.co.todddavies.website;
 import uk.co.todddavies.website.contact.ContactServletModule;
 import uk.co.todddavies.website.notes.NotesServletModule;
 import uk.co.todddavies.website.pages.PagesServletModule;
+import uk.co.todddavies.website.sslverification.SslVerificationServletModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -17,6 +18,7 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         RedirectModule.create(),
         new JsonObjectWriterModule(),
         new PagesServletModule(API_PATH),
+        new SslVerificationServletModule(),
         ContactServletModule.create(API_PATH),
         NotesServletModule.create(API_PATH));
   }
