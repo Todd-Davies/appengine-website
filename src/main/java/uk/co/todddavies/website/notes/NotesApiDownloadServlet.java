@@ -46,7 +46,7 @@ final class NotesApiDownloadServlet extends HttpServlet {
       // TODO(td): Add caching here (w/ long timeout)
       Optional<NotesDocument> optionalNotes = storageInterface.get(key.get());
       if (optionalNotes.isPresent()) {
-        storageInterface.incrementDownloads(optionalNotes.get());
+        storageInterface.incrementDownloadsAsync(optionalNotes.get());
         // The data is now stale
         // TODO(td): Read the data, increment the relevant notes document and then store
         // it in the cache again.

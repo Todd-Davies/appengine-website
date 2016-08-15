@@ -1,9 +1,7 @@
 package uk.co.todddavies.website.notes.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.StringValue;
-import com.google.cloud.datastore.Value;
+import com.google.appengine.api.datastore.Entity;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 
@@ -19,12 +17,12 @@ public final class NotesDocument implements Serializable {
   final String courseCode;
   final String url;
   final ImmutableList<String> tags;
-  final int downloads;
+  final long downloads;
   final long key;
   
   //TODO(td): Use autovalue here
   NotesDocument(
-      String name, String courseCode, String url, List<String> tags, int downloads, long key) {
+      String name, String courseCode, String url, List<String> tags, long downloads, long key) {
     this.name = name;
     this.courseCode = courseCode;
     this.url = url;
@@ -33,18 +31,19 @@ public final class NotesDocument implements Serializable {
     this.key = key;
   }
   
+  @SuppressWarnings("unchecked")
   static NotesDocument createFromEntity(Entity entity) {
     ImmutableList.Builder<String> tags = ImmutableList.<String>builder();
-    for (Value<String> s : entity.<StringValue>getList("tags")) {
-      tags.add(s.get());
+    for (String s : (List<String>) entity.getProperty("tags")) {
+      tags.add(s);
     }
     return new NotesDocument(
-        entity.getString("name"),
-        entity.getString("course_code"),
-        entity.getString("download_url"),
+        (String) entity.getProperty("name"),
+        (String) entity.getProperty("course_code"),
+        (String) entity.getProperty("download_url"),
         tags.build(),
-        (int) entity.getLong("downloads"),
-        entity.key().id());
+        (long) entity.getProperty("downloads"),
+        entity.getKey().getId());
   }
   
   @VisibleForTesting
@@ -54,9 +53,8 @@ public final class NotesDocument implements Serializable {
   }
 
   public static Entity incrementDownloads(Entity entity) {
-    return Entity.builder(entity)
-        .set("downloads", entity.getLong("downloads") + 1)
-        .build();
+    entity.setProperty("downloads", (long) entity.getProperty("downloads") + 1);
+    return entity;
   }
   
   @Override
@@ -91,11 +89,15 @@ public final class NotesDocument implements Serializable {
     return tags;
   }
 
-  public int getDownloads() {
+  public long getDownloads() {
     return downloads;
   }
 
   public long getKey() {
     return key;
+  }
+  
+  public String getCourseCode() {
+    return courseCode;
   }
 }

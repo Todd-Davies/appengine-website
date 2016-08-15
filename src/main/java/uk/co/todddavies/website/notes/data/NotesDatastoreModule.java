@@ -1,8 +1,8 @@
 package uk.co.todddavies.website.notes.data;
 
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
-import com.google.cloud.datastore.KeyFactory;
+import com.google.appengine.api.datastore.AsyncDatastoreService;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.inject.AbstractModule;
 
 /**
@@ -12,9 +12,9 @@ public final class NotesDatastoreModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    Datastore datastore = DatastoreOptions.defaultInstance().service();
-    bind(Datastore.class).toInstance(datastore);
-    bind(KeyFactory.class).toInstance(datastore.newKeyFactory().kind("NotesDocument"));
+    bind(DatastoreService.class).toInstance(DatastoreServiceFactory.getDatastoreService());
+    bind(AsyncDatastoreService.class)
+        .toInstance(DatastoreServiceFactory.getAsyncDatastoreService());
     
     bind(NotesDatastoreInterface.class).to(NotesDatastoreImpl.class);
   }
