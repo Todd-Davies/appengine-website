@@ -7,6 +7,7 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
+import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.AsyncFunction;
@@ -70,15 +71,13 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
   }
   
   public Future<Integer> incrementDownloadsAsync(final NotesDocument notesDocument) {
-    ListenableFuture<com.google.appengine.api.datastore.Entity> entity =
+    ListenableFuture<Entity> entity =
         JdkFutureAdapters.listenInPoolThread(asyncDatastore.get(createKey(notesDocument.getKey())));
-    return Futures.transformAsync(entity,
-        new AsyncFunction<com.google.appengine.api.datastore.Entity, Integer>() {
-          @Override
-          public ListenableFuture<Integer> apply(com.google.appengine.api.datastore.Entity entity) {
-            return Futures.immediateFuture(updateDownloadCount(entity, notesDocument));
-          }
-        });
+    return Futures.transform(entity, new Function<Entity, Integer>() {
+      @Override
+      public Integer apply(Entity input) {
+        return updateDownloadCount(input, notesDocument);
+      }});
   }
   
   private final Integer updateDownloadCount(
