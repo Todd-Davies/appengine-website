@@ -67,8 +67,8 @@ limitations under the License.
         <configuration>
           <configLocation>google-checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
-          <failOnViolation>true</failOnViolation>
-          <failsOnError>true</failsOnError>
+          <failOnViolation>false</failOnViolation>
+          <failsOnError>false</failsOnError>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <suppressionsLocation>suppressions.xml</suppressionsLocation>
         </configuration>
