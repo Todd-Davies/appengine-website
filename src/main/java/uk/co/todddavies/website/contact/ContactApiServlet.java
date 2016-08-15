@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.contact;
 
+import uk.co.todddavies.website.contact.Annotations.EasterEggRefreshNumber;
 import uk.co.todddavies.website.contact.Annotations.EmailAddress;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestion;
 
@@ -27,14 +28,17 @@ final class ContactApiServlet extends HttpServlet {
   private static final Logger log = Logger.getLogger(ContactApiServlet.class.getName());
   
   private final String email;
+  private final int numEasterEggRefreshes;
   private final Provider<CaptchaQuestion> questionProvider;
   private final ObjectWriter jsonObjectWriter;
   
   @Inject
   private ContactApiServlet(@EmailAddress String email,
+      @EasterEggRefreshNumber int numEasterEggRefreshes,
       ObjectWriter jsonObjectWriter,
       Provider<CaptchaQuestion> questionProvider) {
     this.email = email;
+    this.numEasterEggRefreshes = numEasterEggRefreshes;
     this.questionProvider = questionProvider;
     this.jsonObjectWriter = jsonObjectWriter;
   }
@@ -55,15 +59,15 @@ final class ContactApiServlet extends HttpServlet {
   
   private CaptchaQuestion getQuestion(HttpSession session) {
     Object numPresses = session.getAttribute(SESSION_CONTACT_PRESSES);
-    // TODO(td): Don't hard code '5'
     // TODO(td): Check the type of the object before casting
-    if (numPresses == null || (int) numPresses < 5) {
+    if (numPresses == null
+        || (numPresses instanceof Integer && (int) numPresses < numEasterEggRefreshes)) {
       session.setAttribute(
           SESSION_CONTACT_PRESSES,
           numPresses == null ? 1 : (int) numPresses + 1);
       return questionProvider.get();
     } else {
-      log.info("User pressed the contact button 5 times.");
+      log.info(String.format("User pressed the contact button %d times.", numPresses));
       session.setAttribute(SESSION_CONTACT_PRESSES, 0);
       return questionProvider.get();
     }

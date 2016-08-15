@@ -20,7 +20,7 @@ final class SslVerificationServlet extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
     resp.setContentType("text/plain");
-    resp.getWriter().print("J0w3Dh5wav3etnz_lEo6SSVdxCGFpHpcEdkagw9KtFM.OnhvgC6zwPgFskHEs3uAT67O8"
-        + "c5ENzP5hQxOB5o7gk0");
+    resp.getWriter().print("CmBqIFkRQXtUqLTEZ2UW_05Tu3leGJ2WJIsThPMvoHM.FdQRW4Dc3IShx1jP1m8oPPJcLi"
+        + "PD7FLqJSaQD4tgWIQ");
   }
 }

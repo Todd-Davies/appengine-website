@@ -15,6 +15,8 @@ final class Annotations {
   private Annotations() {}
   
   @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
-  public @interface EmailAddress {}
+  @interface EmailAddress {}
   
+  @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
+  @interface EasterEggRefreshNumber{}
 }

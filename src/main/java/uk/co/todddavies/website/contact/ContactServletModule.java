@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.contact;
 
+import uk.co.todddavies.website.contact.Annotations.EasterEggRefreshNumber;
 import uk.co.todddavies.website.contact.Annotations.EmailAddress;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestionModule;
 
@@ -8,8 +9,9 @@ import com.google.inject.servlet.ServletModule;
 
 public final class ContactServletModule extends ServletModule {
   
-  // TODO(td): Get this with a flag
+  // TODO(td): Get these with a flag
   private static final String EMAIL = "todd434@gmail.com";
+  private static final int NUM_EASTER_EGG_REFRESHES = 5;
   
   private final String apiPath;
   
@@ -31,5 +33,8 @@ public final class ContactServletModule extends ServletModule {
   protected void configureServlets() {
     serve(apiPath + "contact").with(ContactApiServlet.class);
     bind(String.class).annotatedWith(EmailAddress.class).toInstance(EMAIL);
+    bind(Integer.class)
+        .annotatedWith(EasterEggRefreshNumber.class)
+        .toInstance(NUM_EASTER_EGG_REFRESHES);
   }  
 }
