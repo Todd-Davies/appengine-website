@@ -11,8 +11,8 @@ public final class CaptchaQuestion {
   
   @VisibleForTesting
   public static CaptchaQuestion create(String question, String answer) {
-    Preconditions.checkNotNull(question, "Question cannot be null");
-    Preconditions.checkNotNull(answer, "Answer cannot be null");
+    Preconditions.checkArgument(question != null && !question.isEmpty(), "Question cannot be null");
+    Preconditions.checkArgument(answer != null && !answer.isEmpty(), "Answer cannot be null");
     return new CaptchaQuestion(question, answer.toLowerCase());
   }
   

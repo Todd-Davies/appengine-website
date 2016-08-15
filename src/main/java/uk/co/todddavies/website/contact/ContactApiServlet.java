@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.contact;
 
+import uk.co.todddavies.website.contact.Annotations.EasterEggQuestion;
 import uk.co.todddavies.website.contact.Annotations.EasterEggRefreshNumber;
 import uk.co.todddavies.website.contact.Annotations.EmailAddress;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestion;
@@ -29,17 +30,19 @@ final class ContactApiServlet extends HttpServlet {
   
   private final String email;
   private final int numEasterEggRefreshes;
-  private final Provider<CaptchaQuestion> questionProvider;
+  private final Provider<CaptchaQuestion> questionProvider, easterEggProvider;
   private final ObjectWriter jsonObjectWriter;
   
   @Inject
   private ContactApiServlet(@EmailAddress String email,
-      @EasterEggRefreshNumber int numEasterEggRefreshes,
       ObjectWriter jsonObjectWriter,
-      Provider<CaptchaQuestion> questionProvider) {
+      Provider<CaptchaQuestion> questionProvider,
+      @EasterEggRefreshNumber int numEasterEggRefreshes,
+      @EasterEggQuestion Provider<CaptchaQuestion> easterEggProvider) {
     this.email = email;
     this.numEasterEggRefreshes = numEasterEggRefreshes;
     this.questionProvider = questionProvider;
+    this.easterEggProvider = easterEggProvider;
     this.jsonObjectWriter = jsonObjectWriter;
   }
   
@@ -67,9 +70,12 @@ final class ContactApiServlet extends HttpServlet {
           numPresses == null ? 1 : (int) numPresses + 1);
       return questionProvider.get();
     } else {
-      log.info(String.format("User pressed the contact button %d times.", numPresses));
+      log.info(
+          String.format(
+              "User pressed the contact button %d times; easter egg activated!",
+              numPresses));
       session.setAttribute(SESSION_CONTACT_PRESSES, 0);
-      return questionProvider.get();
+      return easterEggProvider.get();
     }
   }
 }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
+import uk.co.todddavies.website.contact.Annotations.EasterEggQuestion;
 import uk.co.todddavies.website.contact.Annotations.EasterEggRefreshNumber;
 import uk.co.todddavies.website.contact.Annotations.EmailAddress;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestion;
@@ -35,6 +36,7 @@ public class ContactApiServletTest {
   
   private static final String TEST_EMAIL = "test@testmail.com";
   private static final CaptchaQuestion TEST_CAPTCHA = CaptchaQuestion.create("Hi", "there");
+  private static final CaptchaQuestion EGG_CAPTCHA = CaptchaQuestion.create("Egg", "captcha");
   
   @Inject
   private ContactApiServlet servlet;
@@ -51,6 +53,9 @@ public class ContactApiServletTest {
           protected void configure() {
             bind(String.class).annotatedWith(EmailAddress.class).toInstance(TEST_EMAIL);
             bind(Integer.class).annotatedWith(EasterEggRefreshNumber.class).toInstance(5);
+            bind(CaptchaQuestion.class)
+                .annotatedWith(EasterEggQuestion.class)
+                .toInstance(EGG_CAPTCHA);
             bind(CaptchaQuestion.class).toInstance(TEST_CAPTCHA);
           }
         },
@@ -79,6 +84,6 @@ public class ContactApiServletTest {
     servlet.doGet(mockRequest, mockResponse);
     
     logVerifiers.get(ContactApiServlet.class)
-        .verify(Level.INFO, "User pressed the contact button 5 times.");
+        .verify(Level.INFO, "User pressed the contact button 5 times; easter egg activated!");
   }
 }

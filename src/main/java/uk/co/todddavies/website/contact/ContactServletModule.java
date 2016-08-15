@@ -1,7 +1,9 @@
 package uk.co.todddavies.website.contact;
 
+import uk.co.todddavies.website.contact.Annotations.EasterEggQuestion;
 import uk.co.todddavies.website.contact.Annotations.EasterEggRefreshNumber;
 import uk.co.todddavies.website.contact.Annotations.EmailAddress;
+import uk.co.todddavies.website.contact.captcha.CaptchaQuestion;
 import uk.co.todddavies.website.contact.captcha.CaptchaQuestionModule;
 
 import com.google.inject.AbstractModule;
@@ -36,5 +38,8 @@ public final class ContactServletModule extends ServletModule {
     bind(Integer.class)
         .annotatedWith(EasterEggRefreshNumber.class)
         .toInstance(NUM_EASTER_EGG_REFRESHES);
+    bind(CaptchaQuestion.class)
+        .annotatedWith(EasterEggQuestion.class)
+        .toInstance(CaptchaQuestion.create("Please stop spamming my contact button!", "Okay"));
   }  
 }

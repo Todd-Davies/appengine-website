@@ -19,4 +19,7 @@ final class Annotations {
   
   @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
   @interface EasterEggRefreshNumber{}
+  
+  @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
+  @interface EasterEggQuestion{}
 }
