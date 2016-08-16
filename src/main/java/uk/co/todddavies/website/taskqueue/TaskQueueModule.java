@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
 /**
- * Module to provide {@code Queue}.
+ * Module to provide {@code Queue} for task queues.
  */
 public final class TaskQueueModule extends AbstractModule {
 
