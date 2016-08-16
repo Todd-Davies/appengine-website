@@ -17,8 +17,10 @@ import javax.cache.Cache;
  * 
  * Objects are validated as being the correct type as to avoid casting exceptions at runtime.
  */
-final class MemcacheInterfaceImpl implements MemcacheInterface {
+final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
   
+  private static final long serialVersionUID = 4623929768126779493L;
+
   private static final Logger log = Logger.getLogger(MemcacheInterfaceImpl.class.getName());
 
   private final Cache memcache;

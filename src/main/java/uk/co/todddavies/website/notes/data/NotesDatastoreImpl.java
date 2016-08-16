@@ -1,41 +1,34 @@
 package uk.co.todddavies.website.notes.data;
 
-import com.google.appengine.api.datastore.AsyncDatastoreService;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.AsyncFunction;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.JdkFutureAdapters;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.google.inject.Inject;
 
-import java.util.concurrent.Future;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Implementation of{@code NotesDatastoreInterface}.
  */
-final class NotesDatastoreImpl implements NotesDatastoreInterface {
-  
+final class NotesDatastoreImpl implements NotesDatastoreInterface, Serializable {
+
+  private static final long serialVersionUID = -8170917626618952925L;
   private static final Logger log = Logger.getLogger(NotesDatastoreImpl.class.getName());
   private static String KIND = "NotesDocument";
   
   private final DatastoreService datastore;
-  private final AsyncDatastoreService asyncDatastore;
   
   @Inject
-  NotesDatastoreImpl(DatastoreService datastore, AsyncDatastoreService asyncDatastore) {
+  NotesDatastoreImpl(DatastoreService datastore) {
     this.datastore = datastore;
-    this.asyncDatastore = asyncDatastore;
+
   }
   
   public ImmutableList<NotesDocument> listNotes() {
@@ -66,36 +59,6 @@ final class NotesDatastoreImpl implements NotesDatastoreInterface {
     } catch (EntityNotFoundException e) {
       String errorString = "NotesDocument '%s' not found in Datastore.";
       log.log(Level.WARNING, String.format(errorString, notesDocument), e);
-      return -1;
-    }
-  }
-  
-  public Future<Integer> incrementDownloadsAsync(final NotesDocument notesDocument) {
-    ListenableFuture<Entity> entity =
-        JdkFutureAdapters.listenInPoolThread(asyncDatastore.get(createKey(notesDocument.getKey())));
-    return Futures.transform(entity, new Function<Entity, Integer>() {
-      @Override
-      public Integer apply(Entity input) {
-        return updateDownloadCount(input, notesDocument);
-      }});
-  }
-  
-  private final Integer updateDownloadCount(
-      com.google.appengine.api.datastore.Entity entity,
-      NotesDocument notesDocument) {
-    if (entity != null) {
-      final long newDownloads = (long) entity.getProperty("downloads") + 1;
-      entity.setProperty("downloads", newDownloads);
-      try {
-        Futures.getUnchecked(asyncDatastore.put(entity));
-        return (int) newDownloads;
-      } catch (UncheckedExecutionException e) {
-        String errorString = "An error occured updating the download count of %s";
-        log.log(Level.WARNING, String.format(errorString, notesDocument), e);
-        return -1;
-      }
-    } else {
-      log.warning(String.format("NotesDocument '%s' not found in Datastore.", notesDocument));
       return -1;
     }
   }

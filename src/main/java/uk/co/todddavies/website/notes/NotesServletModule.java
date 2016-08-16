@@ -2,6 +2,7 @@ package uk.co.todddavies.website.notes;
 
 import uk.co.todddavies.website.cache.MemcacheModule;
 import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
+import uk.co.todddavies.website.taskqueue.TaskQueueModule;
 
 import com.google.common.base.Optional;
 import com.google.inject.AbstractModule;
@@ -44,6 +45,7 @@ public final class NotesServletModule extends ServletModule {
         install(new NotesServletModule(apiPath));
         install(new MemcacheModule());
         install(new NotesDatastoreModule());
+        install(new TaskQueueModule());
       }
     };
   }
