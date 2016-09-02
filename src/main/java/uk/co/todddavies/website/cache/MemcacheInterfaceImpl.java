@@ -3,11 +3,13 @@ package uk.co.todddavies.website.cache;
 import uk.co.todddavies.website.cache.Annotations.CacheInstance;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 
+import com.google.appengine.api.memcache.MemcacheServiceException;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.cache.Cache;
@@ -33,8 +35,13 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
   @Override
   @SuppressWarnings("unchecked")
   public <T extends Serializable> Optional<T> get(MemcacheKey key) {
-   // Retrieve the object from the cache
-    T out = (T) memcache.get(MemcacheKeys.KEY_MAP.get(key));
+    T out = null;
+    // Try and retrieve the object from the cache
+    try {
+      out = (T) memcache.get(MemcacheKeys.KEY_MAP.get(key));
+    } catch (MemcacheServiceException e) {
+      log.log(Level.WARNING, "MemCache service down", e);
+    }
     // The cache didn't contain that object
     if (out == null) {
       return Optional.absent();
@@ -59,10 +66,15 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T extends Serializable> void put(MemcacheKey key, T object) {
+  public <T extends Serializable> boolean put(MemcacheKey key, T object) {
     if (object != null
         && MemcacheKeys.EXPECTED_TYPES.get(key).getRawType().isAssignableFrom(object.getClass())) {
-      memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
+      try {
+        memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
+        return true;
+      } catch (MemcacheServiceException e) {
+        log.log(Level.WARNING, "MemCache service down", e);
+      }
     } else {
       StringBuilder errorMessage = new StringBuilder();
       errorMessage.append(String.format(
@@ -71,11 +83,16 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
       logIncorrectTypeError(errorMessage, key, object);
       log.severe(errorMessage.toString());
     }
+    return false;
   }
 
   @Override
   public void remove(MemcacheKey key) {
-    memcache.remove(MemcacheKeys.KEY_MAP.get(key));
+    try {
+      memcache.remove(MemcacheKeys.KEY_MAP.get(key));
+    } catch (MemcacheServiceException e) {
+      log.log(Level.WARNING, "MemCache service down", e);
+    }
   }
   
   private void logIncorrectTypeError(StringBuilder sb, MemcacheKey key, Object object) {
@@ -85,5 +102,4 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
         "Actual type: '%s'\n", object == null ? "null" : object.getClass().toString()));
     sb.append(String.format("Value: '%s'\n", object == null ? "null" : object.toString()));
   }
-
 }

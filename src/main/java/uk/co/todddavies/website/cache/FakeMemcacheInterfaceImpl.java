@@ -20,8 +20,9 @@ public final class FakeMemcacheInterfaceImpl implements MemcacheInterface {
   }
 
   @Override
-  public <T extends Serializable> void put(MemcacheKey key, T object) {
-    /* Do nothing, leave the 'cache' empty */  
+  public <T extends Serializable> boolean put(MemcacheKey key, T object) {
+    /* Do nothing, leave the 'cache' empty */
+    return false;
   }
 
   @Override

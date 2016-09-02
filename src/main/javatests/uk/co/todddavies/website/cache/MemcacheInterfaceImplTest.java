@@ -16,6 +16,7 @@ import uk.co.todddavies.website.notes.data.NotesDocument;
 import uk.co.todddavies.website.testing.LogVerifier;
 import uk.co.todddavies.website.testing.LogVerifierModule;
 
+import com.google.appengine.api.memcache.MemcacheServiceException;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
@@ -144,5 +145,18 @@ public class MemcacheInterfaceImplTest {
     cacheInterface.remove(MemcacheKey.NOTES_LIST);
     
     verify(mockCache).remove(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
+  }
+  
+  @Test
+  @SuppressWarnings("unchecked")
+  public void testPutServiceException() {
+    when(mockCache.put(any(Object.class), any(Object.class)))
+        .thenThrow(new MemcacheServiceException("No service!"));
+    String expectedMessage = "MemCache service down";
+    ImmutableMap<String, LinkedList<NotesDocument>> testValue = ImmutableMap.of();
+    
+    cacheInterface.put(MemcacheKey.NOTES_LIST, testValue);
+    
+    logVerifiers.get(MemcacheInterfaceImpl.class).verifyLogContains(Level.WARNING, expectedMessage);
   }
 }

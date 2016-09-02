@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 import com.google.common.collect.ImmutableSet;
 import com.google.gdata.util.common.base.Pair;
 
+import org.junit.Assert;
 import org.junit.Before;
 
 import java.util.HashSet;
@@ -43,6 +44,24 @@ public final class LogVerifier {
   @SuppressWarnings("unchecked")
   public void verify(Level level, String message) {
     assertThat(logHandler.logs, contains(Pair.of(level, message)));
+  }
+  
+  /**
+   * Verify that a log was present containing part of the message.
+   */
+  public void verifyLogContains(Level level, String message) {
+    for (Pair<Level, String> log : logHandler.logs) {
+      if (log.getFirst().equals(level)) {
+        if (log.getSecond().contains(message)) {
+          // Passed :)
+          return;
+        }
+      }
+    }
+    Assert.fail(
+        String.format(
+            "No log with level '%s' and containing message '%s' was found in the logs.",
+            level, message));
   }
   
   /**

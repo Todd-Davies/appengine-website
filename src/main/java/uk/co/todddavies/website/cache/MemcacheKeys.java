@@ -18,6 +18,8 @@ public final class MemcacheKeys {
           MemcacheKey.NOTES_LIST,
           new TypeLiteral<ImmutableMap<String, LinkedList<NotesDocument>>>() {});
   
+  // N.b. This should be a bijective mapping between MemcacheKey and String.
+  // *Every* MemcacheKey value should be represented.
   static final ImmutableMap<MemcacheKey, String>  KEY_MAP = 
       ImmutableMap.of(MemcacheKey.NOTES_LIST, "notes-list");
   

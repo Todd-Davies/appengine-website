@@ -13,7 +13,7 @@ public interface MemcacheInterface {
   
   public <T extends Serializable> Optional<T> get(MemcacheKey key);
 
-  public <T extends Serializable> void put(MemcacheKey key, T object);
+  public <T extends Serializable> boolean put(MemcacheKey key, T object);
 
   public void remove(MemcacheKey key);
 }
