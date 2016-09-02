@@ -84,6 +84,6 @@ public class ContactApiServletTest {
     servlet.doGet(mockRequest, mockResponse);
     
     logVerifiers.get(ContactApiServlet.class)
-        .verify(Level.INFO, "User pressed the contact button 5 times; easter egg activated!");
+        .verifyLogContains(Level.INFO, "User pressed the contact button 5 times; easter egg activated!");
   }
 }
