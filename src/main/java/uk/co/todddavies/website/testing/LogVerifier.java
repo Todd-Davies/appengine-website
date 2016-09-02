@@ -51,11 +51,9 @@ public final class LogVerifier {
    */
   public void verifyLogContains(Level level, String message) {
     for (Pair<Level, String> log : logHandler.logs) {
-      if (log.getFirst().equals(level)) {
-        if (log.getSecond().contains(message)) {
-          // Passed :)
-          return;
-        }
+      if (log.getFirst().equals(level) && log.getSecond().contains(message)) {
+        // Passed :)
+        return;
       }
     }
     Assert.fail(
