@@ -159,4 +159,26 @@ public class MemcacheInterfaceImplTest {
     
     logVerifiers.get(MemcacheInterfaceImpl.class).verifyLogContains(Level.WARNING, expectedMessage);
   }
+  
+  @Test
+  public void testGetServiceException() {
+    when(mockCache.get(any(Object.class)))
+        .thenThrow(new MemcacheServiceException("No service!"));
+    String expectedMessage = "MemCache service down";
+    
+    cacheInterface.get(MemcacheKey.NOTES_LIST);
+    
+    logVerifiers.get(MemcacheInterfaceImpl.class).verifyLogContains(Level.WARNING, expectedMessage);
+  }
+  
+  @Test
+  public void testRemoveServiceException() {
+    when(mockCache.remove(any(Object.class)))
+        .thenThrow(new MemcacheServiceException("No service!"));
+    String expectedMessage = "MemCache service down";
+    
+    cacheInterface.remove(MemcacheKey.NOTES_LIST);
+    
+    logVerifiers.get(MemcacheInterfaceImpl.class).verifyLogContains(Level.WARNING, expectedMessage);
+  }
 }
