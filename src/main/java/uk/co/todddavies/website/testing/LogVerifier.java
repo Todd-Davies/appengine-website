@@ -28,9 +28,11 @@ public final class LogVerifier {
   
   final LogHandler logHandler;
   
-  LogVerifier(Class<?> targetClass) {
+  LogVerifier(Class<?> targetClass, boolean suppressOutput) {
     logHandler = new LogHandler();
-    Logger.getLogger(targetClass.getName()).addHandler(logHandler);
+    Logger targetLogger = Logger.getLogger(targetClass.getName());
+    targetLogger.addHandler(logHandler);
+    targetLogger.setUseParentHandlers(!suppressOutput);
   }
   
   @Before

@@ -9,13 +9,19 @@ import com.google.inject.multibindings.MapBinder;
 public class LogVerifierModule extends AbstractModule {
 
   private final Class<?>[] targetClasses;
+  private final boolean suppressLogOutput;
   
-  private LogVerifierModule(Class<?>... targetClasses) {
+  private LogVerifierModule(boolean suppressLogOutput, Class<?>... targetClasses) {
     this.targetClasses = targetClasses;
+    this.suppressLogOutput = suppressLogOutput;
   }
   
   public static LogVerifierModule create(Class<?>... targetClasses) {
-    return new LogVerifierModule(targetClasses);
+    return new LogVerifierModule(true, targetClasses);
+  }
+  
+  public static LogVerifierModule create(boolean suppressLogOutput, Class<?>... targetClasses) {
+    return new LogVerifierModule(suppressLogOutput, targetClasses);
   }
   
   @Override
@@ -23,7 +29,8 @@ public class LogVerifierModule extends AbstractModule {
     MapBinder<? super Class<?>, LogVerifier> logVerifierBinder =
         MapBinder.newMapBinder(binder(), Class.class, LogVerifier.class);
     for (Class<?> targetClass : targetClasses) {
-      logVerifierBinder.addBinding(targetClass).toInstance(new LogVerifier(targetClass));
+      logVerifierBinder.addBinding(targetClass)
+          .toInstance(new LogVerifier(targetClass, suppressLogOutput));
     }
   }
 }
