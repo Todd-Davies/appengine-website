@@ -5,4 +5,4 @@ keys/*
 *.~
 codacyUpload.sh
 *#
-src/main/java/uk/co/todddavies/website/cron/tasks/HabiticaApiKeys.java
+./src/main/java/uk/co/todddavies/website/cron/tasks/HabiticaApiKeys.java
