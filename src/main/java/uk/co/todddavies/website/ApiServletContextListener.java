@@ -1,6 +1,7 @@
 package uk.co.todddavies.website;
 
 import uk.co.todddavies.website.contact.ContactServletModule;
+import uk.co.todddavies.website.cron.tasks.CronTasksServletModule;
 import uk.co.todddavies.website.notes.NotesServletModule;
 import uk.co.todddavies.website.pages.PagesServletModule;
 import uk.co.todddavies.website.sslverification.SslVerificationServletModule;
@@ -21,6 +22,7 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         // Used when verifying ownership of the domain for https renewal
         new SslVerificationServletModule(false),
         ContactServletModule.create(API_PATH),
-        NotesServletModule.create(API_PATH));
+        NotesServletModule.create(API_PATH),
+        CronTasksServletModule.create());
   }
 }
