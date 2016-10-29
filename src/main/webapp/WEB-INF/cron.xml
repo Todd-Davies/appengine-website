@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/cron/tasks/?id=5681034041491456</url>
+    <description>Monthly goals</description>
+    <schedule>1 of month 02:30</schedule>
+    <retry-parameters>
+      <min-backoff-seconds>10</min-backoff-seconds>
+      <max-doublings>5</max-doublings>
+    </retry-parameters>
+  </cron>
+</cronentries>
