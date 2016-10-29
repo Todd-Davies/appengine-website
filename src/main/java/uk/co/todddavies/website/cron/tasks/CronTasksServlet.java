@@ -56,6 +56,12 @@ final class CronTasksServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException {
+    String cronHeader = req.getHeader("X-Appengine-Cron");
+    if(cronHeader == null || !cronHeader.equals("true")) {
+      log.warning("Not called from Cron.");
+      resp.setStatus(401);
+      return;
+    }
     Optional<Long> taskId = taskIdProvider.get();
     if (!taskId.isPresent()) {
       log.warning("Task ID not supplied to endpoint");
