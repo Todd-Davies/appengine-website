@@ -38,7 +38,7 @@ public final class RecurringTask implements Serializable {
   @Override
   public String toString() {
     return new StringBuilder()
-        .append("NotesDocument(")
+        .append("RecurringTask(")
         .append(name).append(",")
         .append(notes).append(",")
         .append(key).append(")")

@@ -240,7 +240,8 @@ public class CronTasksServletTest {
     
     servlet.doGet(mockRequest, mockResponse);
 
-    logVerifiers.get(CronTasksServlet.class).verifyNoLogs();
+    logVerifiers.get(CronTasksServlet.class).verify(Level.INFO, 
+        String.format("Task '%s' processed successfully", STORED_TASK));
     verify(testHttpClient).execute(argThat(HttpPostMatcher.match(expectedPost)));
   }
 }

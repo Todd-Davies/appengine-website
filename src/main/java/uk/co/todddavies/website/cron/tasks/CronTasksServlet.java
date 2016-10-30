@@ -88,6 +88,7 @@ final class CronTasksServlet extends HttpServlet {
     // Execute http request to Habitica
     try {
       executeTask(task.get(), credentialStorage, httpClientProvider.get());
+      log.info(String.format("Task '%s' processed successfully", task.get()));
       resp.setStatus(200);
     } catch (RuntimeException e) {
       String errorString = "API request to Habitica failed.\nTask: %s";
