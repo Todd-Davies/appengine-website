@@ -137,7 +137,6 @@ public class CronTasksServletTest {
     
     servlet.doGet(mockRequest, mockResponse);
 
-    System.out.println(logVerifiers.get(CronTasksServlet.class).getLog());
     logVerifiers.get(CronTasksServlet.class)
         .verifyLogContains(Level.WARNING, "API request to Habitica failed");
     logVerifiers.get(CronTasksServlet.class)
@@ -165,7 +164,7 @@ public class CronTasksServletTest {
         Credential.createForTest("Habitica Key", "key", Credentials.HABITICA_KEY)));
     
     servlet.doGet(mockRequest, mockResponse);
-    System.out.println(logVerifiers.get(CronTasksServlet.class).getLog());
+    
     logVerifiers.get(CronTasksServlet.class)
         .verifyLogContainsExceptionMessage("Habitica API returned an invalid response");
     verify(mockResponse).sendError(500, "API request to Habitica failed.");
