@@ -205,6 +205,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 					          <exclude>uk/co/todddavies/website/cache/**/*Test**.class</exclude>
 					          <exclude>uk/co/todddavies/website/contact/**/*Annotations.class</exclude>
 					          <exclude>uk/co/todddavies/website/contact/**/*Test**.class</exclude>
+					          <exclude>uk/co/todddavies/website/cron/tasks/**/*Annotations**.class</exclude>
+					          <exclude>uk/co/todddavies/website/cron/tasks/**/*Test**.class</exclude>
 					          <exclude>uk/co/todddavies/website/notes/**/*Annotations.class</exclude>
 					          <exclude>uk/co/todddavies/website/notes/**/*Test**.class</exclude>
 					          <exclude>uk/co/todddavies/website/pages/**/*Annotations.class</exclude>
