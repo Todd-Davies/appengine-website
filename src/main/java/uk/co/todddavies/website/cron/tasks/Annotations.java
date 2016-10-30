@@ -14,8 +14,6 @@ final class Annotations {
 
   private Annotations() {}
   
-  /* Package private binding annotation for the actual memcache object (as opposed to the 
-   * MemcacheInterface wrappers) */
   @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)
   @interface TaskId {}
 }

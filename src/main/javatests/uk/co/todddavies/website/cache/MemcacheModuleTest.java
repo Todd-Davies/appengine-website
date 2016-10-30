@@ -1,8 +1,6 @@
 package uk.co.todddavies.website.cache;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 import uk.co.todddavies.website.testing.LogVerifier;
@@ -38,6 +36,6 @@ public class MemcacheModuleTest {
   @Test
   public void testCreateInjector() {
     assertThat(cacheInterface, notNullValue());
-    assertThat(logVerifiers.get(MemcacheInterface.class).getLog(), is(empty()));
+    logVerifiers.get(MemcacheInterface.class).verifyNoLogs();
   }
 }

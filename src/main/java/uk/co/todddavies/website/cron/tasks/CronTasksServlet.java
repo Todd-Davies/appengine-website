@@ -87,7 +87,7 @@ final class CronTasksServlet extends HttpServlet {
     } catch (RuntimeException e) {
       String errorString = "API request to Habitica failed.\nTask: %s";
       log.log(Level.WARNING, String.format(errorString, task.get()), e);
-      resp.sendError(500, "Api request to Habitica failed");
+      resp.sendError(500, "API request to Habitica failed.");
     }
   }
   
@@ -137,7 +137,7 @@ final class CronTasksServlet extends HttpServlet {
     if (fetchedCredential.isPresent()) {
       return fetchedCredential.get().getValue();
     } else {
-      throw new RuntimeException(String.format("Unable to find key for credential ID %l", key));
+      throw new RuntimeException(String.format("Unable to find key for credential ID %d", key));
     }
   }
 }
