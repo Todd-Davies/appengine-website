@@ -7,6 +7,7 @@ import uk.co.todddavies.website.cron.tasks.Annotations.TaskId;
 import uk.co.todddavies.website.cron.tasks.data.RecurringTask;
 import uk.co.todddavies.website.cron.tasks.data.TaskDatastoreInterface;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
@@ -21,7 +22,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.BufferedReader;
@@ -41,19 +41,24 @@ import javax.servlet.http.HttpServletResponse;
 final class CronTasksServlet extends HttpServlet {
   
   private static final Logger log = Logger.getLogger(CronTasksServlet.class.getName());
-  private static final String HABITICA_ENDPOINT = "https://habitica.com/api/v3/tasks/user";
+  @VisibleForTesting static final String HABITICA_ENDPOINT = 
+      "https://habitica.com/api/v3/tasks/user";
   private static final String ERROR_MESSAGE = 
       "Habitica API returned an invalid response:\nCode: %d\nMessage:%s";
   private static final ImmutableSet<Integer> SUCCESS_CODES = ImmutableSet.of(200, 201);
   
   private final Provider<Optional<Long>> taskIdProvider;
+  private final Provider<HttpClient> httpClientProvider;
   private final TaskDatastoreInterface taskStorage;
   private final CredentialsDatastoreInterface credentialStorage;
   
   @Inject
   private CronTasksServlet(@TaskId Provider<Optional<Long>> taskIdProvider,
-      TaskDatastoreInterface taskStorage, CredentialsDatastoreInterface credentialStorage) {
+      Provider<HttpClient> httpClientProvider,
+      TaskDatastoreInterface taskStorage,
+      CredentialsDatastoreInterface credentialStorage) {
     this.taskIdProvider = taskIdProvider;
+    this.httpClientProvider = httpClientProvider;
     this.taskStorage = taskStorage;
     this.credentialStorage = credentialStorage;
   }
@@ -82,7 +87,7 @@ final class CronTasksServlet extends HttpServlet {
     }
     // Execute http request to Habitica
     try {
-      executeTask(task.get(), credentialStorage);
+      executeTask(task.get(), credentialStorage, httpClientProvider.get());
       resp.setStatus(200);
     } catch (RuntimeException e) {
       String errorString = "API request to Habitica failed.\nTask: %s";
@@ -93,9 +98,8 @@ final class CronTasksServlet extends HttpServlet {
   
   
   private static final void executeTask(
-      RecurringTask task, CredentialsDatastoreInterface credentialStorage)
+      RecurringTask task, CredentialsDatastoreInterface credentialStorage, HttpClient client)
       throws ClientProtocolException, IOException {
-    HttpClient client = new DefaultHttpClient();
     HttpPost post = new HttpPost(HABITICA_ENDPOINT);
     // Stop the client from moaning about cookies
     client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);

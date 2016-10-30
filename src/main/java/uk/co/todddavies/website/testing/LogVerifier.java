@@ -69,7 +69,9 @@ public final class LogVerifier {
    */
   public void verifyLogContainsExceptionMessage(String message) {
     for (Throwable exception : logHandler.logs.values()) {
-      if (exception != null && exception.getMessage().contains(message)) {
+      if (exception != null &&
+          exception.getMessage() != null &&
+          exception.getMessage().contains(message)) {
         // Passed :)
         return;
       }

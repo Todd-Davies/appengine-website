@@ -13,6 +13,9 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -46,6 +49,11 @@ public final class CronTasksServletModule extends ServletModule {
   protected void configureServlets() {
     filter(CRON_PATH).through(TaskIdFilter.class);
     serve(CRON_PATH).with(CronTasksServlet.class);
+  }
+  
+  @Provides
+  HttpClient provideDefaultHttpClient() {
+    return new DefaultHttpClient();
   }
   
   /**
