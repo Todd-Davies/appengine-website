@@ -18,7 +18,6 @@ import uk.co.todddavies.website.testing.LogVerifier;
 import uk.co.todddavies.website.testing.LogVerifierModule;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -47,17 +46,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Test for {@code CronTasksServlet}.
+ * Tests for {@code CronTasksServlet}.
+ * 
+ * TODO(td): De-duplicate logic in these tests
  */
 public class CronTasksServletTest {
-  
   
   private static final String USER_VALUE = "user";
   private static final String KEY_VALUE = "key";
   private static final String TASK_NAME = "testTask";
   private static final String TASK_NOTES = "taskNotes";
-  private static final ImmutableMap<Long, RecurringTask> TASK_STORAGE = 
-      ImmutableMap.of(999L, RecurringTask.createForTest(TASK_NAME, TASK_NOTES, 999));
+  private static final RecurringTask STORED_TASK = 
+      RecurringTask.createForTest(TASK_NAME, TASK_NOTES, 999);
   
   @Mock private TaskDatastoreInterface mockTasksInterface = mock(TaskDatastoreInterface.class);
   @Mock private CredentialsDatastoreInterface mockCredentialsInterface = 
@@ -155,7 +155,7 @@ public class CronTasksServletTest {
     when(testHttpClient.getParams()).thenReturn(mockHttpParams);
     
     taskId = Optional.of(999L);
-    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(TASK_STORAGE.get(999L)));
+    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(STORED_TASK));
     
     when(mockCredentialsInterface.get(Credentials.HABITICA_USER))
         .thenReturn(Optional.<Credential>absent());
@@ -182,7 +182,7 @@ public class CronTasksServletTest {
     testHttpClient = new DefaultHttpClient();
     
     taskId = Optional.of(999L);
-    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(TASK_STORAGE.get(999L)));
+    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(STORED_TASK));
     
     when(mockCredentialsInterface.get(Credentials.HABITICA_USER))
         .thenReturn(Optional.of(
@@ -213,7 +213,7 @@ public class CronTasksServletTest {
     when(testHttpClient.getParams()).thenReturn(mockHttpParams);
     
     taskId = Optional.of(999L);
-    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(TASK_STORAGE.get(999L))); 
+    when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(STORED_TASK)); 
     
     when(mockCredentialsInterface.get(Credentials.HABITICA_USER))
         .thenReturn(Optional.of(
