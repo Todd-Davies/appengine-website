@@ -12,7 +12,7 @@
   <cron>
     <url>/cron/tasks/?id=5669544198668288</url>
     <description>Change bedsheets</description>
-    <schedule>every 2 weeks</schedule>
+    <schedule>1,15 of month 3:30</schedule>
     <retry-parameters>
       <min-backoff-seconds>10</min-backoff-seconds>
       <max-doublings>5</max-doublings>
