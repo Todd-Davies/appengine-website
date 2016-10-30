@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import java.io.Serializable;
 
 /**
- * Implementation of{@code NotesDatastoreInterface}.
+ * Implementation of{@code TasksDatastoreInterface}.
  */
 final class TasksDatastoreImpl implements TaskDatastoreInterface, Serializable {
 

@@ -38,7 +38,6 @@ public final class CronTasksServletModule extends ServletModule {
         install(new CronTasksServletModule());
         install(new TasksDatastoreModule());
         install(new CredentialsDatastoreModule());
-        // Additional modules go here
       }
     };
   }

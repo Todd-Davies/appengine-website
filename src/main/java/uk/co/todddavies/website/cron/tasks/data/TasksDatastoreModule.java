@@ -7,7 +7,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.inject.AbstractModule;
 
 /**
- * Module to provide {@code NotesDatastoreInterface}.
+ * Module to provide {@code TasksDatastoreInterface}.
  */
 public final class TasksDatastoreModule extends AbstractModule {
 
