@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.cron.tasks;
 
+import uk.co.todddavies.website.credentials.CredentialsDatastoreModule;
 import uk.co.todddavies.website.cron.tasks.Annotations.TaskId;
 import uk.co.todddavies.website.cron.tasks.data.TasksDatastoreModule;
 
@@ -36,6 +37,7 @@ public final class CronTasksServletModule extends ServletModule {
       protected void configure() {
         install(new CronTasksServletModule());
         install(new TasksDatastoreModule());
+        install(new CredentialsDatastoreModule());
         // Additional modules go here
       }
     };

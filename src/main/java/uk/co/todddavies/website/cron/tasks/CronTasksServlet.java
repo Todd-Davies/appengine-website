@@ -1,5 +1,8 @@
 package uk.co.todddavies.website.cron.tasks; 
 
+import uk.co.todddavies.website.credentials.Credential;
+import uk.co.todddavies.website.credentials.Credentials;
+import uk.co.todddavies.website.credentials.CredentialsDatastoreInterface;
 import uk.co.todddavies.website.cron.tasks.Annotations.TaskId;
 import uk.co.todddavies.website.cron.tasks.data.RecurringTask;
 import uk.co.todddavies.website.cron.tasks.data.TaskDatastoreInterface;
@@ -45,12 +48,14 @@ final class CronTasksServlet extends HttpServlet {
   
   private final Provider<Optional<Long>> taskIdProvider;
   private final TaskDatastoreInterface taskStorage;
+  private final CredentialsDatastoreInterface credentialStorage;
   
   @Inject
   private CronTasksServlet(@TaskId Provider<Optional<Long>> taskIdProvider,
-      TaskDatastoreInterface taskStorage) {
+      TaskDatastoreInterface taskStorage, CredentialsDatastoreInterface credentialStorage) {
     this.taskIdProvider = taskIdProvider;
     this.taskStorage = taskStorage;
+    this.credentialStorage = credentialStorage;
   }
   
   @Override
@@ -77,7 +82,7 @@ final class CronTasksServlet extends HttpServlet {
     }
     // Execute http request to Habitica
     try {
-      executeTask(task.get());
+      executeTask(task.get(), credentialStorage);
       resp.setStatus(200);
     } catch (RuntimeException e) {
       String errorString = "API request to Habitica failed.\nTask: %s";
@@ -87,15 +92,16 @@ final class CronTasksServlet extends HttpServlet {
   }
   
   
-  private static final void executeTask(RecurringTask task)
+  private static final void executeTask(
+      RecurringTask task, CredentialsDatastoreInterface credentialStorage)
       throws ClientProtocolException, IOException {
     HttpClient client = new DefaultHttpClient();
     HttpPost post = new HttpPost(HABITICA_ENDPOINT);
     // Stop the client from moaning about cookies
     client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
     
-    post.setHeader("x-api-user", HabiticaApiKeys.USER);
-    post.setHeader("x-api-key", HabiticaApiKeys.KEY);
+    post.setHeader("x-api-user", getValue(credentialStorage, Credentials.HABITICA_USER));
+    post.setHeader("x-api-key", getValue(credentialStorage, Credentials.HABITICA_KEY));
     post.setHeader("Content-Type", "application/x-www-form-urlencoded");
     
     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
@@ -124,5 +130,14 @@ final class CronTasksServlet extends HttpServlet {
       result.append(line);
     }
     return result.toString();
+  }
+  
+  private static String getValue(CredentialsDatastoreInterface credentialsStorage, long key) {
+    Optional<Credential> fetchedCredential = credentialsStorage.get(key);
+    if (fetchedCredential.isPresent()) {
+      return fetchedCredential.get().getValue();
+    } else {
+      throw new RuntimeException(String.format("Unable to find key for credential ID %l", key));
+    }
   }
 }
