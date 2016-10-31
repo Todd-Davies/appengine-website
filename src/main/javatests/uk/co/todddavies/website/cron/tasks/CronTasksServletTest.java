@@ -28,7 +28,6 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpParams;
 import org.junit.Before;
@@ -178,8 +177,17 @@ public class CronTasksServletTest {
     HttpServletRequest mockRequest = mock(HttpServletRequest.class);
     when(mockRequest.getHeader(eq("X-Appengine-Cron"))).thenReturn("true");
     
-    // We want to actually send the request now
-    testHttpClient = new DefaultHttpClient();
+    HttpParams mockHttpParams = mock(HttpParams.class);
+    when(mockHttpParams.setParameter(any(String.class), any(String.class)))
+        .thenReturn(mockHttpParams);
+    when(testHttpClient.getParams()).thenReturn(mockHttpParams);
+    
+    // Mock an unauthorised response
+    org.apache.http.HttpResponse mockHttpResponse = mock(org.apache.http.HttpResponse.class);
+    StatusLine mockStatusLine = mock(StatusLine.class);
+    when(mockStatusLine.getStatusCode()).thenReturn(401);
+    when(mockHttpResponse.getStatusLine()).thenReturn(mockStatusLine);
+    when(testHttpClient.execute(any(HttpPost.class))).thenReturn(mockHttpResponse);
     
     taskId = Optional.of(999L);
     when(mockTasksInterface.get(eq(999L))).thenReturn(Optional.of(STORED_TASK));
@@ -194,7 +202,7 @@ public class CronTasksServletTest {
     servlet.doGet(mockRequest, mockResponse);
 
     logVerifiers.get(CronTasksServlet.class)
-        .verifyLogContainsExceptionMessage("Habitica API returned an invalid response");
+    .verifyLogContains(Level.WARNING, "API request to Habitica failed");
     verify(mockResponse).sendError(500, "API request to Habitica failed.");
   }
   

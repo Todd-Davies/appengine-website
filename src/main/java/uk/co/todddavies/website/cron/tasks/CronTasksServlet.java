@@ -90,7 +90,7 @@ final class CronTasksServlet extends HttpServlet {
       executeTask(task.get(), credentialStorage, httpClientProvider.get());
       log.info(String.format("Task '%s' processed successfully", task.get()));
       resp.setStatus(200);
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       String errorString = "API request to Habitica failed.\nTask: %s";
       log.log(Level.WARNING, String.format(errorString, task.get()), e);
       resp.sendError(500, "API request to Habitica failed.");
@@ -108,7 +108,7 @@ final class CronTasksServlet extends HttpServlet {
     post.setHeader("x-api-user", getValue(credentialStorage, Credentials.HABITICA_USER));
     post.setHeader("x-api-key", getValue(credentialStorage, Credentials.HABITICA_KEY));
     post.setHeader("Content-Type", "application/x-www-form-urlencoded");
-    
+
     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
     urlParameters.add(new BasicNameValuePair("type", "todo"));
     urlParameters.add(new BasicNameValuePair("notes", task.getNotes()));
