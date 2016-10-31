@@ -202,7 +202,7 @@ public class CronTasksServletTest {
     servlet.doGet(mockRequest, mockResponse);
 
     logVerifiers.get(CronTasksServlet.class)
-    .verifyLogContains(Level.WARNING, "API request to Habitica failed");
+        .verifyLogContains(Level.WARNING, "API request to Habitica failed");
     verify(mockResponse).sendError(500, "API request to Habitica failed.");
   }
   
