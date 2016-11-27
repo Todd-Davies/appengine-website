@@ -22,7 +22,7 @@
     <url>/cron/tasks/?id=5735995932672000</url>
     <description>Update yearly goals</description>
     <!-- A clear head is required to think of yearly goals; hence not on new year's day. --> 
-    <schedule>2 of Jan 4:30</schedule>
+    <schedule>2 of jan 4:30</schedule>
     <retry-parameters>
       <min-backoff-seconds>10</min-backoff-seconds>
       <max-doublings>5</max-doublings>
