@@ -158,6 +158,8 @@ public class CronTasksServletTest {
     
     when(mockCredentialsInterface.get(Credentials.HABITICA_USER))
         .thenReturn(Optional.<Credential>absent());
+    when(mockCredentialsInterface.get(Credentials.HABITICA_KEY))
+        .thenReturn(Optional.<Credential>absent());
     
     servlet.doGet(mockRequest, mockResponse);
 

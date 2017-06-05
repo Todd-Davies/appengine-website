@@ -3,6 +3,7 @@ package uk.co.todddavies.website.contact;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import uk.co.todddavies.website.JsonObjectWriterModule;
@@ -19,6 +20,7 @@ import com.google.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,8 +37,8 @@ import javax.servlet.http.HttpSession;
 public class ContactApiServletTest {
   
   private static final String TEST_EMAIL = "test@testmail.com";
-  private static final CaptchaQuestion TEST_CAPTCHA = CaptchaQuestion.create("Hi", "there");
-  private static final CaptchaQuestion EGG_CAPTCHA = CaptchaQuestion.create("Egg", "captcha");
+  @Mock private CaptchaQuestion TEST_CAPTCHA = mock(CaptchaQuestion.class);
+  @Mock private CaptchaQuestion EGG_CAPTCHA = mock(CaptchaQuestion.class);
   
   @Inject
   private ContactApiServlet servlet;
@@ -60,8 +62,11 @@ public class ContactApiServletTest {
           }
         },
         new JsonObjectWriterModule(),
-        LogVerifierModule.create(ContactApiServlet.class)
-        ).injectMembers(this);
+        LogVerifierModule.create(ContactApiServlet.class)).injectMembers(this);
+    when(TEST_CAPTCHA.getQuestion()).thenReturn("question");
+    when(TEST_CAPTCHA.encryptSecret(any(String.class))).thenReturn("secret");
+    when(EGG_CAPTCHA.getQuestion()).thenReturn("question");
+    when(EGG_CAPTCHA.encryptSecret(any(String.class))).thenReturn("secret");
   }
  
   @Test
@@ -78,12 +83,16 @@ public class ContactApiServletTest {
     servlet.doGet(mockRequest, mockResponse);
     
     verify(mockWriter).print(any(String.class));
+    verifyZeroInteractions(EGG_CAPTCHA);
+    verify(TEST_CAPTCHA).getQuestion();
     logVerifiers.get(ContactApiServlet.class).verifyNoLogs();
     
     when(mockSession.getAttribute(ContactApiServlet.SESSION_CONTACT_PRESSES)).thenReturn(5);
     servlet.doGet(mockRequest, mockResponse);
     
     logVerifiers.get(ContactApiServlet.class)
-        .verifyLogContains(Level.INFO, "User pressed the contact button 5 times; easter egg activated!");
+        .verifyLogContains(Level.INFO,
+            "User pressed the contact button 5 times; easter egg activated!");
+    verify(EGG_CAPTCHA).getQuestion();
   }
 }

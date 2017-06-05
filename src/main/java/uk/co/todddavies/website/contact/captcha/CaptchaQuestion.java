@@ -3,8 +3,8 @@ package uk.co.todddavies.website.contact.captcha;
 import com.google.api.client.util.Preconditions;
 import com.google.common.annotations.VisibleForTesting;
 
-
-public final class CaptchaQuestion {
+// Not final so it can be mocked
+public class CaptchaQuestion {
   
   private final String question;
   private final String answer;
