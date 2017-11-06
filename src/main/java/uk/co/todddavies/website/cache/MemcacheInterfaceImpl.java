@@ -3,7 +3,6 @@ package uk.co.todddavies.website.cache;
 import uk.co.todddavies.website.cache.Annotations.CacheInstance;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 
-import com.google.appengine.api.memcache.MemcacheServiceException;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
@@ -39,7 +38,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
     // Try and retrieve the object from the cache
     try {
       out = (T) memcache.get(MemcacheKeys.KEY_MAP.get(key));
-    } catch (MemcacheServiceException e) {
+    } catch (Exception e) {
       log.log(Level.WARNING, "MemCache service down", e);
     }
     // The cache didn't contain that object
@@ -72,7 +71,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
       try {
         memcache.put(MemcacheKeys.KEY_MAP.get(key), object);
         return true;
-      } catch (MemcacheServiceException e) {
+      } catch (Exception e) {
         log.log(Level.WARNING, "MemCache service down", e);
       }
     } else {
@@ -90,7 +89,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
   public void remove(MemcacheKey key) {
     try {
       memcache.remove(MemcacheKeys.KEY_MAP.get(key));
-    } catch (MemcacheServiceException e) {
+    } catch (Exception e) {
       log.log(Level.WARNING, "MemCache service down", e);
     }
   }
