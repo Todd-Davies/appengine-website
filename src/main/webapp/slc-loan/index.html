@@ -23,28 +23,28 @@
         <option value="p2">2</option>
       </select>
       <span id="p1stuff"> <span>with an <a href="http://www.studentloanrepayment.co.uk/portal/page?_pageid=93,6678642&_dad=portal&_schema=PORTAL">interest rate</a> of </span><input type="text" id="p1interest" value="1.5"><span>%</span></span>.<br>
-      My expected yearly income is <input type="text" id="income" ><span>GBP, and my current <a href="https://www.slc.co.uk/students-and-customers.aspx">loan balance</a> is </span><input type="text" id="loan"><span>GBP.</span><br>
+      <span>My expected yearly income is </span><input type="text" id="income" ><span>GBP, and my current <a href="https://www.slc.co.uk/students-and-customers.aspx">loan balance</a> is </span><input type="text" id="loan"><span>GBP.</span><br>
+      <span>I graduate(d) in </span><input type="text" id="gradyear">.
     </form>
     <button id="update">Update</button>
     <div style="width:75%;">
       <canvas id="canvas"></canvas>
     </div>
     <script>
-      var computeRange = function(loan, plan, p1interest, income) {
-        var x = refreshData(loan, plan, p1interest, income).map(function(arr) {
+      var computeRange = function(loan, plan, p1interest, income, gradyear) {
+        var x = refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
           return arr[0];
       });
-      console.log(x);
       return x;
       };
 
-      var computeData = function(loan, plan, p1interest, income) {
+      var computeData = function(loan, plan, p1interest, income, gradyear) {
       return [{
             label: "Interest",
             borderColor: window.chartColors.red,
             backgroundColor: window.chartColors.red,
             fill: false,
-            data: refreshData(loan, plan, p1interest, income).map(function(arr) {
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
               return arr[1];
             }),
             yAxisID: "y-axis-1",
@@ -53,7 +53,7 @@
             borderColor: window.chartColors.blue,
             backgroundColor: window.chartColors.blue,
             fill: false,
-            data: refreshData(loan, plan, p1interest, income).map(function(arr) {
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
               return arr[2];
             }),
             yAxisID: "y-axis-2"
@@ -62,8 +62,8 @@
             borderColor: window.chartColors.green,
             backgroundColor: window.chartColors.green,
             fill: false,
-            data: refreshData(loan, plan, p1interest, income).map(function(arr) {
-              const baseContribution = refreshData(loan, plan, p1interest, income)[0][3];
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+              const baseContribution = refreshData(loan, plan, p1interest, income, gradyear)[0][3];
               return baseContribution - arr[3];
             }),
             yAxisID: "y-axis-1"
@@ -72,7 +72,7 @@
             borderColor: window.chartColors.orange,
             backgroundColor: window.chartColors.orange,
             fill: false,
-            data: refreshData(loan, plan, p1interest, income).map(function(arr) {
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
               return arr[3];
             }),
             yAxisID: "y-axis-1"
@@ -123,13 +123,13 @@
         const plan = document.getElementById("plan").value;
         const p1interest = parseFloat(document.getElementById("p1interest").value);
         const income = parseInt(document.getElementById("income").value);
-        lineChartData.labels = computeRange(loan, plan, p1interest, income);
-        lineChartData.datasets = computeData(loan, plan, p1interest, income);
+        const gradyear = parseInt(document.getElementById("gradyear").value);
+        lineChartData.labels = computeRange(loan, plan, p1interest, income, gradyear);
+        lineChartData.datasets = computeData(loan, plan, p1interest, income, gradyear);
         window.myLine.update();
       });
       document.getElementById('plan').onchange = function() {
         const plan = document.getElementById("plan").value;
-        console.log(plan);
         if (plan == "p1") {
           document.getElementById("p1stuff").style.display = '';
         } else {
