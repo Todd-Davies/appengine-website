@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Student Loan Repayment Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./src.js"></script>
+    <style>
+    canvas {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+    }
+    </style>
+</head>
+
+<body>
+    <form action="">
+      <span>I'm on <a href="https://www.slc.co.uk/students-and-customers/loan-repayment/your-plan-type.aspx">plan</a> </span>
+      <select id="plan">
+        <option value="p1">1</option>
+        <option value="p2">2</option>
+      </select>
+      <span id="p1stuff"> <span>with an <a href="http://www.studentloanrepayment.co.uk/portal/page?_pageid=93,6678642&_dad=portal&_schema=PORTAL">interest rate</a> of </span><input type="text" id="p1interest" value="1.5"><span>%</span></span>.<br>
+      <span>My expected yearly income is </span><input type="text" id="income" ><span>GBP, and my current <a href="https://www.slc.co.uk/students-and-customers.aspx">loan balance</a> is </span><input type="text" id="loan"><span>GBP.</span><br>
+      <span>I graduate(d) in </span><input type="text" id="gradyear">.
+    </form>
+    <button id="update">Update</button>
+    <div style="width:75%;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      var computeRange = function(loan, plan, p1interest, income, gradyear) {
+        var x = refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+          return arr[0];
+      });
+      return x;
+      };
+
+      var computeData = function(loan, plan, p1interest, income, gradyear) {
+      return [{
+            label: "Interest",
+            borderColor: window.chartColors.red,
+            backgroundColor: window.chartColors.red,
+            fill: false,
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+              return arr[1];
+            }),
+            yAxisID: "y-axis-1",
+        }, {
+            label: "Completion year",
+            borderColor: window.chartColors.blue,
+            backgroundColor: window.chartColors.blue,
+            fill: false,
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+              return arr[2];
+            }),
+            yAxisID: "y-axis-2"
+        }, {
+            label: "Money saved by paying early",
+            borderColor: window.chartColors.green,
+            backgroundColor: window.chartColors.green,
+            fill: false,
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+              const baseContribution = refreshData(loan, plan, p1interest, income, gradyear)[0][3];
+              return baseContribution - arr[3];
+            }),
+            yAxisID: "y-axis-1"
+      }, {
+            label: "Total paid",
+            borderColor: window.chartColors.orange,
+            backgroundColor: window.chartColors.orange,
+            fill: false,
+            data: refreshData(loan, plan, p1interest, income, gradyear).map(function(arr) {
+              return arr[3];
+            }),
+            yAxisID: "y-axis-1"
+      }];
+      }
+
+    var lineChartData = {
+        labels: [],
+        datasets: []
+    };
+
+    window.onload = function() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myLine = Chart.Line(ctx, {
+            data: lineChartData,
+            options: {
+                responsive: true,
+                hoverMode: 'index',
+                stacked: false,
+                title:{
+                    display: true,
+                    text:'Student loan repayment simulator'
+                },
+                scales: {
+                    yAxes: [{
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "left",
+                        id: "y-axis-1",
+                    }, {
+                        type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                        display: true,
+                        position: "right",
+                        id: "y-axis-2",
+
+                        // grid line settings
+                        gridLines: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }],
+                }
+            }
+        });
+    };
+
+      document.getElementById('update').addEventListener('click', function() {
+        const loan = parseInt(document.getElementById("loan").value);
+        const plan = document.getElementById("plan").value;
+        const p1interest = parseFloat(document.getElementById("p1interest").value);
+        const income = parseInt(document.getElementById("income").value);
+        const gradyear = parseInt(document.getElementById("gradyear").value);
+        lineChartData.labels = computeRange(loan, plan, p1interest, income, gradyear);
+        lineChartData.datasets = computeData(loan, plan, p1interest, income, gradyear);
+        window.myLine.update();
+      });
+      document.getElementById('plan').onchange = function() {
+        const plan = document.getElementById("plan").value;
+        if (plan == "p1") {
+          document.getElementById("p1stuff").style.display = '';
+        } else {
+          document.getElementById("p1stuff").style.display = 'none';
+        }
+    };
+    </script>
+</body>
+
+</html>
