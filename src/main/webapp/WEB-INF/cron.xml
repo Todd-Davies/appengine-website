@@ -1,31 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
-    <url>/cron/tasks/?id=5681034041491456</url>
-    <description>Monthly goals</description>
-    <schedule>1 of month 02:30</schedule>
-    <retry-parameters>
-      <min-backoff-seconds>10</min-backoff-seconds>
-      <max-doublings>5</max-doublings>
-    </retry-parameters>
-  </cron>
-  <cron>
-    <url>/cron/tasks/?id=5669544198668288</url>
-    <description>Change bedsheets</description>
-    <schedule>1,15 of month 3:30</schedule>
-    <retry-parameters>
-      <min-backoff-seconds>10</min-backoff-seconds>
-      <max-doublings>5</max-doublings>
-    </retry-parameters>
-  </cron>
-  <cron>
-    <url>/cron/tasks/?id=5735995932672000</url>
-    <description>Update yearly goals</description>
-    <!-- A clear head is required to think of yearly goals; hence not on new year's day. --> 
-    <schedule>2 of jan 4:30</schedule>
-    <retry-parameters>
-      <min-backoff-seconds>10</min-backoff-seconds>
-      <max-doublings>5</max-doublings>
-    </retry-parameters>
-  </cron>
 </cronentries>
