@@ -1,17 +1,15 @@
 package uk.co.todddavies.website.cache;
 
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 import uk.co.todddavies.website.cache.Annotations.CacheInstance;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 
-import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.google.inject.TypeLiteral;
-
+import javax.cache.Cache;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.cache.Cache;
 
 /**
  * Interfaces with memcache in a typesafe manner.
@@ -43,7 +41,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
     }
     // The cache didn't contain that object
     if (out == null) {
-      return Optional.absent();
+      return Optional.empty();
     } else {
       // Check that the retrieved object is of the correct type.
       TypeLiteral<?> expectedType = MemcacheKeys.EXPECTED_TYPES.get(key);
@@ -58,7 +56,7 @@ final class MemcacheInterfaceImpl implements MemcacheInterface, Serializable {
             "This should not happen; are multiple systems writing to the same memcache"
             + " instance?\n");
         log.severe(errorMessage.toString());
-        return Optional.absent();
+        return Optional.empty();
       }
     }
   }

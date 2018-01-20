@@ -1,38 +1,32 @@
 package uk.co.todddavies.website.cache;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
+import com.google.appengine.api.memcache.MemcacheServiceException;
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 import uk.co.todddavies.website.cache.Annotations.CacheInstance;
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 import uk.co.todddavies.website.notes.data.NotesDocument;
 import uk.co.todddavies.website.testing.LogVerifier;
 import uk.co.todddavies.website.testing.LogVerifierModule;
 
-import com.google.appengine.api.memcache.MemcacheServiceException;
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-
+import javax.cache.Cache;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 
-import javax.cache.Cache;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
 /**
  * Test for {@code MemcacheInterfaceImpl}.
@@ -69,7 +63,7 @@ public class MemcacheInterfaceImplTest {
     when(mockCache.get(any(String.class))).thenReturn(null);
     
     assertThat(cacheInterface.get(MemcacheKey.NOTES_LIST),
-        is(equalTo(Optional.<Serializable>absent())));
+        is(equalTo(Optional.<Serializable>empty())));
     
     verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
   }
@@ -86,7 +80,7 @@ public class MemcacheInterfaceImplTest {
         + " multiple systems writing to the same memcache instance?\n";
     
     assertThat(cacheInterface.get(MemcacheKey.NOTES_LIST),
-        is(equalTo(Optional.<Serializable>absent())));
+        is(equalTo(Optional.<Serializable>empty())));
     
     verify(mockCache).get(MemcacheKeys.KEY_MAP.get(MemcacheKey.NOTES_LIST));
     logVerifiers.get(MemcacheInterfaceImpl.class).verify(Level.SEVERE, expectedMessage);

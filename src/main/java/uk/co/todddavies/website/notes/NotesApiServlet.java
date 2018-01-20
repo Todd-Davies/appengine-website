@@ -7,7 +7,6 @@ import uk.co.todddavies.website.notes.data.NotesDocument;
 
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gdata.util.common.base.Pair;
@@ -18,6 +17,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -108,6 +108,6 @@ final class NotesApiServlet extends HttpServlet {
         return Optional.of(tag);
       }
     }
-    return Optional.absent();
+    return Optional.empty();
   }
 }

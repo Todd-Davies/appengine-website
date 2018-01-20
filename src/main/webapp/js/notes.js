@@ -1,7 +1,7 @@
 var initPage = function() {
   $.getJSON("/api/notes", function(data) {
     $("#notes-list").html("");
-    $("#notes-downloads").text("Total downloads: " + data["downloads"]);
+    //$("#notes-downloads").text("Total downloads: " + data["downloads"]);
     var table = $("<table>").appendTo("#notes-list");
     $.each(data["notes"], function(tag, list) {
       table.append(

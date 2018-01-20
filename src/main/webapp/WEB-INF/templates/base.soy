@@ -6,13 +6,16 @@
 {template .base}
   {@param? description: string}
   {@param? title: string}
+  {@param? content: html}
   <!DOCTYPE html>
   <html lang="en">
     {call .head}
       {param description: $description /}
       {param title: $title /}
     {/call}
-    {call .body /}
+    {call .body}
+      {param content: $content /}
+    {/call}
   </html>
 {/template}
 
@@ -53,6 +56,7 @@
 {/template}
 
 {template .body visibility="private"}
+  {@param? content: html}
   <body>
   <div class="site-wrapper">
     <div class=""> // site-wrapper-inner
@@ -69,6 +73,9 @@
           </div>
         </div>
         <div class="inner cover" id="content">
+          {if $content}
+            {$content}
+          {/if}
          //autofilled
         </div>
 

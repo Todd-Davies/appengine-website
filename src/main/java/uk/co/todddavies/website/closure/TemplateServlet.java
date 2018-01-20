@@ -14,10 +14,10 @@ import java.util.Map;
 @Singleton
 final class TemplateServlet extends HttpServlet {
 
-  private static String PREFIX = "/_/v2";
   private static final ImmutableMap<String, String> TEMPLATE_MAP = addSlashesToPaths(ImmutableMap.of(
-      PREFIX + "", ".base",
-      PREFIX + "/contact", ".contact"));
+      "/", ".base",
+      "/contact", ".contact",
+      "/notes", ".notes"));
 
   private final SoyTofu soyTofu;
 

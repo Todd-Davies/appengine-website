@@ -8,6 +8,9 @@ import com.google.inject.servlet.ServletModule;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.SoyModule;
 import com.google.template.soy.tofu.SoyTofu;
+import uk.co.todddavies.website.cache.MemcacheModule;
+import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
+import uk.co.todddavies.website.taskqueue.TaskQueueModule;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
@@ -43,9 +46,10 @@ public final class TemplateServletModule extends ServletModule {
 
   @Override
   protected void configureServlets() {
-    serve("/_/v2", "/_/v2/").with(TemplateServlet.class);
-    serve("/_/v2/home*").with(HomeServlet.class);
-    serve("/_/v2/contact*").with(TemplateServlet.class);
+    serve("/").with(TemplateServlet.class);
+    serve("/home*").with(HomeServlet.class);
+    serve("/contact*").with(TemplateServlet.class);
+    serve("/notes*").with(NotesServlet.class);
   }
 
   @Provides

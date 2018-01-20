@@ -29,9 +29,7 @@ final class RedirectModule  extends ServletModule {
   
   // TODO: Read from config
   private static final ImmutableMap<String, String> REDIRECT_MAP = ImmutableMap.of(
-      "/home", "/#home",
-      "/notes", "/#notes",
-      "/contact", "/#contact");
+      "/index.html", "/");
   
   private static final String UNKNOWN_PATH_WARNING = "Request to path '%s' was handled by the "
       + "redirect module, but was not registered with a redirect target. Registered targets "

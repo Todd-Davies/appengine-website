@@ -2,9 +2,8 @@ package uk.co.todddavies.website.cache;
 
 import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 
-import com.google.common.base.Optional;
-
 import java.io.Serializable;
+import java.util.Optional;
 
 /**
  * Interface for reading and writing objects to memcache in a typesafe manner.

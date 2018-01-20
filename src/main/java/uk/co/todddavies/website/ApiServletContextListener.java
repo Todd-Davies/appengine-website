@@ -1,15 +1,18 @@
 package uk.co.todddavies.website;
 
+import uk.co.todddavies.website.cache.MemcacheModule;
 import uk.co.todddavies.website.closure.TemplateServletModule;
 import uk.co.todddavies.website.contact.ContactServletModule;
 import uk.co.todddavies.website.cron.tasks.CronTasksServletModule;
 import uk.co.todddavies.website.notes.NotesServletModule;
+import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
 import uk.co.todddavies.website.pages.PagesServletModule;
 import uk.co.todddavies.website.sslverification.SslVerificationServletModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import uk.co.todddavies.website.taskqueue.TaskQueueModule;
 
 public final class ApiServletContextListener  extends GuiceServletContextListener {
 
@@ -25,6 +28,10 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         ContactServletModule.create(API_PATH),
         NotesServletModule.create(API_PATH),
         CronTasksServletModule.create(),
-        TemplateServletModule.create());
+        TemplateServletModule.create(),
+        // Global notes binding modules to avoid multiple bindings
+        new MemcacheModule(),
+        new NotesDatastoreModule(),
+        new TaskQueueModule());
   }
 }

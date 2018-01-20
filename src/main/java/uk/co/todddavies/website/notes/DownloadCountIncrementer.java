@@ -47,7 +47,11 @@ final class DownloadCountIncrementer implements DeferredTask {
     Optional<NotesDocument> optionalNotes = storageInterface.get(key);
     if (optionalNotes.isPresent()) {
       storageInterface.incrementDownloads(optionalNotes.get());
-      memcacheProvider.get().remove(MemcacheKey.NOTES_LIST);
+      MemcacheInterface memcache = memcacheProvider.get();
+      memcache.remove(MemcacheKey.NOTES_LIST);
+      memcache.remove(MemcacheKey.NOTES_SOY);
+      java.util.Optional<Long> optionalDownloads = memcache.get(MemcacheKey.NOTES_DOWNLOADS);
+      optionalDownloads.ifPresent(aLong -> memcache.put(MemcacheKey.NOTES_DOWNLOADS, aLong + 1));
     } else {
       log.warning(String.format("Unable to find notes file with key %d\n", key));
     }

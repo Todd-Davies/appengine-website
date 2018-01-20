@@ -48,9 +48,6 @@ public final class NotesServletModule extends ServletModule {
       @Override
       protected void configure() {
         install(new NotesServletModule(apiPath));
-        install(new MemcacheModule());
-        install(new NotesDatastoreModule());
-        install(new TaskQueueModule());
       }
     };
   }
