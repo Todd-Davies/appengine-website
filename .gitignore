@@ -6,3 +6,4 @@ keys/*
 codacyUpload.sh
 *#
 .settings/*
+.idea/*

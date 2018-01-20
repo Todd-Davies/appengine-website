@@ -1,0 +1,19 @@
+{namespace todddavies.helloworld}
+
+/**
+ * Greets a person using "Hello" by default.
+ * @param? name The name of the person.
+ * @param? greetingWord Optional greeting word to use instead of "Hello".
+ */
+{template .hello}
+  {if not $greetingWord}
+    Hello{sp}
+  {else}
+    {$greetingWord}{sp}
+  {/if}
+  {if not $name}
+     world
+  {else}
+    {$greetingWord}
+  {/if}!
+{/template}

@@ -1,0 +1,34 @@
+{namespace todddavies.website}
+
+{template .home}
+  {@param age: int}
+  <div id="home-content">
+    <p itemprop="description">
+      I'm a {$age} year old <span itemprop="jobtitle">software engineer</span>, working at{sp}
+      {call .orgLink}
+        {param href: 'http://google.com/' /}
+        {param text: 'Google Munich' /}
+      {/call}, having recently
+      graduated from a BSc Computer Science course at the{sp}
+      {call .orgLink}
+        {param href: 'http://www.manchester.ac.uk/' /}
+        {param text: 'The University of Manchester' /}
+      {/call}.
+    </p>
+    <p>
+      I have interests in fashion, fitness, software engineering and theoretical computer
+      science. I particularly enjoy going to the gym, bouldering
+      and <a href="https://www.goodreads.com/user/show/39367252-todd-davies">reading</a>.
+    </p>
+  </div>
+
+  {call .analytics /}
+{/template}
+
+{template .orgLink visibility="private"}
+  {@param href: string}
+  {@param text: string}
+  <span itemscope
+        itemtype="http://schema.org/Organization"
+        itemprop="affiliation"><a href="{$href}" itemprop="url">{$text}</a></span>
+{/template}

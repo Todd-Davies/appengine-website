@@ -1,5 +1,6 @@
 package uk.co.todddavies.website;
 
+import uk.co.todddavies.website.closure.TemplateServletModule;
 import uk.co.todddavies.website.contact.ContactServletModule;
 import uk.co.todddavies.website.cron.tasks.CronTasksServletModule;
 import uk.co.todddavies.website.notes.NotesServletModule;
@@ -23,6 +24,7 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         new SslVerificationServletModule(false),
         ContactServletModule.create(API_PATH),
         NotesServletModule.create(API_PATH),
-        CronTasksServletModule.create());
+        CronTasksServletModule.create(),
+        TemplateServletModule.create());
   }
 }
