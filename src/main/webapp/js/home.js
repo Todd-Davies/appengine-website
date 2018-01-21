@@ -38,8 +38,7 @@ $(document).ready(function() {
         }
       }
     }
-    var currentHeader = window.location.hash.substr(1);
-    if (currentHeader === "") {
+    if (window.location.hash.substr(1) === "") {
       loadPage(data["home"]);
     }
   });

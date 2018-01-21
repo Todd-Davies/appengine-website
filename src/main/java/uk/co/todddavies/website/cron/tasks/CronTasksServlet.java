@@ -98,9 +98,9 @@ final class CronTasksServlet extends HttpServlet {
   }
   
   
-  private static final void executeTask(
+  private static void executeTask(
       RecurringTask task, CredentialsDatastoreInterface credentialStorage, HttpClient client)
-      throws ClientProtocolException, IOException {
+      throws IOException {
     HttpPost post = new HttpPost(HABITICA_ENDPOINT);
     // Stop the client from moaning about cookies
     client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
@@ -142,7 +142,7 @@ final class CronTasksServlet extends HttpServlet {
     if (fetchedCredential.isPresent()) {
       return fetchedCredential.get().getValue();
     } else {
-      throw new RuntimeException(String.format("Unable to find key for credential ID %d", key));
+      throw new IllegalArgumentException(String.format("Unable to find key for credential ID %d", key));
     }
   }
 }

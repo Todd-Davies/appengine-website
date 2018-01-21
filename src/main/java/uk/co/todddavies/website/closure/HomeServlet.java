@@ -4,10 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.tofu.SoyTofu;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

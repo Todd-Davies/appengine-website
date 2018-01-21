@@ -1,30 +1,16 @@
 package uk.co.todddavies.website.notes;
 
-import uk.co.todddavies.website.cache.MemcacheModule;
-import uk.co.todddavies.website.notes.data.NotesDatastoreModule;
-import uk.co.todddavies.website.taskqueue.TaskQueueModule;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
-import com.google.inject.AbstractModule;
-import com.google.inject.Key;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 
+import javax.servlet.*;
 import java.io.IOException;
 import java.util.logging.Logger;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 
 /**
  * Module for serving '{@code /api/notes*}'.

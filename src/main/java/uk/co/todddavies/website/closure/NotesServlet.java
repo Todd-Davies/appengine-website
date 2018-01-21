@@ -21,13 +21,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Singleton
 final class NotesServlet extends HttpServlet {
 
   private final NotesDatastoreInterface notesStorage;
-  private final ObjectWriter jsonObjectWriter;
   private final MemcacheInterface memCache;
   private final SoyTofu soyTofu;
 
@@ -38,11 +36,9 @@ final class NotesServlet extends HttpServlet {
   @Inject
   private NotesServlet(
       NotesDatastoreInterface notesStorage,
-      ObjectWriter jsonObjectWriter,
       MemcacheInterface memCache,
       SoyTofu soyTofu) {
     this.notesStorage = notesStorage;
-    this.jsonObjectWriter = jsonObjectWriter;
     this.memCache = memCache;
     this.soyTofu = soyTofu;
   }
@@ -110,12 +106,12 @@ final class NotesServlet extends HttpServlet {
    * Returns the first tag in {@code tags} that is present in {@code notes.getTags()}. Returns
    * {@code Optional.absent()} if none are present.
    */
-  private static java.util.Optional<String> getFirstTag(NotesDocument notes) {
+  private static Optional<String> getFirstTag(NotesDocument notes) {
     for (String tag : TAGS) {
       if (notes.getTags().contains(tag)) {
-        return java.util.Optional.of(tag);
+        return Optional.of(tag);
       }
     }
-    return java.util.Optional.empty();
+    return Optional.empty();
   }
 }

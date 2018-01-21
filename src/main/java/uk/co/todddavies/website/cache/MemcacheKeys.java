@@ -1,14 +1,11 @@
 package uk.co.todddavies.website.cache;
 
 import com.google.common.collect.ImmutableList;
-import uk.co.todddavies.website.notes.data.NotesDocument;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.TypeLiteral;
+import uk.co.todddavies.website.notes.data.NotesDocument;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public final class MemcacheKeys {
   
@@ -19,7 +16,7 @@ public final class MemcacheKeys {
   }
   
   static ImmutableMap<MemcacheKey, TypeLiteral<?>> EXPECTED_TYPES =
-      ImmutableMap.<MemcacheKey, TypeLiteral<?>>of(
+      ImmutableMap.of(
           MemcacheKey.NOTES_LIST,
           new TypeLiteral<ImmutableMap<String, LinkedList<NotesDocument>>>() {},
           MemcacheKey.NOTES_SOY,

@@ -27,7 +27,6 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         new SslVerificationServletModule(false),
         ContactServletModule.create(API_PATH),
         NotesServletModule.create(API_PATH),
-        CronTasksServletModule.create(),
         TemplateServletModule.create(),
         // Global notes binding modules to avoid multiple bindings
         new MemcacheModule(),

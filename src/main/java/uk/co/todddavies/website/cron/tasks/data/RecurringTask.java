@@ -47,9 +47,7 @@ public final class RecurringTask implements Serializable {
   
   @Override
   public boolean equals(Object other) {
-    return other instanceof RecurringTask
-        ? this.key == ((RecurringTask) other).key
-        : false;
+    return other instanceof RecurringTask && this.key == ((RecurringTask) other).key;
   }
 
   public String getName() {

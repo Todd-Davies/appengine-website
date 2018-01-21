@@ -33,17 +33,8 @@ public final class HttpPostMatcher extends BaseMatcher<HttpPost> {
       return false;
     }
     HttpPost given = (HttpPost) in;
-    if (!compareHeaders(given.getAllHeaders())) {
-      return false;
-    }
-    if (!compareEntity(given.getEntity())) {
-      return false;
-    }
-    return true;
+    return compareHeaders(given.getAllHeaders()) && compareEntity(given.getEntity());
   }
-
-  @Override
-  public void describeTo(Description arg0) {}
   
   private boolean compareHeaders(Header[] givenHeaders) {
     for (Header givenHeader : givenHeaders) {
@@ -74,5 +65,10 @@ public final class HttpPostMatcher extends BaseMatcher<HttpPost> {
       e.printStackTrace();
       return "";
     }
+  }
+
+  @Override
+  public void describeTo(Description description) {
+    // Required
   }
 }
