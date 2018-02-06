@@ -34,9 +34,9 @@ public final class TemplateServletModule extends ServletModule {
   @Override
   protected void configureServlets() {
     serve("/").with(TemplateServlet.class);
-    serve("/home*").with(HomeServlet.class);
-    serve("/contact*").with(TemplateServlet.class);
-    serve("/notes*").with(NotesServlet.class);
+    serve("/ajax/home*").with(HomeServlet.class);
+    serve("/ajax/contact*").with(TemplateServlet.class);
+    serve("/ajax/notes*").with(NotesServlet.class);
   }
 
   @Provides

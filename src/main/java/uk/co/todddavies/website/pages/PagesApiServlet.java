@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 final class PagesApiServlet extends HttpServlet {
 
-  private static final String HOME_URL = "/home";
+  private static final String HOME_URL = "/ajax/home";
   // TODO(td): Discover these automatically?
   private static final ImmutableMap<String, String> PAGES = ImmutableMap.of(
       HOME_URL, "Home",
-      "/contact", "Contact",
-      "/notes", "Notes");
+      "/ajax/contact", "Contact",
+      "/ajax/notes", "Notes");
   
   private final ObjectWriter jsonObjectWriter;
   
