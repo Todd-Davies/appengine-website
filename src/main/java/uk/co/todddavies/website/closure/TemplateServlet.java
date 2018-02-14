@@ -16,7 +16,7 @@ final class TemplateServlet extends HttpServlet {
 
   private static final ImmutableMap<String, String> TEMPLATE_MAP = addSlashesToPaths(ImmutableMap.of(
       "/", ".base",
-      "/contact", ".contact",
+      "/ajax/contact", ".contact",
       "/notes", ".notes"));
 
   private final SoyTofu soyTofu;
