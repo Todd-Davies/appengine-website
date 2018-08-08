@@ -1,0 +1,50 @@
+{namespace todddavies.website}
+
+{template .minimalistnotes}
+  {@param downloads: int}
+  {@param tags: list<string>}
+  {@param notes: map<string, list<map<string, string>>>}
+
+  {call .minimalistbase}
+    {param description kind="text"}Todd Davies' notes{/param}
+    {param title kind="text"}Notes{/param}
+    {param content kind="html"}
+      <div id="notes-content">
+        <div id="notes-description">
+          <p>
+            Here are all (well, most) of the notes that I made while studying for my GCSE, A-level and University
+            examinations. Please double check all information in them whilst revising, there's no guarantee that they are
+            correct.
+          </p>
+        </div>
+        <div id="notes-downloads">
+          Total downloads: {$downloads}.
+        </div>
+        <hr>
+        <div id="notes-list">
+          <table>
+            {foreach $tag in $tags}
+              <tr>
+                <th class="notes-header-cell" colspan="3">{$tag}</th>
+              </tr>
+              <tr class="notes-header2-cell">
+                <th>Name</th>
+                <th>Course code</th>
+                <th>Downloads</th>
+              </tr>
+              {foreach $row in $notes[$tag]}
+                <tr class="notes-body-cell">
+                  <td><a href="{$row['url']}">{$row['name']}</a></td>
+                  <td>{$row['course_code']}</td>
+                  <td>{$row['downloads']}</td>
+                </tr>
+              {/foreach}
+            {ifempty}
+              No notes found; shoot me <a href="http://todddavies.co.uk/#Contact">an email</a>.
+            {/foreach}
+          </table>
+        </div>
+      </div>
+    {/param}
+  {/call}
+{/template}

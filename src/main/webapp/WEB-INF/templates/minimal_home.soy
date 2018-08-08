@@ -1,0 +1,28 @@
+{namespace todddavies.website}
+
+{template .minimalisthome}
+  {@param age: int}
+
+  {call .minimalistbase}
+    {param description kind="text"}Todd Davies' home page{/param}
+    {param title kind="text"}Home{/param}
+    {param content kind="html"}
+      <div class="entry">
+        <p>
+          I'm a {$age} year old software engineer at <a href="http://google.com/">Google Munich</a>, before that I
+          studied
+          Computer Science at the <a href="http://www.manchester.ac.uk/">University of Manchester</a>.
+        </p>
+        <p>
+          I have interests in fashion, fitness, debating, software engineering, computational neuroscience,
+          and theoretical computer science. I particularly enjoy going to the gym, running
+          and <a href="https://www.goodreads.com/user/show/39367252-todd-davies">reading</a>.
+        </p>
+        <p>
+          If you'd like to contact me, feel free to send me an email at{sp}
+          <a href="mailto:todd434@gmail.com">todd434@gmail.com</a>.
+        </p>
+      </div>
+    {/param}
+  {/call}
+{/template}

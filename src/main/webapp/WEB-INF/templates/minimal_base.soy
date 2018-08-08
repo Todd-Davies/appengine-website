@@ -1,0 +1,82 @@
+{namespace todddavies.website}
+
+/**
+ * Base template for all website pages.
+ */
+{template .minimalistbase}
+  {@param? description: string}
+  {@param? title: string}
+  {@param? content: html}
+  <!DOCTYPE html>
+  <html lang="en">
+    {call .minimalisthead}
+      {param description: $description /}
+      {param title: $title /}
+    {/call}
+    {call .minimalistbody}
+      {param content: $content /}
+    {/call}
+  </html>
+{/template}
+
+{template .minimalisthead visibility="private"}
+  {@param? description: string}
+  {@param? title: string}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+
+    <meta name="description" content="{$description}">
+    <meta name="author" content="Todd Davies">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>
+      Todd Davies{if $title}; {$title}{/if}
+    </title>
+
+    <link href="/css/minimal.css" rel="stylesheet">
+  </head>
+{/template}
+
+{template .minimalistbody visibility="private"}
+  {@param? content: html}
+  {@param? title: html}
+
+  <body>
+    <div class="content">
+      <div class="menu">
+        <h1 class="left">
+          Todd Davies{if $title}: <strong>{$title}</strong>{/if}
+        </h1>
+        <ul class="right">
+          // These appear in reverse order
+          <li><a href="/notes/">Notes</a></li>
+          <li><a href="/">Home</a></li>
+        </ul>
+        <div style="float: clear;"></div>
+      </div>
+      {if $content}
+        {$content}
+      {/if}
+
+      {call .minimalistfooter /}
+    </div>
+
+    {call .analytics /}
+  </body>
+{/template}
+
+{template .minimalistfooter visibility="private"}
+  <div class="footer">
+    <hr/>
+    <div class="inner">
+      <p>Powered by <a href="https://cloud.google.com/appengine/">App Engine</a>,
+        <a href="https://developers.google.com/closure/templates/"> Closure Templates</a> & <a
+            href="https://cloud.google.com/datastore/">Datastore</a> running on <a
+            href="https://cloud.google.com/">Google Cloud</a>.</p>
+      <p>Open sourced on <a href="https://github.com/Todd-Davies/appengine-website">GitHub</a>.</p>
+    </div>
+  </div>
+{/template}
