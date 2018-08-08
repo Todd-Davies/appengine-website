@@ -29,7 +29,7 @@ final class RedirectModule  extends ServletModule {
   
   // TODO: Read from config
   private static final ImmutableMap<String, String> REDIRECT_MAP = ImmutableMap.of(
-      "/index.html", "/", "/notes", "/#notes", "/contact", "/#contact");
+      "/index.html", "/", "/notes", "/notes/" );
   
   private static final String UNKNOWN_PATH_WARNING = "Request to path '%s' was handled by the "
       + "redirect module, but was not registered with a redirect target. Registered targets "
@@ -38,7 +38,6 @@ final class RedirectModule  extends ServletModule {
   private static final ImmutableMap<String, String> GENERATED_MAP =
       ImmutableMap.<String, String>builder()
           .putAll(REDIRECT_MAP)
-          .putAll(addSlashesToPaths(REDIRECT_MAP))
           .build();
   
   private RedirectModule() {}
@@ -84,20 +83,6 @@ final class RedirectModule  extends ServletModule {
         resp.sendError(404);
       }
     }
-  }
-  
-  /**
-   * Adds slashes to the paths (keys) of a redirect mapping.
-   * 
-   * E.g. (/contact, /#contact) will go to (/contact/, #contact);
-   */
-  private static final ImmutableMap<String, String> addSlashesToPaths(
-      ImmutableMap<String, String> input) {
-    ImmutableMap.Builder<String, String> output = ImmutableMap.builder();
-    for (Entry<String, String> mapping : input.entrySet()) {
-      output.put(mapping.getKey() + '/', mapping.getValue());
-    }
-    return output.build();
   }
   
   @BindingAnnotation @Target({ FIELD, PARAMETER, METHOD }) @Retention(RUNTIME)

@@ -13,7 +13,6 @@ import java.io.IOException;
 @Singleton
 final class MinimalistHomeServlet extends HttpServlet {
 
-  private static final String EXPECTED_PATH = "/minimal/";
   private static final String TEMPLATE_NAME = ".minimalisthome";
 
   private static final long BIRTH_MILLIS = 802224000000L;
@@ -29,10 +28,6 @@ final class MinimalistHomeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    if (EXPECTED_PATH.equals(req.getRequestURI())) {
-      resp.getWriter().print(soyTofu.newRenderer(TEMPLATE_NAME).setData(HOME_DATA).render());
-    } else {
-      resp.sendError(404, String.format("Page '%s' not found.", req.getRequestURI()));
-    }
+    resp.getWriter().print(soyTofu.newRenderer(TEMPLATE_NAME).setData(HOME_DATA).render());
   }
 }
