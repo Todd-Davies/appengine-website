@@ -47,28 +47,24 @@ a:link {
 }
 
 .menu {
-  height: 80px;
+  display: grid;
 }
 
-.menu .left {
-  float: left;
-}
-
-.menu .right{
-  float: right;
+@media only screen and (max-width: 600px) {
+  .menu ul {
+    margin-top: 0px !important;
+  }
 }
 
 .menu ul {
+  margin-top: -60px;
   list-style-type: none;
-  margin: 0;
   padding: 0;
-  overflow: hidden;
   height: 100%;
 }
 
 .menu li {
   float: right;
-  transform: translate(0%, 50%);
 }
 
 .menu li a {
