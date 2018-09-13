@@ -35,6 +35,7 @@ public final class TemplateServletModule extends ServletModule {
   protected void configureServlets() {
     serve("/").with(MinimalistHomeServlet.class);
     serve("/notes/").with(MinimalistNotesServlet.class);
+    serve("/socialmedia/").with(MinimalistSocialMediaServlet.class);
   }
 
   @Provides
