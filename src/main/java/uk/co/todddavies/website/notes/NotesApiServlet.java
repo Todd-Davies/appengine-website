@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.gdata.util.common.base.Pair;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -55,8 +54,8 @@ final class NotesApiServlet extends HttpServlet {
     // If it wasn't read, then read & prepare it.
     if (!cachedValue.isPresent()) {
       Pair<LinkedHashMap<String, LinkedList<NotesDocument>>, Integer> notes = listNotesByTag(TAGS);
-      int totalDownloads = notes.getSecond();
-      response = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getFirst());
+      int totalDownloads = notes.getValue();
+      response = ImmutableMap.of("downloads", totalDownloads, "notes", notes.getKey());
       memCache.put(MemcacheKey.NOTES_LIST, response);
     } else {
       response = cachedValue.get();
@@ -110,4 +109,5 @@ final class NotesApiServlet extends HttpServlet {
     }
     return Optional.empty();
   }
+
 }
