@@ -23,7 +23,7 @@
         <hr>
         <div id="notes-list">
           <table>
-            {foreach $tag in $tags}
+            {for $tag in $tags}
               <tr>
                 <th class="notes-header-cell" colspan="3">{$tag}</th>
               </tr>
@@ -32,16 +32,16 @@
                 <th>Course code</th>
                 <th>Downloads</th>
               </tr>
-              {foreach $row in $notes[$tag]}
+              {for $row in $notes[$tag]}
                 <tr class="notes-body-cell">
                   <td><a href="{$row['url']}">{$row['name']}</a></td>
                   <td>{$row['course_code']}</td>
                   <td>{$row['downloads']}</td>
                 </tr>
-              {/foreach}
+              {/for}
             {ifempty}
               No notes found; shoot me <a href="mailto:todd434@gmail.com">an email</a>.
-            {/foreach}
+            {/for}
           </table>
         </div>
       </div>
