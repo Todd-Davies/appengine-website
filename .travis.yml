@@ -13,7 +13,7 @@
 # limitations under the License.
 language: java
 jdk:
-- oraclejdk8
+- openjdk11
 script: mvn verify
 after_success:
 - bash <(curl -s https://codecov.io/bash)
