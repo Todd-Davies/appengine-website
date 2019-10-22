@@ -1,0 +1,9 @@
+image: ubuntu/latest
+packages:
+  - maven
+sources:
+  - https://git.sr.ht/~todd/personal-website
+tasks:
+ - verify: |
+     cd personal-website
+     mvn verify
