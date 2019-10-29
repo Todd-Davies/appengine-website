@@ -32,7 +32,7 @@
     <properties>
         <jetty.version>9.4.21.v20190926</jetty.version>
         <appengine.app.version>1</appengine.app.version>
-        <appengine.target.version>1.9.60</appengine.target.version>
+        <appengine.target.version>1.9.76</appengine.target.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
