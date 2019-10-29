@@ -6,8 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimaps;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.template.soy.data.SoyMapData;
-import com.google.template.soy.tofu.SoyTofu;
+import com.google.template.soy.jbcsrc.api.SoySauce;
 import uk.co.todddavies.website.cache.MemcacheInterface;
 import uk.co.todddavies.website.cache.MemcacheKeys;
 import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
@@ -26,7 +25,7 @@ final class MinimalistNotesServlet extends HttpServlet {
 
   private final NotesDatastoreInterface notesStorage;
   private final MemcacheInterface memCache;
-  private final SoyTofu soyTofu;
+  private final SoySauce soySauce;
 
   // TODO(td): Don't hardcode this list
   private static final ImmutableList<String> TAGS =
@@ -36,10 +35,10 @@ final class MinimalistNotesServlet extends HttpServlet {
   private MinimalistNotesServlet(
       NotesDatastoreInterface notesStorage,
       MemcacheInterface memCache,
-      SoyTofu soyTofu) {
+      SoySauce soySauce) {
     this.notesStorage = notesStorage;
     this.memCache = memCache;
-    this.soyTofu = soyTofu;
+    this.soySauce = soySauce;
   }
 
   @Override
@@ -59,12 +58,12 @@ final class MinimalistNotesServlet extends HttpServlet {
     }
     final ImmutableMap<String, ImmutableList<ImmutableMap<String, String>>> notes = cachedNotes.get();
 
-    resp.getWriter().print(soyTofu.newRenderer(".minimalistnotes")
-        .setData(new SoyMapData(
+    resp.getWriter().print(soySauce.renderTemplate("todddavies.website.minimalistnotes")
+        .setData(ImmutableMap.of(
             "downloads", cachedDownloads.get(),
             "tags", TAGS.stream().filter(tag -> notes.keySet().contains(tag)).collect(ImmutableList.toImmutableList()),
             "notes", cachedNotes.get()))
-        .render());
+        .renderHtml().get().getContent());
   }
 
   private long downloads(ImmutableList<NotesDocument> notes) {

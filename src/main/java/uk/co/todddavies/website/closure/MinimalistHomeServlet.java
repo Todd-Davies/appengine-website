@@ -1,9 +1,9 @@
 package uk.co.todddavies.website.closure;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.template.soy.data.SoyMapData;
-import com.google.template.soy.tofu.SoyTofu;
+import com.google.template.soy.jbcsrc.api.SoySauce;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,21 +13,22 @@ import java.io.IOException;
 @Singleton
 final class MinimalistHomeServlet extends HttpServlet {
 
-  private static final String TEMPLATE_NAME = ".minimalisthome";
+  private static final String TEMPLATE_NAME = "todddavies.website.minimalisthome";
 
   private static final long BIRTH_MILLIS = 802224000000L;
   private static final long YEAR_MILLIS = 31556952000L;
-  private static final SoyMapData HOME_DATA = new SoyMapData("age", (System.currentTimeMillis() - BIRTH_MILLIS) / YEAR_MILLIS);
+  private static final ImmutableMap<String, String> HOME_DATA = ImmutableMap.of(
+      "age", String.valueOf((System.currentTimeMillis() - BIRTH_MILLIS) / YEAR_MILLIS));
 
-  private final SoyTofu soyTofu;
+  private final SoySauce soySauce;
 
   @Inject
-  private MinimalistHomeServlet(SoyTofu soyTofu) {
-    this.soyTofu= soyTofu;
+  private MinimalistHomeServlet(SoySauce soySauce) {
+    this.soySauce = soySauce;
   }
 
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    resp.getWriter().print(soyTofu.newRenderer(TEMPLATE_NAME).setData(HOME_DATA).render());
+    resp.getWriter().print(soySauce.renderTemplate(TEMPLATE_NAME).setData(HOME_DATA).renderHtml().get().getContent());
   }
 }

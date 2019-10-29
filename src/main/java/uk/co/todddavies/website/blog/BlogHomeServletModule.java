@@ -2,7 +2,7 @@ package uk.co.todddavies.website.blog;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.template.soy.tofu.SoyTofu;
+import com.google.template.soy.jbcsrc.api.SoySauce;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,15 +12,15 @@ import java.io.IOException;
 @Singleton
 final class BlogHomeServletModule extends HttpServlet {
 
-  private final SoyTofu soyTofu;
+  private final SoySauce soySauce;
 
   @Inject
-  private BlogHomeServletModule(SoyTofu soyTofu) {
-    this.soyTofu = soyTofu;
+  private BlogHomeServletModule(SoySauce soySauce) {
+    this.soySauce = soySauce;
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.getWriter().print(soyTofu.newRenderer(".blog").renderHtml());
+    response.getWriter().print(soySauce.renderTemplate("todddavies.website.blog").renderHtml().get().getContent());
   }
 }
