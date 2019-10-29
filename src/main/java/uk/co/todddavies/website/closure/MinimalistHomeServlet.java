@@ -9,16 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Singleton
 final class MinimalistHomeServlet extends HttpServlet {
 
   private static final String TEMPLATE_NAME = "todddavies.website.minimalisthome";
-
-  private static final long BIRTH_MILLIS = 802224000000L;
-  private static final long YEAR_MILLIS = 31556952000L;
-  private static final ImmutableMap<String, String> HOME_DATA = ImmutableMap.of(
-      "age", String.valueOf((System.currentTimeMillis() - BIRTH_MILLIS) / YEAR_MILLIS));
+  private static final LocalDate BIRTH_DATE = LocalDate.of(1995, 06, 04);
 
   private final SoySauce soySauce;
 
@@ -29,6 +27,11 @@ final class MinimalistHomeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    resp.getWriter().print(soySauce.renderTemplate(TEMPLATE_NAME).setData(HOME_DATA).renderHtml().get().getContent());
+    int yearsOld = Period.between(BIRTH_DATE, LocalDate.now()).getYears();
+    resp.getWriter().print(
+        soySauce
+            .renderTemplate(TEMPLATE_NAME)
+            .setData(ImmutableMap.of("age", yearsOld))
+            .renderHtml().get().getContent());
   }
 }
