@@ -3,6 +3,7 @@ package uk.co.todddavies.website;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
+import uk.co.todddavies.website.blog.BlogModule;
 import uk.co.todddavies.website.cache.MemcacheModule;
 import uk.co.todddavies.website.closure.TemplateServletModule;
 import uk.co.todddavies.website.notes.NotesServletModule;
@@ -22,6 +23,7 @@ public final class ApiServletContextListener  extends GuiceServletContextListene
         new SslVerificationServletModule(false),
         NotesServletModule.create(API_PATH),
         TemplateServletModule.create(),
+        BlogModule.create(),
         // Global notes binding modules to avoid multiple bindings
         new MemcacheModule(),
         new NotesDatastoreModule(),
