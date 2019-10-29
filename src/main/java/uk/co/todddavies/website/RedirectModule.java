@@ -1,27 +1,19 @@
 package uk.co.todddavies.website;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import com.google.common.collect.ImmutableMap;
-import com.google.inject.AbstractModule;
-import com.google.inject.BindingAnnotation;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
 import com.google.inject.servlet.ServletModule;
-
-import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.util.Map.Entry;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.util.logging.Logger;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 final class RedirectModule  extends ServletModule {
   
@@ -29,7 +21,7 @@ final class RedirectModule  extends ServletModule {
   
   // TODO: Read from config
   private static final ImmutableMap<String, String> REDIRECT_MAP = ImmutableMap.of(
-      "/index.html", "/", "/notes", "/notes/" );
+      "/index.html", "/", "/notes", "/notes/", "/blog", "/blog/");
   
   private static final String UNKNOWN_PATH_WARNING = "Request to path '%s' was handled by the "
       + "redirect module, but was not registered with a redirect target. Registered targets "

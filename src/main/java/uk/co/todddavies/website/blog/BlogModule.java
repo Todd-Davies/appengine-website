@@ -14,6 +14,6 @@ public class BlogModule extends ServletModule {
 
   @Override
   protected void configureServlets() {
-    serve("/blog").with(BlogHomeServletModule.class);
+    serve("/blog/").with(BlogHomeServletModule.class);
   }
 }
