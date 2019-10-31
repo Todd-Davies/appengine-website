@@ -25,7 +25,7 @@ final class BlogHomeServletModule extends HttpServlet {
     response.getWriter().print(
         soySauce
             .renderTemplate("todddavies.website.blog")
-            .setData(ImmutableMap.of("content", "Coming soon!", "sidebar", ""))
+            .setData(ImmutableMap.of("content", "Coming soon!"))
             .renderHtml().get().getContent());
   }
 }

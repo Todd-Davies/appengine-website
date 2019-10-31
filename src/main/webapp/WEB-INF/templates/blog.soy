@@ -1,0 +1,23 @@
+{namespace todddavies.website}
+
+{template .blog}
+  {@param content: html}
+
+  {call .minimalistbase}
+    {param description kind="text"}Todd Davies' blog{/param}
+    {param title kind="text"}Blog{/param}
+    {param content kind="html"}
+      <div class="blog-sidebar">
+        {call .blogSidebar /}
+      </div>
+      {$content}
+    {/param}
+  {/call}
+{/template}
+
+{template .blogSidebar}
+   // Add a new line here for each post
+  <ul>
+    //<li><a href="/blog/sample-post">Sample post</a></li>
+  </ul>
+{/template}
