@@ -1,5 +1,6 @@
 package uk.co.todddavies.website.blog;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.template.soy.jbcsrc.api.SoySauce;
@@ -21,6 +22,10 @@ final class BlogHomeServletModule extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.getWriter().print(soySauce.renderTemplate("todddavies.website.blog").renderHtml().get().getContent());
+    response.getWriter().print(
+        soySauce
+            .renderTemplate("todddavies.website.blog")
+            .setData(ImmutableMap.of("content", "Coming soon!", "sidebar", ""))
+            .renderHtml().get().getContent());
   }
 }

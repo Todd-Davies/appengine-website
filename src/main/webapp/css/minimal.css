@@ -111,3 +111,11 @@ a:link {
 
 .notes-body-cell:nth-child(even) {background: #F0F0F0}
 .notes-body-cell:nth-child(odd) {}
+
+.blog-sidebar {
+  width: 160px;
+  position: absolute;
+  overflow-x: hidden;
+  padding-top: 20px;
+  margin-left: 520px;
+}

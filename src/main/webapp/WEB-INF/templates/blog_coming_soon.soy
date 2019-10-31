@@ -1,10 +1,16 @@
 {namespace todddavies.website}
-        {template .blog}
-            {call .minimalistbase}
-        {param description kind="text"}Todd Davies' blog{/param}
-        {param title kind="text"}Blog{/param}
-        {param content kind="html"}
-<b>Coming soon!</b>
-        {/param}
-        {/call}
-        {/template}
+  {template .blog}
+    {@param content: html}
+    {@param sidebar: html}
+
+    {call .minimalistbase}
+      {param description kind="text"}Todd Davies' blog{/param}
+      {param title kind="text"}Blog{/param}
+      {param content kind="html"}
+        <div class="blog-sidebar">
+          {$sidebar}
+        </div>
+        {$content}
+      {/param}
+  {/call}
+{/template}
