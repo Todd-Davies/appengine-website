@@ -118,3 +118,8 @@ a:link {
   overflow-x: hidden;
   margin-left: 520px;
 }
+
+.blog-post {
+  display: flex;
+  flex-direction: column;
+}

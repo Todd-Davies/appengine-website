@@ -23,6 +23,9 @@ final class SoyRenderModule extends ServletModule {
     for (String path : context.getResourcePaths("/WEB-INF/templates/")) {
       fileSet.add(getServletContext().getResource(path));
     }
+    for (String path : context.getResourcePaths("/WEB-INF/blog/")) {
+      fileSet.add(getServletContext().getResource(path));
+    }
     return fileSet;
   }
 }

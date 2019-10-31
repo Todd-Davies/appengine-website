@@ -1,8 +1,10 @@
 package uk.co.todddavies.website.blog;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.template.soy.data.SanitizedContent;
 import com.google.template.soy.jbcsrc.api.SoySauce;
 
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,10 @@ import java.io.IOException;
 @Singleton
 final class BlogHomeServletModule extends HttpServlet {
 
+  private static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
+    "starting-a-blog", "startingABlog"
+  );
+
   private final SoySauce soySauce;
 
   @Inject
@@ -22,10 +28,16 @@ final class BlogHomeServletModule extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    ImmutableList.Builder<SanitizedContent> posts = ImmutableList.builder();
+    for (String templateName : PATH_MAP.values()) {
+      String fullyQualifiedName = String.format("todddavies.website.blog.%sContent", templateName);
+      posts.add(soySauce.renderTemplate(fullyQualifiedName).renderHtml().get());
+    }
+
     response.getWriter().print(
         soySauce
-            .renderTemplate("todddavies.website.blog")
-            .setData(ImmutableMap.of("content", "Coming soon!"))
+            .renderTemplate("todddavies.website.blogHome")
+            .setData(ImmutableMap.of("content", posts.build()))
             .renderHtml().get().getContent());
   }
 }

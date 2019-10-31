@@ -1,7 +1,7 @@
 {namespace todddavies.website}
 
-{template .blogPost}
-  {@param content: html}
+{template .blogHome}
+  {@param content: list<html>}
 
   {call .minimalistbase}
     {param description kind="text"}Todd Davies' blog{/param}
@@ -10,14 +10,18 @@
       <div class="blog-sidebar">
         {call .blogSidebar /}
       </div>
-      {$content}
+      {for $post in $content}
+        <div class="blog-post">
+          {$post}
+        </div>
+        {if not isLast($post)}
+          {call .divider /}
+        {/if}
+      {/for}
     {/param}
   {/call}
 {/template}
 
-{template .blogSidebar}
-   // Add a new line here for each post
-  <ul>
-    {call todddavies.website.blog.startingABlogLink /}
-  </ul>
+{template .divider}
+   <hr>
 {/template}

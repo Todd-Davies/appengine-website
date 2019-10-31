@@ -1,0 +1,21 @@
+{namespace todddavies.website.blog}
+
+{template .startingABlogLink}
+  <li><a href="/blog/starting-a-blog">I'm starting a blog</a></li>
+{/template}
+
+{template .startingABlog}
+  {call todddavies.website.blogPost}
+    {param content kind="html"}
+      {call .startingABlogContent /}
+    {/param}
+  {/call}
+{/template}
+
+{template .startingABlogContent}
+  <h1>I'm starting a blog!</h1>
+  <b>31.10.2019</b>
+
+  // TODO
+  Write reasons here...
+{/template}
