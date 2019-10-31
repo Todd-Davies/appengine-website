@@ -113,7 +113,7 @@ a:link {
 .notes-body-cell:nth-child(odd) {}
 
 .blog-sidebar {
-  width: 160px;
+  max-width: 300px;
   position: absolute;
   overflow-x: hidden;
   margin-left: 520px;
