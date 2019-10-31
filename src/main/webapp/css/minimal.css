@@ -116,7 +116,9 @@ a:link {
   max-width: 300px;
   position: absolute;
   overflow-x: hidden;
-  margin-left: 520px;
+  margin-left: 540px;
+  background-color: #E9E9E9;
+  padding: 10px;
 }
 
 .blog-post {

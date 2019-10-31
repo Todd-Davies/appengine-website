@@ -7,7 +7,9 @@
 {template .startingABlog}
   {call todddavies.website.blogPost}
     {param content kind="html"}
-      {call .startingABlogContent /}
+      <div class="blog-post">
+        {call .startingABlogContent /}
+      </div>
     {/param}
   {/call}
 {/template}

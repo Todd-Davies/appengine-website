@@ -5,8 +5,7 @@ import com.google.inject.servlet.ServletModule;
 
 public class BlogModule extends ServletModule {
 
-  private BlogModule() {
-  }
+  private BlogModule() {}
 
   public static AbstractModule create() {
     return new BlogModule();
@@ -15,5 +14,6 @@ public class BlogModule extends ServletModule {
   @Override
   protected void configureServlets() {
     serve("/blog/").with(BlogHomeServletModule.class);
+    serve("/blog/*").with(BlogPostServletModule.class);
   }
 }
