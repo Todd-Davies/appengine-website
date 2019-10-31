@@ -125,3 +125,14 @@ a:link {
   display: flex;
   flex-direction: column;
 }
+
+@media only screen and (max-width: 960px) {
+  .blog-sidebar {
+    max-width: 500px;
+    margin-left: 0px;
+    position: inherit;
+    overflow-x: hidden;
+    background-color: #E9E9E9;
+    padding: 10px;
+  }
+}
