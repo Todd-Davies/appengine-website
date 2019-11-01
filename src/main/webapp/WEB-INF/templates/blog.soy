@@ -25,10 +25,24 @@
   <p class="blog-inline-caption">{$caption}</p>
 {/template}
 
+{template .blogCodeDollar}
+  <span class="no-select">$ </span>
+{/template}
+
 {template .blogCode}
+  {@param code: string|html}
+
+  <div class="blog-code-block">
+    <p>
+      {$code}
+    </p>
+  </div>
+{/template}
+
+{template .blogCodeInline}
   {@param code: string}
 
-  <p class="blog-code-block">{$code}</p>
+  <span class="blog-code-inline">{$code}</span>
 {/template}
 
 {template .blogSidebar}

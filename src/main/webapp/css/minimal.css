@@ -137,6 +137,31 @@ a:link {
   font-size: 14px;
 }
 
+.blog-code-block {
+  background-color: #333;
+  color: #EEE;
+  font-family: monospace;
+  padding: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.blog-code-block p {
+  color: #EEE;
+  margin: 0;
+}
+
+.blog-code-inline {
+  background-color: #EEE;
+  font-family: monospace;
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+.no-select {
+  user-select: none;
+}
+
 @media only screen and (max-width: 960px) {
   .blog-sidebar {
     max-width: 500px;
