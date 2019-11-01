@@ -1,21 +1,23 @@
 {namespace todddavies.website.blog}
 
+{template .startingABlogTitle}
+  I'm starting a blog
+{/template}
+
 {template .startingABlogLink}
-  <li><a href="/blog/starting-a-blog">I'm starting a blog</a></li>
+  <li><a href="/blog/starting-a-blog">{call .startingABlogTitle /}</a></li>
 {/template}
 
 {template .startingABlog}
   {call todddavies.website.blogPost}
     {param content kind="html"}
-      <div class="blog-post">
-        {call .startingABlogContent /}
-      </div>
+      {call .startingABlogContent /}
     {/param}
   {/call}
 {/template}
 
-{template .startingABlogContent}
-  <h1>I'm starting a blog!</h1>
+{template .howToPullContent}
+  <h1>{call .startingABlogTitle /}</h1>
   <b>31.10.2019</b>
 
   <p>The internet has gotten a lot of flak recently for facilitating information pollution via the World Wide Web, which
