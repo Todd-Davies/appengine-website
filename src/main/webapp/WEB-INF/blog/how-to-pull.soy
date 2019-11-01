@@ -1,0 +1,87 @@
+{namespace todddavies.website.blog}
+
+{template .howToPullTitle}
+  My notes: How to make a Pull Request
+{/template}
+
+{template .howToPullLink}
+  <li><a href="/blog/how-to-pull">{call .howToPullTitle /}</a></li>
+{/template}
+
+{template .howToPull}
+  {call todddavies.website.blogPost}
+    {param content kind="html"}
+      {call .howToPullContent /}
+    {/param}
+  {/call}
+{/template}
+
+{template .howToPullContent}
+  <h1>{call .howToPullTitle /}</h1>
+  <b>01.11.2019</b>
+
+  <i>If you want to skip to the tutorial, <a href="#notesPrTutorial">click here</a>.</i>
+
+  <p>Soon after starting at university, I started to become frustrated with the rather poor quality of the lecture
+    slides we would have to revise from. Though all the information was there, and it was (mostly) perfectly clear if
+    you attended all the lectures, when it came to revising for the exams, it was hard to figure out what exactly was
+    happening from the lecture slides themselves.</p>
+
+  <p>Thus, I started to make my own notes and flashcards, which <a href="/notes">I put online</a> after each of my
+    courses was finished. To my very pleasant surprise, other students at <a href="https://cs.man.ac.uk">Manchester</a>
+    {sp}started to use them for revision too. This is very visible from the large spikes in traffic that my website
+    receives during every exam period.</p>
+
+  {call todddavies.website.blogImage}
+    {param imageUrl kind="uri"}/images/blog/how-to-pull/traffic-graph.png{/param}
+    {param caption kind="text"}The peaks in my website's traffic correspond to exam periods at university.{/param}
+  {/call}
+
+  <p>This makes me really, really happy, but with great happiness comes a little bit of responsibility. Since so many
+    students are using my notes to revise and learn, any mistakes in the notes (and there are likely quite a few) could
+    be propagated onto them, which nobody wants. Furthermore, some of the courses have changed and the material has
+    become out of date, argh!</p>
+
+  <p>Since my notes are 100% open source, I've always hoped that they would become living documents, and students would
+    update the notes as they found mistakes, or thought of improvements. While I do typically receive a few changes per
+    year, I think there's a very low ratio of eyes-on-page to proposed-amendments, and I'd like to improve that. I
+    recognise that many students, having just come to university, might not be familiar with LaTeX, or with Git or with
+    how pull requests work, so this is my effort to help students contribute.</p>
+
+  <p id="notesPrTutorial"><b>So, what follows is my guide on how to submit a pull request to my notes, from start to
+    finish.</b></p>
+
+  <p>I'll split the tutorial into three parts; the structure of my notes repositories, how to edit the notes, and how to
+    submit a PR.</p>
+
+  <b>How my notes are structured</b>
+
+  <p>As of writing, my bachelor's degree notes are split into three repositories on GitHub, corresponding to each year I
+    spent at university. The repositories can be found <a
+            href="https://github.com/Todd-Davies/first-year-notes">here</a>, <a
+            href="https://github.com/Todd-Davies/second-year-notes">here</a> and <a
+            href="https://github.com/Todd-Davies/third-year-notes">here</a>. In this tutorial, I'll use my first year
+    notes as an example, but the other two repositories are similar.</p>
+
+  <p><i>I'll assume that you have a terminal set up that you can type Git commands into. If you've not heard of version
+    control or Git before, perhaps read <a href="https://guides.github.com/introduction/git-handbook/">this intro</a>
+    {sp}before continuing.</i></p>
+
+  <p>If you want to make changes to the notes, the first step is to <i>fork</i> the repository. To do that, you need to
+    open <a href="https://github.com/Todd-Davies/first-year-notes">the repository</a> in your web-browser and hit the
+    'fork' button in the top-right corner. This will create a copy of my repository under your GitHub account, that you
+    can make edits to Eventually, you'll send me a request to pull your edits back into the original repository (and
+    that request, is the pull request).</p>
+
+  <p>Once you've forked the repository, you'll need to download it to your machine before you can make any changes. To
+    do that, you should run the following command, but <b>replacing Todd-Davies with your username</b> so that you
+    download your copy of the repository:</p>
+
+  {call todddavies.website.blogCode}
+    {param code kind="text"}
+      $ git clone https://github.com/Todd-Davies/first-year-notes.git
+    {/param}
+  {/call}
+
+  <p></p>
+{/template}
