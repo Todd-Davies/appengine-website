@@ -17,6 +17,20 @@
   {/call}
 {/template}
 
+{template .blogImage}
+  {@param imageUrl: uri}
+  {@param caption: string}
+
+  <img src="{$imageUrl}" class="blog-inline-image"/>
+  <p class="blog-inline-caption">{$caption}</p>
+{/template}
+
+{template .blogCode}
+  {@param code: string}
+
+  <p class="blog-code-block">{$code}</p>
+{/template}
+
 {template .blogSidebar}
   <b>Recent posts</b>
    // Add a new line here for each post

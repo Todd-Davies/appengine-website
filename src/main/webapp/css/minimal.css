@@ -126,6 +126,17 @@ a:link {
   flex-direction: column;
 }
 
+.blog-inline-image {
+  object-fit: contain;
+  width: 520px;
+}
+
+.blog-inline-caption {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+}
+
 @media only screen and (max-width: 960px) {
   .blog-sidebar {
     max-width: 500px;
