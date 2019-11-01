@@ -12,13 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static uk.co.todddavies.website.blog.BlogPostServletModule.PATH_MAP;
+
 @Singleton
 final class BlogHomeServletModule extends HttpServlet {
-
-  private static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
-    "starting-a-blog", "startingABlog"
-  );
-
   private final SoySauce soySauce;
 
   @Inject

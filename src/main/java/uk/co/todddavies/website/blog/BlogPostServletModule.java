@@ -12,7 +12,8 @@ import java.io.IOException;
 
 @Singleton
 final class BlogPostServletModule extends HttpServlet {
-  private static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
+  static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
+      "how-to-pull", "howToPull",
       "starting-a-blog", "startingABlog"
   );
 
