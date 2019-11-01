@@ -17,6 +17,17 @@ h1 {
   float: left;
 }
 
+@media only screen and (max-width: 520px) {
+  .left {
+    text-align: center;
+  }
+
+  .right {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 a:hover {
   background: #e7eef8;
   border-width: 0 0 1px 0;
@@ -50,7 +61,7 @@ a:link {
   display: grid;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 520px) {
   .menu ul {
     margin-top: 0px !important;
   }
@@ -119,6 +130,11 @@ a:link {
   margin-left: 540px;
   background-color: #E9E9E9;
   padding: 10px;
+  margin-right: 10px;
+}
+
+.blog-sidebar ul {
+  padding-inline-start: 20px;
 }
 
 .blog-post {
@@ -128,7 +144,7 @@ a:link {
 
 .blog-inline-image {
   object-fit: contain;
-  width: 520px;
+  max-width: 520px;
 }
 
 .blog-inline-caption {
@@ -170,5 +186,6 @@ a:link {
     overflow-x: hidden;
     background-color: #E9E9E9;
     padding: 10px;
+    margin-right: 0px;
   }
 }
