@@ -1,7 +1,7 @@
 {namespace todddavies.website.blog}
 
 {template .howToPullTitle}
-  My notes: How to make a Pull Request
+  How to make a Pull Request (for my notes)
 {/template}
 
 {template .howToPullLink}
@@ -74,14 +74,147 @@
     that request, is the pull request).</p>
 
   <p>Once you've forked the repository, you'll need to download it to your machine before you can make any changes. To
-    do that, you should run the following command, but <b>replacing Todd-Davies with your username</b> so that you
+    do that, you should run the following command, but <b>replacing `Todd-Davies' with your username</b> so that you
     download your copy of the repository:</p>
 
   {call todddavies.website.blogCode}
-    {param code kind="text"}
-      $ git clone https://github.com/Todd-Davies/first-year-notes.git
+    {param code kind="html"}
+      {call todddavies.website.blogCodeDollar /}git clone https://github.com/Todd-Davies/first-year-notes.git
     {/param}
   {/call}
 
-  <p></p>
+  <p>Now, if you run {call todddavies.website.blogCodeInline}
+    {param code: 'cd first-year-notes' /}
+  {/call} and then
+    run {call todddavies.website.blogCodeInline}
+      {param code: 'ls' /}
+    {/call}, you'll see the structure of the notes
+    directory:</p>
+
+  {call todddavies.website.blogCode}
+    {param code kind="html"}
+      {call todddavies.website.blogCodeDollar /}ls<br>
+      > COMP10120  COMP11212  COMP15111  COMP18112  setup<br>
+      > COMP11120_1  COMP12111  COMP16121  README.rst<br>
+      > COMP11120_2  COMP14112  COMP16212  page_count.sh<br>
+    {/param}
+  {/call}
+
+  <p>Each of the {call todddavies.website.blogCodeInline}
+    {param code: 'COMP*' /}
+  {/call} sub-directories contain the
+    source for one of my notes files, and as you can probably guess, they're named after the course code for that
+    course.</p>
+
+  <p>Lets see what's inside one of the course subdirectories. I'll {call todddavies.website.blogCodeInline}
+    {param code: 'cd' /}
+  {/call} into one of them, then see what's inside:</p>
+
+  {call todddavies.website.blogCode}
+    {param code kind="html"}
+      {call todddavies.website.blogCodeDollar /}cd COMP15111<br>
+      {call todddavies.website.blogCodeDollar /}ls<br>
+      > build.sh      notes.pdf<br>
+      > content.tex      notes.tex<br>
+      > drawstack.sty      packages.tex<br>
+      > flashcards      rm_extras.sh<br>
+      > kindle.pdf      tcolorbox.sty<br>
+      > kindle.tex      two_box_model_diagram.pdf<br>
+      > meta.tex      two_box_model_diagram.tex<br>
+    {/param}
+  {/call}
+
+  <p><b>How to make a change, and build the PDF files</b></p>
+
+   // So readable... lol
+  <p>That's a lot of files, and most of them aren't relevant for the basics. The most important thing to know, is that
+    the content goes inside the {call todddavies.website.blogCodeInline}
+      {param code: '.tex' /}
+    {/call} files, and the output is in the {call todddavies.website.blogCodeInline}
+      {param code: '.pdf' /}
+    {/call} files. The actual notes usually live in the {call todddavies.website.blogCodeInline}
+      {param code: 'content.tex' /}
+    {/call} file. In order to convert the {call todddavies.website.blogCodeInline}
+      {param code: 'tex' /}
+    {/call} files into {call todddavies.website.blogCodeInline}
+      {param code: 'pdf' /}
+    {/call} files, then you need to either run a command called {call todddavies.website.blogCodeInline}
+      {param code: 'pdflatex' /}
+    {/call}, or run the build script that's usually provided (later versions of my notes should
+    use {call todddavies.website.blogCodeInline}
+      {param code: 'makefiles' /}
+    {/call}) {call todddavies.website.blogCodeInline}
+      {param code: './build.sh' /}
+    {/call}.</p>
+
+  <p>I'm not going to go into editing the LaTeX code now, because that would make a long post already longer than it is,
+    but to get your feet wet, try making a change to some text, saving the file, compiling the code using the build
+    script, and viewing the updated output in a PDF viewer (your web browser should do the trick).</p>
+
+  <b>How to make a change in Git, and push to GitHub</b>
+
+  <p>Once you've done that, if you run {call todddavies.website.blogCodeInline}
+    {param code: 'git status' /}
+  {/call}, you should see output similar to the following:</p>
+
+  {call todddavies.website.blogCode}
+    {param code kind="html"}
+      {call todddavies.website.blogCodeDollar /}git status<br>
+      On branch master<br>
+      Your branch is up to date with 'origin/master'.<br>
+      <br>
+      Changes not staged for commit:<br>
+      (use "git add (file)..." to update what will be committed)<br>
+      (use "git checkout -- (file)..." to discard changes in working directory)<br>
+      <br>
+      modified:   content.tex<br>
+      modified:   kindle.pdf<br>
+      modified:   notes.pdf<br>
+      <br>
+      no changes added to commit (use "git add" and/or "git commit -a")<br>
+    {/param}
+  {/call}
+
+  <p>As Git says, the next step is to make a commit with the files we changed! Lets do that, and then push back up to
+    the repository we forked on Github.</p>
+
+  {call todddavies.website.blogCode}
+    {param code kind="html"}
+      {call todddavies.website.blogCodeDollar /}git commit -a -m 'My first commit'<br>
+      ...<br>
+      {call todddavies.website.blogCodeDollar /}git push origin master<br>
+      ...
+    {/param}
+  {/call}
+
+  <p>Note that most of the courses have a section for contributors; please do add yourself in there if you do some
+    editing, however small!</p>
+
+  <p><b>How to make a Pull Request (PR)</b></p>
+
+  <p>Now, if you go back to the repository you made in GitHub, and click on 'Pull Requests' in the tabs, then you should
+    be able to see a 'New pull request' button on the top right side:</p>
+
+  {call todddavies.website.blogImage}
+    {param imageUrl kind="uri"}/images/blog/how-to-pull/new-pull-request.png{/param}
+    {param caption kind="text"}The green button on the top right!{/param}
+  {/call}
+
+  <p>If you click the button, you'll be taken to the UI, where you can actually send the PR to me.</p>
+
+  <p><b>Next steps</b></p>
+
+  <p>Now, I'll get an email that you sent me a PR, and within a few days (hopefully!), I'll take a look and either merge
+    the PR into the codebase (which will automatically make the updated versions of the notes available on my website),
+    or give you some feedback if we should make some changes before we merge.</p>
+
+  <p>If you'd like to see examples of previous PR's, then you can look <a
+          href="https://github.com/Todd-Davies/first-year-notes/pulls?q=is%3Apr+is%3Aclosed">here</a>.</p>
+
+  <p>Finally, studying CS is hard, revising is hard, exams are hard, writing LaTeX is hard, putting all the knowledge
+    you've learnt into coherent sentences so that other people can understand it is also... hard. So first off, if you
+    do get around to making a PR, then you have my sincere gratitude for the effort, and second, I promise to be
+    friendly, and will spend the time with you to help with any part of the process if required. If you have any
+    problems, feel free to <a href="mailto:todd434@gmail.com">email me</a>!</p>
+
 {/template}
