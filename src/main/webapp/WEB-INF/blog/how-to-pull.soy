@@ -1,11 +1,15 @@
 {namespace todddavies.website.blog}
 
-{template .howToPullTitle}
+{template .howToPullTitle kind="text"}
   How to make a Pull Request (for my notes)
 {/template}
 
+{template .howToPullPath kind="uri"}
+  /blog/how-to-pull
+{/template}
+
 {template .howToPullLink}
-  <li><a href="/blog/how-to-pull">{call .howToPullTitle /}</a></li>
+  <li><a href="{call .howToPullPath/}">{call .howToPullTitle /}</a></li>
 {/template}
 
 {template .howToPull}
@@ -17,7 +21,14 @@
 {/template}
 
 {template .howToPullContent}
-  <h1>{call .howToPullTitle /}</h1>
+  {call todddavies.website.blogTitle}
+    {param title kind="text"}
+      {call .howToPullTitle /}
+    {/param}
+    {param link kind="uri"}
+      {call .howToPullPath /}
+    {/param}
+  {/call}
   <b>01.11.2019</b>
 
   <i>If you want to skip to the tutorial, <a href="#notesPrTutorial">click here</a>.</i>

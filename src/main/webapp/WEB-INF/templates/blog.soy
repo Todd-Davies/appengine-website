@@ -17,6 +17,13 @@
   {/call}
 {/template}
 
+{template .blogTitle}
+  {@param link: uri}
+  {@param title: string}
+
+  <h1><a href="{$link}">{$title}</a></h1>
+{/template}
+
 {template .blogImage}
   {@param imageUrl: uri}
   {@param caption: string}
