@@ -133,6 +133,14 @@ a:link {
   margin-right: 10px;
 }
 
+.blog-header {
+  margin-bottom: 10px;
+}
+
+.blog-date {
+  margin-bottom: 20px;
+}
+
 .blog-sidebar ul {
   padding-inline-start: 20px;
 }

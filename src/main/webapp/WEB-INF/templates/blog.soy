@@ -20,8 +20,10 @@
 {template .blogTitle}
   {@param link: uri}
   {@param title: string}
+  {@param date: string}
 
-  <h1><a href="{$link}">{$title}</a></h1>
+  <h1 class="blog-header"><a href="{$link}">{$title}</a></h1>
+  <b class="blog-date">{$date}</b>
 {/template}
 
 {template .blogImage}
