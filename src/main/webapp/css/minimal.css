@@ -123,6 +123,13 @@ a:link {
 .notes-body-cell:nth-child(even) {background: #F0F0F0}
 .notes-body-cell:nth-child(odd) {}
 
+.notes-contribute {
+  background-color: #E9E9E9;
+  padding: 10px;
+  margin-top: 0px;
+  text-align: center;
+}
+
 .blog-sidebar {
   max-width: 300px;
   position: absolute;
