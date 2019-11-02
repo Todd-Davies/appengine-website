@@ -1,20 +1,18 @@
 package uk.co.todddavies.website.notes;
 
-import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
-import uk.co.todddavies.website.notes.data.NotesDocument;
-
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-
-import java.io.IOException;
+import uk.co.todddavies.website.notes.data.NotesDatastoreInterface;
+import uk.co.todddavies.website.notes.data.NotesDocument;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Singleton
 @SuppressWarnings("serial")
@@ -44,11 +42,16 @@ final class NotesApiDownloadServlet extends HttpServlet {
     } else {
       // TODO(td): Add caching here (w/ long timeout)
       Optional<NotesDocument> optionalNotes = storageInterface.get(key.get());
-      if (optionalNotes.isPresent()) {
+      if (!optionalNotes.isPresent()) {
         // Increment the download count asynchronously
-        taskQueue.add(
-            DownloadCountIncrementer.create(key.get()));
-        resp.sendRedirect(optionalNotes.get().getUrl());
+        //taskQueue.add(
+        //    DownloadCountIncrementer.create(key.get()));
+        String notesUrl = "https://blob.com"; //optionalNotes.get().getUrl();
+        if ("true".equals(req.getParameter("promoExperiment"))) {
+          resp.sendRedirect("/notes/promo?continue=" + notesUrl);
+        } else {
+          resp.sendRedirect(notesUrl);
+        }
       } else {
         resp.sendError(404, String.format("Notes document with ID %d not found.", key.get()));
       }

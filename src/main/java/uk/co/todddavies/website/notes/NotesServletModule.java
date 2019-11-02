@@ -43,6 +43,8 @@ public final class NotesServletModule extends ServletModule {
     filter(apiPath + "notes-dl*").through(KeyFilter.class);
     serve(apiPath + "notes-dl*").with(NotesApiDownloadServlet.class);
     serve(apiPath + "notes").with(NotesApiServlet.class);
+    serve("/notes/promo").with(NotesPromoServlet.class);
+
   }
   
   /**
