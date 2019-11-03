@@ -1,0 +1,26 @@
+{namespace todddavies.website}
+
+{template .blogRssFeed stricthtml="false"}
+  // {@param blogPosts: List<BlogPost>}
+  {@param year: string}
+  {@param buildDate: string}
+
+  <rss version="2.0" slick-uniqueid="3">
+    <div>
+      <a id="slick_uniqueid"/>
+    </div>
+    <channel>
+      <title>Todd Davies' Blog</title>
+      <link>https://todddavies.co.uk/blog/</link>
+      <description>Todd Davies' blog.</description>
+      <language>en</language>
+      <copyright>Copyright 2019-{$year} Todd Davies</copyright>
+      <lastBuildDate>{$buildDate}</lastBuildDate>
+      /* 3 hour TTL */
+      <ttl>180</ttl>
+       //{for $item in blogPosts}
+
+       //{/for}
+  </channel>
+  </rss>
+{/template}
