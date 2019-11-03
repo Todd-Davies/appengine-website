@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static uk.co.todddavies.website.blog.BlogPostServletModule.PATH_MAP;
@@ -22,6 +25,9 @@ import static uk.co.todddavies.website.blog.BlogPostServletModule.PATH_MAP;
 @Singleton
 public class BlogPostRssServletModule extends HttpServlet {
 
+  private static final DateTimeFormatter BLOG_DATE_FORMAT = DateTimeFormatter.ofPattern("d.MM.yyyy");
+  private static final DateTimeFormatter RSS_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss ZZZ");
+  public static final ZoneId GMT = ZoneId.of("GMT");
   private final SoySauce soySauce;
 
   @Inject
@@ -39,8 +45,11 @@ public class BlogPostRssServletModule extends HttpServlet {
       String templateName = PATH_MAP.get(path);
       String name = renderText("todddavies.website.blog." + templateName + "Title");
       String description = renderText("todddavies.website.blog." + templateName + "Description");
+      String rawDate = renderText("todddavies.website.blog." + templateName + "Date");
+      LocalDate date = LocalDate.parse(rawDate, BLOG_DATE_FORMAT);
+      String pubDate = date.atStartOfDay(GMT).plusHours(16).format(RSS_DATE_FORMAT);
       String link = "https://todddavies.co.uk/blog/" + path;
-      posts.add(new Item(name, link, description, path));
+      posts.add(new Item(name, link, description, path, pubDate));
     }
 
     XmlMapper xmlMapper = new XmlMapper();
@@ -93,17 +102,19 @@ public class BlogPostRssServletModule extends HttpServlet {
 
   @JacksonXmlRootElement(localName = "item")
   class Item {
-    Item(String title, String link, String description, String guid) {
+    Item(String title, String link, String description, String guid, String pubDate) {
       this.title = title;
       this.link = link;
       this.description = description;
       this.guid = new Guid(guid);
+      this.pubDate = pubDate;
     }
 
     @JacksonXmlProperty private final String title;
     @JacksonXmlProperty private final String link;
     @JacksonXmlProperty private final String description;
     @JacksonXmlProperty private final Guid guid;
+    @JacksonXmlProperty private final String pubDate;
 
     @JacksonXmlRootElement(localName = "guid")
     private class Guid {

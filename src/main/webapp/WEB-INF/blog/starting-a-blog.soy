@@ -12,6 +12,10 @@
   I decided to start a blog, this post (the first) explains some of the reasons why.
 {/template}
 
+{template .startingABlogDate kind="text"}
+  31.10.2019
+{/template}
+
 {template .startingABlogLink}
   <li><a href="{call .startingABlogPath /}">{call .startingABlogTitle /}</a></li>
 {/template}
@@ -33,7 +37,7 @@
       {call .startingABlogPath /}
     {/param}
     {param date kind="text"}
-      31.10.2019
+      {call .startingABlogDate /}
     {/param}
   {/call}
 

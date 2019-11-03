@@ -14,6 +14,10 @@
   towards keeping future students at the top of their game!
 {/template}
 
+{template .howToPullDate kind="text"}
+  01.11.2019
+{/template}
+
 {template .howToPullLink}
   <li><a href="{call .howToPullPath /}">{call .howToPullTitle /}</a></li>
 {/template}
@@ -35,7 +39,7 @@
       {call .howToPullPath /}
     {/param}
     {param date kind="text"}
-      01.11.2019
+      {call .howToPullDate /}
     {/param}
   {/call}
 
