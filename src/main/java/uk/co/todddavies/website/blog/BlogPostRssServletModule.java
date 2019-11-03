@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.template.soy.jbcsrc.api.SoySauce;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,12 @@ import static uk.co.todddavies.website.blog.BlogPostServletModule.PATH_MAP;
 @Singleton
 public class BlogPostRssServletModule extends HttpServlet {
 
+  private final SoySauce soySauce;
+
   @Inject
-  private BlogPostRssServletModule() {}
+  private BlogPostRssServletModule(SoySauce soySauce) {
+    this.soySauce = soySauce;
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,15 +35,20 @@ public class BlogPostRssServletModule extends HttpServlet {
     response.setContentType("application/rss+xml");
 
     ImmutableList.Builder<Item> posts = ImmutableList.builder();
-    for (String path : PATH_MAP.values()) {
-      // TODO: Set a proper name
-      // TODO: Set a proper description
+    for (String path : PATH_MAP.keySet()) {
+      String templateName = PATH_MAP.get(path);
+      String name = renderText("todddavies.website.blog." + templateName + "Title");
+      String description = renderText("todddavies.website.blog." + templateName + "Description");
       String link = "https://todddavies.co.uk/blog/" + path;
-      posts.add(new Item(link, link, "", path));
+      posts.add(new Item(name, link, description, path));
     }
 
     XmlMapper xmlMapper = new XmlMapper();
     response.getWriter().print(xmlMapper.writeValueAsString(new Rss(posts.build())));
+  }
+
+  private String renderText(String templateName) {
+    return soySauce.renderTemplate(templateName).renderText().get();
   }
 
   @JacksonXmlRootElement(localName = "rss")
