@@ -12,7 +12,8 @@ public final class MemcacheKeys {
   public enum MemcacheKey {
     NOTES_LIST,
     NOTES_SOY,
-    NOTES_DOWNLOADS
+    NOTES_DOWNLOADS,
+    RSS_FEED,
   }
   
   static ImmutableMap<MemcacheKey, TypeLiteral<?>> EXPECTED_TYPES =
@@ -22,12 +23,15 @@ public final class MemcacheKeys {
           MemcacheKey.NOTES_SOY,
           new TypeLiteral<ImmutableMap<String, ImmutableList<ImmutableMap<String, String>>>>() {},
           MemcacheKey.NOTES_DOWNLOADS,
-          new TypeLiteral<Long>() {});
+          new TypeLiteral<Long>() {},
+          MemcacheKey.RSS_FEED,
+          new TypeLiteral<String>() {});
   
   static final ImmutableMap<MemcacheKey, String>  KEY_MAP = 
       ImmutableMap.of(MemcacheKey.NOTES_LIST, "notes-list",
           MemcacheKey.NOTES_SOY, "notes-soy",
-          MemcacheKey.NOTES_DOWNLOADS, "notes-dl");
+          MemcacheKey.NOTES_DOWNLOADS, "notes-dl",
+          MemcacheKey.RSS_FEED, "rss-feed");
   
   private MemcacheKeys() {/* Private constructor */}
 }

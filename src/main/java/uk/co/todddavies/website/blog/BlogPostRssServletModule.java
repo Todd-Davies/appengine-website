@@ -1,6 +1,7 @@
 package uk.co.todddavies.website.blog;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -8,8 +9,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.template.soy.jbcsrc.api.SoySauce;
+import uk.co.todddavies.website.cache.MemcacheInterface;
+import uk.co.todddavies.website.cache.MemcacheKeys.MemcacheKey;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static uk.co.todddavies.website.blog.BlogPostServletModule.PATH_MAP;
 
@@ -27,12 +32,15 @@ public class BlogPostRssServletModule extends HttpServlet {
 
   private static final DateTimeFormatter BLOG_DATE_FORMAT = DateTimeFormatter.ofPattern("d.MM.yyyy");
   private static final DateTimeFormatter RSS_DATE_FORMAT = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss ZZZ");
-  public static final ZoneId GMT = ZoneId.of("GMT");
+  private static final ZoneId GMT = ZoneId.of("GMT");
   private final SoySauce soySauce;
+  private final Provider<MemcacheInterface> memcacheProvider;
+
 
   @Inject
-  private BlogPostRssServletModule(SoySauce soySauce) {
+  private BlogPostRssServletModule(SoySauce soySauce, Provider<MemcacheInterface> memcacheProvider) {
     this.soySauce = soySauce;
+    this.memcacheProvider = memcacheProvider;
   }
 
   @Override
@@ -40,6 +48,20 @@ public class BlogPostRssServletModule extends HttpServlet {
       throws IOException {
     response.setContentType("application/rss+xml");
 
+    MemcacheInterface memCache = memcacheProvider.get();
+    Optional<String> cachedFeed = memCache.get(MemcacheKey.RSS_FEED);
+
+    // The cache expires after 10 minutes, so the feed is never too out of date.
+    if (cachedFeed.isPresent()) {
+      response.getWriter().print(cachedFeed.get());
+    } else {
+      String feed = createRssFeed();
+      memCache.put(MemcacheKey.RSS_FEED, feed);
+      response.getWriter().print(feed);
+    }
+  }
+
+  private String createRssFeed() throws JsonProcessingException {
     ImmutableList.Builder<Item> posts = ImmutableList.builder();
     for (String path : PATH_MAP.keySet()) {
       String templateName = PATH_MAP.get(path);
@@ -53,7 +75,7 @@ public class BlogPostRssServletModule extends HttpServlet {
     }
 
     XmlMapper xmlMapper = new XmlMapper();
-    response.getWriter().print(xmlMapper.writeValueAsString(new Rss(posts.build())));
+    return xmlMapper.writeValueAsString(new Rss(posts.build()));
   }
 
   private String renderText(String templateName) {
