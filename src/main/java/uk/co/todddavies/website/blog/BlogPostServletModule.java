@@ -31,6 +31,11 @@ final class BlogPostServletModule extends HttpServlet {
       postPath = postPath.substring(1);
     }
 
+    if (!PATH_MAP.containsKey(postPath)) {
+      response.sendError(404, String.format("Post '%s' not found.", postPath));
+      return;
+    }
+
     response.getWriter().print(
         soySauce
             .renderTemplate("todddavies.website.blog." + PATH_MAP.get(postPath))
