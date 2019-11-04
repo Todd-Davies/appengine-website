@@ -152,6 +152,10 @@ a:link {
   padding-inline-start: 20px;
 }
 
+.blog-rss-link {
+  float: right;
+}
+
 .blog-post {
   display: flex;
   flex-direction: column;
