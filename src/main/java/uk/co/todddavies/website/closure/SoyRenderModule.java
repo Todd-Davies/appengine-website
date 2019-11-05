@@ -18,14 +18,18 @@ final class SoyRenderModule extends ServletModule {
   }
 
   private SoyFileSet.Builder getFileSetBuilder() throws MalformedURLException {
-    SoyFileSet.Builder fileSet = SoyFileSet.builder();
-    ServletContext context = getServletContext();
-    for (String path : context.getResourcePaths("/WEB-INF/templates/")) {
-      fileSet.add(getServletContext().getResource(path));
+    return findTemplates(getServletContext(), SoyFileSet.builder(), "/WEB-INF/templates");
+  }
+
+  private SoyFileSet.Builder findTemplates(ServletContext context, SoyFileSet.Builder builder, String path)
+      throws MalformedURLException {
+    for (String item : context.getResourcePaths(path)) {
+      if (item.endsWith("/")) {
+        findTemplates(context, builder, item);
+      } else {
+        builder.add(getServletContext().getResource(item));
+      }
     }
-    for (String path : context.getResourcePaths("/WEB-INF/blog/")) {
-      fileSet.add(getServletContext().getResource(path));
-    }
-    return fileSet;
+    return builder;
   }
 }
