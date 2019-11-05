@@ -6,8 +6,12 @@
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     {rb})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-40703426-1', 'auto');
-    ga('send', 'pageview');
+    {literal}
+    if (window.location.hostname === 'todddavies.co.uk') {
+      ga('create', 'UA-40703426-1', 'auto');
+      ga('send', 'pageview');
+    }
+    {/literal}
 
   </script>
 {/template}
