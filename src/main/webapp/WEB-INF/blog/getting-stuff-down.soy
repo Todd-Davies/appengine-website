@@ -1,0 +1,62 @@
+{namespace todddavies.website.blog}
+
+{template .gettingStuffDownTitle kind="text"}
+  Getting into the habit of getting stuff down
+{/template}
+
+{template .gettingStuffDownPath kind="uri"}
+  /blog/getting-stuff-down
+{/template}
+
+{template .gettingStuffDownDescription kind="text"}
+  I wrote a short piece about my strategy to improve myself as a writer/blogger.
+{/template}
+
+{template .gettingStuffDownDate kind="text"}
+  04.11.2019
+{/template}
+
+{template .gettingStuffDownLink}
+  <li><a href="{call .gettingStuffDownPath /}">{call .gettingStuffDownTitle /}</a></li>
+{/template}
+
+{template .gettingStuffDown}
+  {call todddavies.website.blogPost}
+    {param content kind="html"}
+      {call .gettingStuffDownContent /}
+    {/param}
+  {/call}
+{/template}
+
+{template .gettingStuffDownContent}
+  {call todddavies.website.blogTitle}
+    {param title kind="text"}
+      {call .gettingStuffDownTitle /}
+    {/param}
+    {param link kind="uri"}
+      {call .gettingStuffDownPath /}
+    {/param}
+    {param date kind="text"}
+      {call .gettingStuffDownDate /}
+    {/param}
+  {/call}
+
+  <p>My life got more busy lately since I started a masters degree, perhaps it's not the best time to start a blog. But,
+    as the headmaster at my high school would cheekily remark, "<i>if you want something doing, give it to a busy
+      person</i>" (often at the end of a conversation to parents about homework allocation).</p>
+
+  <p>In order to make the blog successful, it needs to have content. I think if I try to make each new post as good
+    as I can, then this blog will remain decidedly empty. I aim to embrace the maxim that 'perfection is the enemy of
+    good' and strive to improve the quality blog, at least initially, by simply getting content out there, and getting
+    into the habit of getting stuff down.</p>
+
+  <p>Actually, there's a fun anecdote about this; a university professor once split their photography class in two; one
+    half would be graded on the number of photos they produced, and the other on the composition of a single photo that
+    they would select and submit. At the end of the course, the best photos were all from the 'quantity' side of the
+    class, since they had spent lots of time practicing their skills, while the 'quality' side of the class mostly
+    theorised about the best approach, and didn't actually learn as much. There's a more in-depth blog post about that
+    {sp}<a href="https://jamesclear.com/repetitions">here</a>.</p>
+
+  <p>That's not to say that I'd like to post complete junk, I hope each post will have a central theme and something
+    meaningful that I'd like to say as the basis behind it.</p>
+{/template}
