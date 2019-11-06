@@ -1,0 +1,71 @@
+{namespace todddavies.website.blog}
+
+{template .ukElection19SeriesIntroTitle kind="text"}
+  UK Election 2019 Series - Intro
+{/template}
+
+{template .ukElection19SeriesIntroPath kind="uri"}
+  /blog/uk-election-2019-series-intro
+{/template}
+
+{template .ukElection19SeriesIntroDescription kind="text"}
+  I'm writing a series of posts about political parties, and how I view them in terms of the coming election in
+  December. This is the first post, which sets the scene and introduces the series.
+{/template}
+
+{template .ukElection19SeriesIntroDate kind="text"}
+  06.11.2019
+{/template}
+
+{template .ukElection19SeriesIntroLink}
+  <li><a href="{call .ukElection19SeriesIntroPath /}">{call .ukElection19SeriesIntroTitle /}</a></li>
+{/template}
+
+{template .ukElection19SeriesIntro}
+  {call todddavies.website.blogPost}
+    {param content kind="html"}
+      {call .ukElection19SeriesIntroContent /}
+    {/param}
+  {/call}
+{/template}
+
+{template .ukElection19SeriesIntroContent}
+  {call todddavies.website.blogTitle}
+    {param title kind="text"}
+      {call .ukElection19SeriesIntroTitle /}
+    {/param}
+    {param link kind="uri"}
+      {call .ukElection19SeriesIntroPath /}
+    {/param}
+    {param date kind="text"}
+      {call .ukElection19SeriesIntroDate /}
+    {/param}
+  {/call}
+
+  <p>UK politics is incredibly complicated at the moment, dominated by a single issue (of course, Brexit), yet dogged by
+    many others that in more normal times, could classify as era defining by themselves (think inequality, the climate
+    crisis, possible break-up of The Union via Scottish independence, international affairs such as the war in Syria,
+    etc).</p>
+
+  <p>But as the country is attempting to grapple with these problems, it has also become increasingly evident that are
+    also problems with the UK's system of governance. The election in 2019 will be the third general election since
+    2015, during which time we also had two leadership contests within the incumbent Conservative party, three
+    prime-ministers, and of course, one very big referendum. There have been extraordinary occurrences in Parliament,
+    with MP's using both newly invented and almost forgotten political devices to try to hold an increasingly
+    recalcitrant executive branch to account, making our lack of a written constitution increasingly apparent.</p>
+
+  <p>I'm not sure if it's sensible for me to try to speculate on why all this has come to pass, but I think it is fair
+    game to look at the current political landscape as it stands today, and examine where each party might stand in the
+    coming general election. So, I'm writing a series of blog posts looking at most political fractions inside the UK
+    parliament from my perspective as an English voter. I intend it to be an analysis for myself as much as for anybody
+    else; I'll need to make a decision on the 12th of December, and I'd like to make a considered one.</p>
+
+  <p>I'll take each major party that's running in England; that's the Conservative Party, the Labour party, the Liberal
+    Democrat party, the Green Party and the Brexit party, and discuss how they stand in the coming election. Since I'm
+    looking from an English perspective, I won't take into account parties from other countries, such as the SNP, the
+    DUP, Plaid Cymru, etc.</p>
+
+  <p>It's my first time writing content like this, and to be honest, my first time taking such an in-depth look at each
+    party. I expect that to shine through in the content, though I hope that the end result will remain useful and that
+    I learn a lot along the way. Stay tuned!</p>
+{/template}

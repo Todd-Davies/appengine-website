@@ -13,7 +13,8 @@ import java.io.IOException;
 @Singleton
 final class BlogPostServletModule extends HttpServlet {
   static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
-         "getting-stuff-down", "gettingStuffDown",
+          "uk-election-2019-series-intro", "ukElection19SeriesIntro",
+      "getting-stuff-down", "gettingStuffDown",
       "how-to-pull", "howToPull",
       "starting-a-blog", "startingABlog"
   );
