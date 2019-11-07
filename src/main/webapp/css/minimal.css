@@ -172,6 +172,10 @@ a:link {
   font-size: 14px;
 }
 
+.blog-inline-list {
+  margin: 0;
+}
+
 .blog-code-block {
   background-color: #333;
   color: #EEE;

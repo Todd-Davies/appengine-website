@@ -28,9 +28,9 @@
 
 {template .blogImage}
   {@param imageUrl: uri}
-  {@param caption: string}
+  {@param caption: string|html}
 
-  <img src="{$imageUrl}" class="blog-inline-image"/>
+  <a href="{$imageUrl}"><img src="{$imageUrl}" class="blog-inline-image"/></a>
   <p class="blog-inline-caption">{$caption}</p>
 {/template}
 
@@ -59,6 +59,7 @@
   <a href="/blog/rss.xml" class="blog-rss-link">RSS</a>
    // Add a new line here for each post
   <ul>
+    {call todddavies.website.blog.ukElection19SeriesConservativesLink /}
     {call todddavies.website.blog.ukElection19SeriesIntroLink /}
     {call todddavies.website.blog.gettingStuffDownLink /}
     {call todddavies.website.blog.howToPullLink /}
