@@ -169,6 +169,7 @@ a:link {
 .blog-inline-image {
   object-fit: contain;
   max-width: 520px;
+  width: 100%;
 }
 
 .blog-inline-caption {
