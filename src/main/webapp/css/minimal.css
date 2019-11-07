@@ -152,6 +152,11 @@ a:link {
   padding-inline-start: 20px;
 }
 
+.blog-sidebar li {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .blog-rss-link {
   float: right;
 }
