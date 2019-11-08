@@ -12,13 +12,14 @@ import java.io.IOException;
 
 @Singleton
 final class BlogPostServletModule extends HttpServlet {
-  static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.of(
-      "uk-election-2019-series-conservatives", "ukElection19SeriesConservatives",
-      "uk-election-2019-series-intro", "ukElection19SeriesIntro",
-      "getting-stuff-down", "gettingStuffDown",
-      "how-to-pull", "howToPull",
-      "starting-a-blog", "startingABlog"
-  );
+  static final ImmutableMap<String, String> PATH_MAP = ImmutableMap.<String, String>builder()
+      .put("uk-election-2019-series-labour", "ukElection19SeriesLabour")
+      .put("uk-election-2019-series-conservatives", "ukElection19SeriesConservatives")
+      .put("uk-election-2019-series-intro", "ukElection19SeriesIntro")
+      .put("getting-stuff-down", "gettingStuffDown")
+      .put("how-to-pull", "howToPull")
+      .put("starting-a-blog", "startingABlog")
+      .build();
 
   private final SoySauce soySauce;
 
