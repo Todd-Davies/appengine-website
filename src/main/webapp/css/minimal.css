@@ -180,6 +180,7 @@ a:link {
 
 .blog-inline-list {
   margin: 0;
+  margin-bottom: 20px;
 }
 
 .blog-code-block {
